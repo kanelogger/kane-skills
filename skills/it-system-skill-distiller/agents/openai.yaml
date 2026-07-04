@@ -1,0 +1,6 @@
+interface:
+  display_name: "IT 业务系统技能包蒸馏"
+  short_description: "将业务系统蒸馏成 AI 可调用技能包"
+  default_prompt: "使用 $it-system-skill-distiller 将这个 IT 业务系统蒸馏成结构化 AI 技能包。"
+policy:
+  allow_implicit_invocation: true

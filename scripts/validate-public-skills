@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
+
+failures=0
+
+fail() {
+  printf 'FAIL: %s\n' "$1" >&2
+  failures=$((failures + 1))
+}
+
+if [ ! -d "skills" ]; then
+  fail "skills/ directory is missing"
+else
+  while IFS= read -r skill_dir; do
+    [ -n "$skill_dir" ] || continue
+    skill_name="$(basename "$skill_dir")"
+    [ -f "$skill_dir/SKILL.md" ] || fail "$skill_name is missing SKILL.md"
+    [ -f "$skill_dir/README.md" ] || fail "$skill_name is missing README.md"
+  done < <(find skills -mindepth 1 -maxdepth 1 -type d | sort)
+fi
+
+if find . -name ".DS_Store" -print -quit | grep -q .; then
+  fail ".DS_Store files are present"
+fi
+
+for forbidden_dir in registry manifests runtime .agents warehouse/remote warehouse/adapted; do
+  if [ -e "$forbidden_dir" ]; then
+    fail "local management state should not be public: $forbidden_dir"
+  fi
+done
+
+if grep -R -n -E '/Users/kanehua|/Users/[^ ]+|kane_inbox|kane_vault|kane_echoes' README.md catalog.md docs skills 2>/dev/null; then
+  fail "private machine paths or private project names found"
+fi
+
+if grep -R -n -E 'warehouse/local|warehouse/adapted|runtime/|registry/|manifests/|\.agents/' skills 2>/dev/null; then
+  fail "HK-Skills management references found inside skill packages"
+fi
+
+if [ "$failures" -gt 0 ]; then
+  printf '\n%d validation failure(s).\n' "$failures" >&2
+  exit 1
+fi
+
+printf 'Public skill validation passed.\n'

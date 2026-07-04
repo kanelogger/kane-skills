@@ -1,0 +1,21 @@
+.DS_Store
+*.log
+logs/
+
+# Local agent/runtime state
+.agents/
+.agent/
+.opencode/
+runtime/
+registry/
+manifests/
+warehouse/remote/
+warehouse/adapted/
+
+# Dependencies and generated outputs
+node_modules/
+dist/
+build/
+coverage/
+*.tmp
+

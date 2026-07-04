@@ -1,0 +1,142 @@
+{
+  "skill_name": "it-system-skill-distiller",
+  "version": 1,
+  "cases": [
+    {
+      "id": "trigger-positive-distill-business-system",
+      "type": "positive-trigger",
+      "prompt": "把这个合同管理系统的需求、SQLite schema、Flask 后端源码蒸馏成 AI 可调用的 Skills 技能包，输出 distilled/ 目录。",
+      "expected_signal": "it-system-skill-distiller should trigger because the user asks to reverse engineer a concrete business system into a distilled AI skill package.",
+      "assertions": [
+        {
+          "name": "should-trigger",
+          "method": "external_judgment",
+          "expect": "yes",
+          "criteria": "The request names a concrete IT business system, source artifacts, and a distilled Skills package output."
+        }
+      ],
+      "split": "dev",
+      "source": "manual",
+      "notes": "Hero positive trigger from the source article pattern."
+    },
+    {
+      "id": "trigger-positive-api-capability-center",
+      "type": "positive-trigger",
+      "prompt": "基于这个 CRM 仓库，提取领域对象、用例级 API、字段 Schema、枚举、错误码和验证场景，让自然语言 Agent 只能通过 API 操作。",
+      "expected_signal": "it-system-skill-distiller should trigger because the task asks for the exact semantic/capability/detail layered package.",
+      "assertions": [
+        {
+          "name": "should-trigger",
+          "method": "external_judgment",
+          "expect": "yes",
+          "criteria": "The request asks for domain objects, use-case APIs, schema, enums, errors, validation, and API-only operation."
+        }
+      ],
+      "split": "dev",
+      "source": "manual",
+      "notes": "Covers article-specific layer vocabulary."
+    },
+    {
+      "id": "trigger-negative-code-review",
+      "type": "negative-trigger",
+      "prompt": "帮我 review 这个后端接口有没有 bug，并提出修改建议。",
+      "expected_signal": "it-system-skill-distiller should not trigger; this is ordinary code review rather than system distillation.",
+      "assertions": [
+        {
+          "name": "should-not-trigger",
+          "method": "external_judgment",
+          "expect": "yes",
+          "criteria": "The request is about code review and bug finding, not producing distilled/ or an AI skills package."
+        }
+      ],
+      "split": "regression",
+      "source": "manual",
+      "notes": "Guards against over-trigger on IT/code vocabulary."
+    },
+    {
+      "id": "adjacent-confusion-api-doc-polish",
+      "type": "adjacent-confusion",
+      "prompt": "把这份 OpenAPI 文档改写得更清楚一点，方便前端同事阅读。",
+      "expected_signal": "it-system-skill-distiller should not trigger; API documentation polishing is adjacent but out of scope.",
+      "assertions": [
+        {
+          "name": "should-not-trigger",
+          "method": "external_judgment",
+          "expect": "yes",
+          "criteria": "The prompt asks for human-facing API doc polishing, not reverse engineering a system into a layered AI capability package."
+        }
+      ],
+      "split": "regression",
+      "source": "manual",
+      "notes": "Adjacent confusion for API docs."
+    },
+    {
+      "id": "adjacent-confusion-database-modeling",
+      "type": "adjacent-confusion",
+      "prompt": "帮我为一个库存系统设计数据库表结构和 ER 图。",
+      "expected_signal": "it-system-skill-distiller should not trigger; this is greenfield database modeling, not distilling an existing system.",
+      "assertions": [
+        {
+          "name": "should-not-trigger",
+          "method": "external_judgment",
+          "expect": "yes",
+          "criteria": "The prompt lacks an existing system and asks for schema design rather than reverse engineering and validation."
+        }
+      ],
+      "split": "regression",
+      "source": "manual",
+      "notes": "Prevents the skill from over-triggering on business system and schema terms."
+    },
+    {
+      "id": "script-check-init-scaffold",
+      "type": "script-check",
+      "prompt": "Run the bundled scaffold script against a scratch output directory.",
+      "expected_signal": "The scaffold script should exist and run successfully.",
+      "assertions": [
+        {
+          "name": "scaffold-script-exists",
+          "method": "file_exists",
+          "expect": "scripts/init_distilled_package.py",
+          "criteria": "The target skill includes the deterministic scaffold script."
+        }
+      ],
+      "split": "regression",
+      "source": "manual",
+      "notes": "Script execution itself is covered by task-local smoke commands; this assertion protects script presence."
+    },
+    {
+      "id": "script-check-validate-package",
+      "type": "script-check",
+      "prompt": "Run the bundled validator against a completed distilled output directory.",
+      "expected_signal": "The validator script should exist and be the final gate before handoff.",
+      "assertions": [
+        {
+          "name": "validator-script-exists",
+          "method": "file_exists",
+          "expect": "scripts/validate_distilled_package.py",
+          "criteria": "The target skill includes a deterministic validator for the standard output package."
+        }
+      ],
+      "split": "regression",
+      "source": "manual",
+      "notes": "Protects the user's requirement that agent runs produce standard output files rather than only an unchecked scaffold."
+    },
+    {
+      "id": "script-check-agent-smoke",
+      "type": "script-check",
+      "prompt": "Run the enabled-skill smoke test through an installed it-system-skill-distiller package.",
+      "expected_signal": "The smoke script should exist and prove that an enabled agent skill path can produce a valid distilled package.",
+      "assertions": [
+        {
+          "name": "agent-smoke-script-exists",
+          "method": "file_exists",
+          "expect": "scripts/smoke_agent_run.py",
+          "criteria": "The target skill includes a reusable smoke test for the agent execution path."
+        }
+      ],
+      "split": "regression",
+      "source": "manual",
+      "notes": "Protects project enablement and standard-output generation as a repeatable check."
+    }
+  ]
+}

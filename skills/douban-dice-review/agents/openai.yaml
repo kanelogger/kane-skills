@@ -1,0 +1,4 @@
+interface:
+  display_name: "骰子豆瓣影评"
+  short_description: "必要时轻搜电影事实，再用六个理论骰子生成一份无序号的六句中文豆瓣影评"
+  default_prompt: "使用 $douban-dice-review 为《电影名》判断是否需要轻搜电影事实，然后投一次六个骰子，输出本轮汇总，并按六个骰子顺序写一份无序号的六句豆瓣风格影评。"
