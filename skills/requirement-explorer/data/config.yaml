@@ -1,0 +1,86 @@
+# 需求探索技能包 · 配置文件
+# 定义技能运行时的参数和约束
+
+version: "1.0.0"
+domain: 需求探索
+
+# ── AI 模型配置 ──
+ai:
+  model: deepseek-chat
+  temperature: 0.3          # 低温度保证需求文档的一致性和规范性
+  max_tokens: 16384         # 需求文档可能较长，需要较大输出窗口
+  stream: true              # 使用流式输出提升交互体验
+
+# ── 需求文档配置 ──
+document:
+  format: markdown
+  encoding: utf-8
+  max_sections: 6           # 六部分结构（四部分正文 + 两个附录）
+  required_sections:
+    - 场景与流程说明
+    - 业务功能说明
+    - 业务对象说明
+    - 岗位角色说明
+    - 术语表（附录A）
+    - 待澄清问题清单（附录B）
+
+# ── 交互配置 ──
+interaction:
+  max_questions_per_batch: 6      # 每批提问不超过6个
+  max_followup_rounds: 2          # 单问题最多追问2轮
+  stages:
+    - name: 总体理解确认
+      round: 0
+      output: 业务范围确认
+    - name: 业务对象探索
+      round: 1
+      output: 业务对象清单与属性
+    - name: 业务功能与规则探索
+      round: 2
+      output: 业务功能说明与规则
+    - name: 场景与流程探索
+      round: 3
+      output: 端到端流程与审批流
+    - name: 岗位角色探索
+      round: 4
+      output: 角色权限矩阵
+
+# ── 文档完整性自检清单 ──
+completeness_checklist:
+  场景与流程:
+    - 是否有完整的端到端流程说明，且每个流程都有Mermaid流程图
+    - 是否对每个核心单据都明确回答了"是否需要审批"
+    - 是否每个审批流都有完整节点和状态流转说明
+    - 流程步骤衔接是否都标注了"同步等待"或"异步触发"
+  业务功能:
+    - 每个功能是否明确了操作角色、主操作对象、引用对象
+    - 每个功能是否说明了前置条件
+    - 每个功能是否区分了"后置状态变更"和"下游触发"
+    - 每个功能引用的规则是否有独立的RULE条目
+    - 同一规则被多次引用时是否合并为同一编号
+  业务对象:
+    - 是否对所有对象做了分类标注
+    - 每个对象属性是否说明了类型、长度、必填、唯一、引用
+    - 每对父子/引用关系是否明确了删除/作废时的处理策略
+  岗位角色:
+    - 是否列出了全部岗位角色
+    - 每个角色的功能权限是否完整
+    - 每个查询/列表功能是否在每个相关角色下明确了数据范围
+  全局:
+    - 附录B是否无"待确认"状态条目
+    - 文档中是否未出现UI/UE交互层面描述
+
+# ── Word 导出配置 ──
+word_export:
+  enabled: true
+  mermaid_rendering:
+    service: kroki                    # 可选: kroki, mermaid.ink, local-cli
+    base_url: "https://kroki.io"
+    output_format: png                # 嵌入Word使用PNG格式
+    timeout_seconds: 30
+  conversion:
+    engine: pandoc                    # Markdown → Word 转换引擎
+    reference_doc: null               # 可选: 自定义Word模板路径
+    extra_args:
+      - "--from=markdown+smart"
+      - "--to=docx"

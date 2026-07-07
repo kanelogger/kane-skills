@@ -1,0 +1,6 @@
+interface:
+  display_name: "需求探索"
+  short_description: "把原始业务需求整理成标准软件需求文档"
+  default_prompt: "使用 $requirement-explorer 将这段原始业务需求推进成一份标准软件需求文档。"
+policy:
+  allow_implicit_invocation: true

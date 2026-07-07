@@ -1,0 +1,143 @@
+################################################################################
+#  需求探索技能包 — AI-Driven Requirements Exploration Skill Pack
+#
+#  基于《AI需求探索与确认提示词》和《软件需求文档编写规范》构建。
+#  核心能力：通过四阶段结构化对话，将原始业务需求转化为可直接驱动
+#  M1-M5 本体建模的完整软件需求文档，支持 Markdown 和 Word 双格式输出。
+#
+#  本技能包是 Onto-DeepSeek 平台 "需求探索 → 本体建模 → 能力生成 →
+#  技能封装 → Agent发布" 完整链路的第一阶段。
+################################################################################
+
+apiVersion: skillpack/v1
+kind: DomainSkill
+
+metadata:
+  id: requirement-explorer
+  name: 需求探索技能包
+  version: "1.0.0"
+  domain: 软件需求探索
+  namespace: "http://example.org/skill/requirement-explorer#"
+  description: >
+    基于《AI需求探索与确认提示词》和《软件需求文档编写规范》，通过AI主导的
+    四阶段结构化对话，将一段原始业务需求转化为完整的、可直接驱动本体建模的
+    软件需求文档。支持Markdown和Word双格式输出，Word导出时自动将Mermaid
+    流程图渲染为内嵌图片。
+  tags: [需求探索, 需求分析, 本体建模前置, 文档生成]
+  owner: he.minglu@gmail.com
+
+spec:
+  sourceRoot: "."
+
+  activation:
+    enabled: true
+    autoload: true
+    priority: 200              # 高优先级：需求探索是后续所有阶段的前提
+
+  dependencies:
+    skills:
+      - id: mermaid-renderer         # 可选：Mermaid渲染服务（用于Word导出）
+        required: false
+        purpose: Word导出时渲染Mermaid图为PNG
+      - id: pandoc-converter         # 可选：Pandoc文档转换服务（用于Word导出）
+        required: false
+        purpose: Markdown → Word格式转换
+    runtime:
+      llm: deepseek                  # 大语言模型
+      functionCalling: true          # 需要Function Calling能力
+      database: sqlite               # 用于存储需求文档草稿和会话记录
+      reasoner: none                 # 需求探索阶段不需要本体推理机
+
+  # ───────────── 资源索引 ─────────────
+  layers:
+
+    # ── 提示层：AI的核心行为指令 ──
+    prompt:
+      systemFragment:
+        source: bundled
+        path: prompt/system-fragment.md
+        derive: false
+        description: >
+          完整的AI需求分析师系统提示词，包含：
+          - 系统角色设定（资深企业软件需求分析师）
+          - 四大核心工作原则（自主补全vs必须确认、分批推进、落地为文档、UI无关边界）
+          - 五阶段推进流程（阶段零→一→二→三→四→最终产出）
+          - 最终输出与Word导出确认逻辑
+      glossary:
+        source: bundled
+        path: data/config.yaml
+        description: 术语配置和参数定义
+
+    # ── 知识层：两个核心参考文档 ──
+    knowledge:
+      corpus:
+        - source: bundled
+          path: knowledge/requirement-spec.md
+          role: writing_standard
+          description: >
+            《软件需求文档编写规范》— 定义完整需求文档的六部分结构、
+            编号体系、字段强制要求、完整性自检清单。
+            AI在撰写文档草稿时必须严格遵循此规范。
+        - source: bundled
+          path: knowledge/exploration-prompt.md
+          role: methodology_guide
+          description: >
+            《AI需求探索与确认提示词》— 定义AI的角色、四阶段推进流程、
+            A/B类内容判定规则、提问方式和交互语气。
+            AI在整个对话过程中的行为受此文档约束。
+      explainTopics:
+        - 需求探索四阶段流程
+        - A类/B类内容判定标准
+        - 需求文档六部分结构
+        - 编号体系规范
+        - 完整性自检清单
+        - Mermaid流程图规范
+        - Word导出流程（含Mermaid→图片转换）
+
+    # ── 能力层：AI可调用的工具 ──
+    capability:
+      derive: false
+      artifact: capability/tools.yaml
+      tools:
+        - save_requirement_draft       # 保存需求草稿（含增量更新）
+        - check_completeness           # 完整性自检
+        - generate_final_document      # 生成最终Markdown文档
+        - render_mermaid               # Mermaid → PNG/SVG渲染
+        - export_to_word               # Markdown → Word（含Mermaid内嵌图片）
+        - query_requirement_documents  # 查询已有需求文档
+
+    # ── 数据层：技能配置 ──
+    data:
+      config:
+        source: bundled
+        artifact: data/config.yaml
+        description: 模型参数、交互配置、自检清单、Word导出配置
+
+  # ───────────── 能力边界 ─────────────
+  boundaries:
+    canAnswer:
+      - 基于原始业务需求进行结构化需求探索
+      - 自动补全行业通用知识（A类内容）
+      - 识别并提问企业特有的业务信息（B类内容）
+      - 按照《软件需求文档编写规范》逐章节生成需求文档
+      - 生成Mermaid流程图（端到端流程、审批流）
+      - 执行完整性自检并报告结果
+      - 输出完整Markdown格式需求文档
+      - 将需求文档导出为Word格式（含Mermaid图内嵌图片）
+      - 恢复未完成的需求探索会话
+    cannotAnswer:
+      - UI/UE界面交互设计（规范明确排除）
+      - 技术架构设计（属于后续阶段）
+      - 数据库表结构设计（属于本体建模后的能力生成阶段）
+      - API接口设计（同上）
+      - 不依赖需求文档的业务决策
+
+  # ───────────── 注册表注入 ─────────────
+  registry:
+    injectKeys:
+      - system_prompt
+      - ai_tools
+      - domain_knowledge
+      - writing_standard
+      - completeness_checklist
+    namespacePrefix: req

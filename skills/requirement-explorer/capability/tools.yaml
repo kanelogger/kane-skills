@@ -1,0 +1,183 @@
+# 需求探索技能包 · 能力层 AI 工具定义
+# 定义 AI 在需求探索过程中可调用的工具
+
+version: "1.0.0"
+domain: 需求探索
+
+selectionPriority:
+  - save_requirement_draft
+  - check_completeness
+  - generate_final_document
+  - render_mermaid
+  - export_to_word
+
+decisionRules:
+  - "用户确认某一阶段内容 → save_requirement_draft 保存草稿"
+  - "完成所有阶段后 → check_completeness 自检 → generate_final_document 生成终稿"
+  - "用户确认终稿后 → 主动询问是否需要导出Word"
+  - "用户要求导出Word → export_to_word 转换（自动处理Mermaid→图片）"
+  - "需要预览Mermaid流程图 → render_mermaid 渲染为图片"
+
+tools:
+
+  # ── 工具1: 保存需求草稿 ──
+  - name: save_requirement_draft
+    aiInvokable: true
+    backend: services.requirement_service.save_draft
+    description: >
+      保存当前阶段的需求文档草稿。AI在每轮确认后自动调用，
+      将确认结果写入对应章节。支持增量更新，不覆盖其他章节。
+    params:
+      document_id:
+        type: string
+        required: true
+        description: 需求文档唯一标识（首次保存为空，系统自动生成）
+      section:
+        type: enum
+        required: true
+        enum: [overview, objects, functions, scenarios, roles, glossary, appendix_b]
+        description: 当前更新的章节
+      content_markdown:
+        type: string
+        required: true
+        description: 章节的Markdown内容（含标注：[AI自动补全]/[已确认]/[待确认]）
+      confirmed_items:
+        type: array
+        required: false
+        description: 本批次已确认的B类问题清单
+    examples:
+      - ask: "保存阶段一的业务对象草稿"
+        params:
+          section: objects
+          content_markdown: "## 第三部分：业务对象说明\n\n### OBJ-CON-001 合同..."
+          confirmed_items: ["合同删除时开票记录独立保留", "合同总金额为含税金额"]
+
+  # ── 工具2: 完整性自检 ──
+  - name: check_completeness
+    aiInvokable: true
+    backend: services.requirement_service.check_completeness
+    description: >
+      对照《软件需求文档编写规范》第九章的自检清单，
+      逐项检查当前需求文档的完整性。返回通过项、未通过项和缺失说明。
+      只有在所有项目通过后，才能调用 generate_final_document。
+    params:
+      document_id:
+        type: string
+        required: true
+        description: 需求文档唯一标识
+    returns:
+      total_checks: integer
+      passed: integer
+      failed: integer
+      failed_items:
+        type: array
+        description: 未通过项列表，每项包含 category, item, reason
+      pending_questions:
+        type: array
+        description: 附录B中仍为"待确认"状态的问题
+
+  # ── 工具3: 生成最终需求文档 ──
+  - name: generate_final_document
+    aiInvokable: true
+    backend: services.requirement_service.finalize_document
+    description: >
+      所有阶段完成且完整性自检通过后，将全部草稿整合为最终的完整Markdown需求文档。
+      自动去除所有[AI自动补全]/[已确认]等过程标注，生成干净的正式文档。
+      生成后AI应主动询问用户是否需要导出为Word文档。
+    params:
+      document_id:
+        type: string
+        required: true
+        description: 需求文档唯一标识
+      title:
+        type: string
+        required: true
+        description: 需求文档最终标题
+      include_appendix_b:
+        type: boolean
+        default: false
+        description: 是否包含附录B（仅当无待确认项时设为false，否则必须包含）
+    returns:
+      document_id: string
+      title: string
+      content_markdown: string
+      word_count: integer
+      completeness_status: enum  # "complete" 或 "has_pending_items"
+
+  # ── 工具4: 渲染Mermaid图为图片 ──
+  - name: render_mermaid
+    aiInvokable: true
+    backend: services.requirement_service.render_mermaid
+    description: >
+      将Mermaid源代码渲染为PNG图片。
+      用于Word导出时的图表转换，也支持用户在对话中预览流程图。
+      支持 flowchart、sequenceDiagram、classDiagram 等常见Mermaid图表类型。
+    params:
+      mermaid_code:
+        type: string
+        required: true
+        description: Mermaid源代码（不含markdown代码围栏标记）
+      output_format:
+        type: enum
+        required: false
+        default: png
+        enum: [png, svg]
+        description: 输出图片格式（Word嵌入推荐PNG）
+    returns:
+      image_base64: string
+      image_url: string
+      width: integer
+      height: integer
+      format: string
+
+  # ── 工具5: 导出Word文档 ──
+  - name: export_to_word
+    aiInvokable: true
+    backend: services.requirement_service.export_to_word
+    description: >
+      将完整的Markdown需求文档导出为Word（.docx）格式。
+      自动执行以下处理流程：
+      1. 扫描Markdown中的所有Mermaid代码块
+      2. 调用 render_mermaid 将每个Mermaid图渲染为PNG图片
+      3. 将Markdown中的Mermaid代码块替换为图片引用
+      4. 使用Pandoc将处理后的Markdown转换为Word文档
+      5. 确保所有Mermaid流程图作为内嵌图片存在于Word中
+    params:
+      document_id:
+        type: string
+        required: true
+        description: 需求文档唯一标识
+      output_path:
+        type: string
+        required: false
+        description: Word文档输出路径（默认与Markdown同目录）
+      template:
+        type: string
+        required: false
+        description: 可选的自定义Word模板文件路径
+    returns:
+      file_path: string
+      file_size: integer
+      mermaid_count: integer        # 已转换的Mermaid图数量
+      conversion_status: enum       # "success" 或 "partial" (部分图转换失败)
+    constraints:
+      - "Mermaid图渲染失败时不阻塞整体导出，在对应位置保留Mermaid源代码作为备用"
+      - "导出前必须确认文档已完成完整性自检"
+
+  # ── 工具6: 查询已有需求文档 ──
+  - name: query_requirement_documents
+    aiInvokable: true
+    backend: services.requirement_service.list_documents
+    description: >
+      查询已有的需求文档列表。用于会话开始时检查是否有未完成的文档可以继续。
+    params:
+      status:
+        type: enum
+        required: false
+        enum: [draft, completed, all]
+        default: all
+        description: 按状态筛选文档
+    returns:
+      documents:
+        type: array
+        description: 文档列表，每项含 id, title, status, updated_at, completeness

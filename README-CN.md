@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-12-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-13-green.svg)](skills/)
 [![Validation](https://img.shields.io/badge/Validation-passing-brightgreen.svg)](scripts/validate-public-skills)
 
 > 语言版本: [English README](README.md) | [中文 README](README-CN.md)
@@ -30,6 +30,7 @@ Kane 创建的可复用智能体技能库。
 | [`it-system-skill-distiller`](skills/it-system-skill-distiller/) | 将 IT 业务系统提炼为智能体可读的能力包。 | 经过校验的 `distilled/` 包结构。 | [SKILL](skills/it-system-skill-distiller/SKILL.md) |
 | [`merge-drafts`](skills/merge-drafts/) | 将多份草稿合并为一篇润色后的文章。 | 最终合并文章及合并报告。 | [SKILL](skills/merge-drafts/SKILL.md) |
 | [`prompt-optimizer`](skills/prompt-optimizer/) | 将模糊需求转化为可直接复制使用的提示词。 | 一个 `.md` 或 `.xml` 提示词文件。 | [SKILL](skills/prompt-optimizer/SKILL.md) |
+| [`requirement-explorer`](skills/requirement-explorer/) | 将原始业务需求推进成标准软件需求文档。 | 含 Mermaid 流程图和完整性自检的 Markdown 需求文档。 | [SKILL](skills/requirement-explorer/SKILL.md) |
 | [`request-refactor-plan`](skills/request-refactor-plan/) | 将重构想法转化为小步提交的实施计划。 | 重构 RFC / GitHub issue 正文。 | [SKILL](skills/request-refactor-plan/SKILL.md) |
 | [`session-achieve`](skills/session-achieve/) | 复盘多轮对话并提取可复用的提示词。 | 会话复盘与提示词经验。 | [SKILL](skills/session-achieve/SKILL.md) |
 | [`skill-evaluator`](skills/skill-evaluator/) | 为智能体技能构建可复用的评估方案。 | 评估计划、评分模板与报告结构。 | [SKILL](skills/skill-evaluator/SKILL.md) |
