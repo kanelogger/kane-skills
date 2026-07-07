@@ -1,0 +1,131 @@
+{
+  "skill_name": "requirement-explorer",
+  "version": 1,
+  "cases": [
+    {
+      "id": "trigger-positive-raw-business-need",
+      "type": "positive-trigger",
+      "prompt": "我们要做一个合同履约回款系统，帮我把业务需求梳理成标准需求文档。",
+      "expected_signal": "The skill should trigger for turning raw business needs into a structured software requirements document.",
+      "assertions": [
+        {
+          "name": "description-covers-requirement-exploration",
+          "method": "fact_coverage",
+          "expect": "需求探索|需求确认|软件需求文档|raw business needs|structured software requirements document",
+          "criteria": "Frontmatter description must preserve positive trigger language for requirement exploration and document generation."
+        }
+      ],
+      "split": "regression",
+      "source": "manual",
+      "notes": "Protects the primary invocation path."
+    },
+    {
+      "id": "trigger-negative-ui-only",
+      "type": "negative-trigger",
+      "prompt": "帮我设计一个合同列表页面，要有筛选框、按钮布局和交互动效。",
+      "expected_signal": "The skill should not treat UI-only design as an in-scope requirements exploration task.",
+      "assertions": [
+        {
+          "name": "ui-boundary-present",
+          "method": "fact_coverage",
+          "expect": "Exclude UI/UX layout|translate them into business actions|interface design belongs to a later phase",
+          "criteria": "The skill must preserve the boundary that UI-only requests are out of scope or should be translated to business actions."
+        }
+      ],
+      "split": "regression",
+      "source": "manual",
+      "notes": "Guards against over-triggering on adjacent UI design work."
+    },
+    {
+      "id": "core-ab-classification",
+      "type": "core-logic",
+      "prompt": "探索一个开票审批系统，需要区分哪些内容你能自动补全、哪些必须问我确认。",
+      "expected_signal": "The skill must retain the A/B classification rule and B-class mandatory confirmation list.",
+      "assertions": [
+        {
+          "name": "ab-classification-present",
+          "method": "fact_coverage",
+          "expect": "A class|B class|manual approval|synchronous waiting or asynchronous triggering|Data visibility ranges",
+          "criteria": "The skill must distinguish common assumptions from enterprise-specific facts that require confirmation."
+        }
+      ],
+      "split": "regression",
+      "source": "manual",
+      "notes": "Protects the highest-risk reasoning rule in the skill."
+    },
+    {
+      "id": "core-tool-fallback",
+      "type": "core-logic",
+      "prompt": "在没有后端草稿保存工具的环境里，继续做需求探索。",
+      "expected_signal": "The skill should not pretend unavailable tools were called and should maintain a Markdown draft with manual checks.",
+      "assertions": [
+        {
+          "name": "tool-fallback-present",
+          "method": "fact_coverage",
+          "expect": "If tools with these exact capabilities are available|do not pretend tool calls occurred|Maintain the draft as Markdown|manual completeness check",
+          "criteria": "Tool usage rules must support graceful fallback when requirement-service tools are unavailable."
+        },
+        {
+          "name": "system-fragment-tool-boundary-present",
+          "method": "fact_coverage",
+          "expect": "工具使用边界|如当前环境提供|不要假装已调用工具|手工执行完整性自检",
+          "criteria": "The loaded prompt fragment must preserve the fallback boundary instead of hard-requiring unavailable tools."
+        }
+      ],
+      "split": "regression",
+      "source": "manual",
+      "notes": "Regression for the tool-call conflict found during evaluation."
+    },
+    {
+      "id": "output-document-contract",
+      "type": "output-quality",
+      "prompt": "请生成最终需求文档，要求结构完整、编号可交叉引用，并包含流程图。",
+      "expected_signal": "The skill should produce the six-part Markdown contract with ID schemes and Mermaid diagrams.",
+      "assertions": [
+        {
+          "name": "document-contract-present",
+          "method": "fact_coverage",
+          "expect": "Scenario and process descriptions|Business function descriptions|Business object descriptions|Role descriptions|Appendix A|Appendix B|OBJ-{DOMAIN}-{NNN}|FUNC-{DOMAIN}-{NNN}|RULE-{DOMAIN}-{NNN}|Mermaid",
+          "criteria": "The skill must preserve the document structure, ID patterns, and Mermaid requirement."
+        }
+      ],
+      "split": "regression",
+      "source": "manual",
+      "notes": "Protects final artifact shape."
+    },
+    {
+      "id": "output-completeness-check",
+      "type": "output-quality",
+      "prompt": "最终交付前，请检查这份需求文档是否完整。",
+      "expected_signal": "The skill should run or manually perform the completeness checklist before calling the document complete.",
+      "assertions": [
+        {
+          "name": "completion-check-present",
+          "method": "fact_coverage",
+          "expect": "Before calling a requirements document complete|Every process has ordered steps|Every core document explicitly says whether it needs approval|Every referenced rule has a standalone RULE definition|Appendix B has no unresolved B-class item",
+          "criteria": "The skill must retain the final completeness gate."
+        }
+      ],
+      "split": "regression",
+      "source": "manual",
+      "notes": "Protects the final quality gate."
+    },
+    {
+      "id": "legacy-manifest-non-authoritative-runtime",
+      "type": "robustness",
+      "prompt": "检查 legacy manifest 是否会让 Codex 误以为必须使用特定模型或数据库。",
+      "expected_signal": "The legacy manifest should explicitly mark runtime hints as legacy-only and avoid hard model/database requirements for Codex.",
+      "assertions": [
+        {
+          "name": "legacy-runtime-marked",
+          "method": "fact_coverage",
+          "expect": "legacyOnly|Codex 使用本技能时不要求特定模型|如缺少 capability/tools.yaml 中定义的后端工具，应改用 Markdown 草稿和手工完整性自检",
+          "criteria": "Legacy runtime metadata must be clearly non-authoritative for Codex."
+        }
+      ],
+      "split": "regression",
+      "source": "manual",
+      "notes": "Regression for the old platform runtime assumption."
+    }
+  ]
+}

@@ -43,10 +43,16 @@ spec:
         required: false
         purpose: Markdown → Word格式转换
     runtime:
-      llm: deepseek                  # 大语言模型
-      functionCalling: true          # 需要Function Calling能力
-      database: sqlite               # 用于存储需求文档草稿和会话记录
-      reasoner: none                 # 需求探索阶段不需要本体推理机
+      legacyOnly: true
+      notes: >
+        原 Onto-DeepSeek 平台的运行提示，仅作为历史来源说明保留。
+        Codex 使用本技能时不要求特定模型、数据库或 Function Calling 后端；
+        如缺少 capability/tools.yaml 中定义的后端工具，应改用 Markdown 草稿和手工完整性自检。
+      optionalCapabilities:
+        - draftStorage
+        - completenessCheck
+        - mermaidRendering
+        - wordConversion
 
   # ───────────── 资源索引 ─────────────
   layers:
