@@ -13,12 +13,6 @@ Merge multiple draft documents into one polished article by selecting the strong
 - A merged final article.
 - A merge report that records the base draft, imported material, discarded duplication, and unresolved issues when relevant.
 
-## Install
-
-```bash
-./bin/hk-skill install https://github.com/kanelogger/kane-skills --subpath skills/merge-drafts
-```
-
 ## Public Notes
 
 This package contains only the workflow instructions. Bring your own drafts as task inputs.

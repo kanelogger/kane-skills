@@ -22,12 +22,6 @@ For a file input, the skill creates a package folder:
   manifest.json
 ```
 
-## Install
-
-```bash
-./bin/hk-skill install https://github.com/kanelogger/kane-skills --subpath skills/subtext-article
-```
-
 ## Public Notes
 
 The bundled scripts normalize common subtitle and transcript formats. Public examples can be added later under `examples/` after checking that the source content is shareable.

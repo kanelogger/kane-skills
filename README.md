@@ -8,7 +8,7 @@
 
 Reusable Agent Skills created by Kane.
 
-This repository is a public, self-contained skill library. Each package is installable, inspectable, copyable, and adaptable without depending on local manager state, runtime links, registry files, adapted mirrors, or private project configuration.
+This repository is a public, self-contained skill library. Each package is inspectable, copyable, and adaptable without depending on private project configuration.
 
 ---
 

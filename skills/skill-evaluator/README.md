@@ -20,12 +20,6 @@ references/templates/test-case-template.yaml
 references/templates/report-structure.md
 ```
 
-## Install
-
-```bash
-./bin/hk-skill install https://github.com/kanelogger/kane-skills --subpath skills/skill-evaluator
-```
-
 ## Public Notes
 
 This skill evaluates runtime behavior. Use `skill-optimizer` when the goal is to rewrite or improve the skill itself.

@@ -31,12 +31,6 @@ article-analyzer-<slug>/
   99-summary.md
 ```
 
-## Install
-
-```bash
-./bin/hk-skill install https://github.com/kanelogger/kane-skills --subpath skills/article-analyzer
-```
-
 ## Public Notes
 
 The skill loads only the reference prompt files required for the selected route. It should not rely on sibling skills or private workspace files.

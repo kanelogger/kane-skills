@@ -14,12 +14,6 @@ Compile vague, raw, or under-specified requirements into copy-ready prompts.
 - Complex tasks: a structured XML prompt using `assets/complex-prompt.xml`.
 - The final prompt is saved as a file instead of only being pasted into chat.
 
-## Install
-
-```bash
-./bin/hk-skill install https://github.com/kanelogger/kane-skills --subpath skills/prompt-optimizer
-```
-
 ## Public Notes
 
 This skill is self-contained. It should not depend on local registry state, adapted mirrors, or private project paths.

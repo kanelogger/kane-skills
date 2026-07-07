@@ -22,12 +22,6 @@ A Chinese Markdown response with:
 # 延伸阅读方向
 ```
 
-## Install
-
-```bash
-./bin/hk-skill install https://github.com/kanelogger/kane-skills --subpath skills/concept-fable
-```
-
 ## Public Notes
 
 This skill is self-contained and does not require bundled scripts or private examples.

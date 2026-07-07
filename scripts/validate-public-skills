@@ -26,18 +26,8 @@ if find . -name ".DS_Store" -print -quit | grep -q .; then
   fail ".DS_Store files are present"
 fi
 
-for forbidden_dir in registry manifests runtime .agents warehouse/remote warehouse/adapted; do
-  if [ -e "$forbidden_dir" ]; then
-    fail "local management state should not be public: $forbidden_dir"
-  fi
-done
-
 if grep -R -n -E '/Users/kanehua|/Users/[^ ]+|kane_inbox|kane_vault|kane_echoes' README.md catalog.md docs skills 2>/dev/null; then
   fail "private machine paths or private project names found"
-fi
-
-if grep -R -n -E 'warehouse/local|warehouse/adapted|runtime/|registry/|manifests/|\.agents/' skills 2>/dev/null; then
-  fail "HK-Skills management references found inside skill packages"
 fi
 
 if [ "$failures" -gt 0 ]; then

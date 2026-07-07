@@ -21,12 +21,6 @@ validation plan
 GitHub issue body
 ```
 
-## Install
-
-```bash
-./bin/hk-skill install https://github.com/kanelogger/kane-skills --subpath skills/request-refactor-plan
-```
-
 ## Public Notes
 
 This skill plans refactors. It should not start editing code unless the user separately asks for implementation.

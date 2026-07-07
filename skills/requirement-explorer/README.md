@@ -14,9 +14,3 @@ Guide business experts through structured requirement exploration and generate a
 - A Markdown requirements document with scenarios/processes, business functions and rules, business objects, roles, glossary, and pending clarifications.
 - Mermaid source blocks for process and approval diagrams.
 - A completeness check against the bundled requirements specification.
-
-## Install
-
-```bash
-./bin/hk-skill install https://github.com/kanelogger/kane-skills --subpath skills/requirement-explorer
-```

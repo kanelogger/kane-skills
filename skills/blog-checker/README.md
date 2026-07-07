@@ -17,12 +17,6 @@ assets/report-template.md
 references/review-dimensions.md
 ```
 
-## Install
-
-```bash
-./bin/hk-skill install https://github.com/kanelogger/kane-skills --subpath skills/blog-checker
-```
-
 ## Public Notes
 
 The skill is intended for technical writing. It is not a general copywriting or fiction critique skill.

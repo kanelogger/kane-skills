@@ -18,12 +18,6 @@ references/few_shot_example.md
 scripts/generate-review.js
 ```
 
-## Install
-
-```bash
-./bin/hk-skill install https://github.com/kanelogger/kane-skills --subpath skills/session-achieve
-```
-
 ## Public Notes
 
 Do not include private transcripts in this repository. Use the skill on user-provided conversation context at runtime.

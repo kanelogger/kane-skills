@@ -23,12 +23,6 @@ final optimization reports
 
 Bundled scripts support deterministic checks, eval generation, gate decisions, checkpoints, restore, and iteration.
 
-## Install
-
-```bash
-./bin/hk-skill install https://github.com/kanelogger/kane-skills --subpath skills/skill-optimizer
-```
-
 ## Public Notes
 
 Generated runtime directories such as `logs/`, `runs/`, `checkpoints/`, and restore backups should be created in a working directory, not committed into this public package.
