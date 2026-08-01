@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-13-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-16-green.svg)](skills/)
 [![Validation](https://img.shields.io/badge/Validation-passing-brightgreen.svg)](scripts/validate-public-skills)
 
 > 语言版本: [English README](README.md) | [中文 README](README-CN.md)
@@ -28,6 +28,9 @@ Kane 创建的可复用智能体技能库。
 | [`concept-fable`](skills/concept-fable/) | 通过三段式中文寓言解释高阶概念。 | 故事、揭示、理论映射、边界与阅读方向。 | [SKILL](skills/concept-fable/SKILL.md) |
 | [`douban-dice-review`](skills/douban-dice-review/) | 用六枚理论骰子撰写简洁的豆瓣式影评。 | 骰子总结与六句影评。 | [SKILL](skills/douban-dice-review/SKILL.md) |
 | [`it-system-skill-distiller`](skills/it-system-skill-distiller/) | 将 IT 业务系统提炼为智能体可读的能力包。 | 经过校验的 `distilled/` 包结构。 | [SKILL](skills/it-system-skill-distiller/SKILL.md) |
+| [`kane-q-article-illustrator`](skills/kane-q-article-illustrator/) | 以 Kane Q IP 为固定叙述者与视觉锚点为文章配图。 | 保持 Kane Q 角色一致性的插图文章。 | [SKILL](skills/kane-q-article-illustrator/SKILL.md) |
+| [`kane-q-cover-image`](skills/kane-q-cover-image/) | 以 Kane Q IP 生成文章封面图、社交封面与缩略图。 | 具有 Kane Q 品牌标识的封面图。 | [SKILL](skills/kane-q-cover-image/SKILL.md) |
+| [`kane-q-infographic`](skills/kane-q-infographic/) | 以 Kane Q 为叙述者创建漫画风格信息图。 | Kane Q 视觉一致的信息图。 | [SKILL](skills/kane-q-infographic/SKILL.md) |
 | [`merge-drafts`](skills/merge-drafts/) | 将多份草稿合并为一篇润色后的文章。 | 最终合并文章及合并报告。 | [SKILL](skills/merge-drafts/SKILL.md) |
 | [`prompt-optimizer`](skills/prompt-optimizer/) | 将模糊需求转化为可直接复制使用的提示词。 | 一个 `.md` 或 `.xml` 提示词文件。 | [SKILL](skills/prompt-optimizer/SKILL.md) |
 | [`requirement-explorer`](skills/requirement-explorer/) | 将原始业务需求推进成标准软件需求文档。 | 含 Mermaid 流程图和完整性自检的 Markdown 需求文档。 | [SKILL](skills/requirement-explorer/SKILL.md) |

@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-13-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-16-green.svg)](skills/)
 [![Validation](https://img.shields.io/badge/Validation-passing-brightgreen.svg)](scripts/validate-public-skills)
 
 > Languages: [English README](README.md) | [中文 README](README-CN.md)
@@ -27,6 +27,9 @@ This repository is a public, self-contained skill library. Each package is inspe
 | [`concept-fable`](skills/concept-fable/) | Explain advanced concepts through a Chinese three-stage fable. | Story, reveal, theory mapping, boundaries, and reading directions. | [SKILL](skills/concept-fable/SKILL.md) |
 | [`douban-dice-review`](skills/douban-dice-review/) | Write a compact Douban-style film review with six theory dice. | Dice summary plus six-sentence review. | [SKILL](skills/douban-dice-review/SKILL.md) |
 | [`it-system-skill-distiller`](skills/it-system-skill-distiller/) | Distill an IT business system into an AI-readable capability package. | Validated `distilled/` package structure. | [SKILL](skills/it-system-skill-distiller/SKILL.md) |
+| [`kane-q-article-illustrator`](skills/kane-q-article-illustrator/) | Illustrate articles with Kane Q IP as the fixed narrator and visual anchor. | Illustrated article with Kane Q character consistency. | [SKILL](skills/kane-q-article-illustrator/SKILL.md) |
+| [`kane-q-cover-image`](skills/kane-q-cover-image/) | Generate article cover images, social cover art, and thumbnails with Kane Q IP. | Cover image with Kane Q brand identity. | [SKILL](skills/kane-q-cover-image/SKILL.md) |
+| [`kane-q-infographic`](skills/kane-q-infographic/) | Create comic-style infographics with Kane Q as narrator and explainer. | Infographic with Kane Q visual consistency. | [SKILL](skills/kane-q-infographic/SKILL.md) |
 | [`merge-drafts`](skills/merge-drafts/) | Merge several drafts into one polished article. | Final merged article plus merge report. | [SKILL](skills/merge-drafts/SKILL.md) |
 | [`prompt-optimizer`](skills/prompt-optimizer/) | Turn vague requirements into copy-ready prompts. | A `.md` or `.xml` prompt file. | [SKILL](skills/prompt-optimizer/SKILL.md) |
 | [`requirement-explorer`](skills/requirement-explorer/) | Turn raw business needs into a standard software requirements document. | Markdown requirements document with Mermaid flows and a completeness check. | [SKILL](skills/requirement-explorer/SKILL.md) |
