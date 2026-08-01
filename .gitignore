@@ -18,4 +18,4 @@ dist/
 build/
 coverage/
 *.tmp
-
+.tools

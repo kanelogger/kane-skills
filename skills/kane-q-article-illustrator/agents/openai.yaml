@@ -1,0 +1,7 @@
+interface:
+  display_name: "Kane Q Article Illustrator"
+  short_description: "用 Kane Q 固定角色为文章生成配图"
+  default_prompt: "Use $kane-q-article-illustrator to illustrate this article with the Kane Q IP."
+
+policy:
+  allow_implicit_invocation: true

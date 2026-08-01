@@ -1,6 +1,19 @@
 ---
 name: article-analyzer
-description: Analyze articles, papers, essays, technical blogs, business commentary, reports, raw notes, or long-form arguments into structured understanding, delivered as an output folder containing one Markdown file per selected analysis module plus a synthesis document. Use when the user asks for article analysis, 深度分析, 分析这篇文章, 拆解观点, 论文速读, paper scan, 分析这篇论文, thought refinement, 思想精炼, 提炼主线, 高密度表达, cognitive upgrade, 提维, 升维, 认知升级, 底层模型, model reconstruction, fact/opinion audit, 事实核查, 事实观点分离, 观点是否有证据, or 核查证据. Do not use for translation, publishable article rewriting, social-media packaging, title generation, or cover creation.
+description: >-
+  Create a multi-file analysis package for a specific, substantive article,
+  paper, report, essay, raw argument, or long-form source. Decompose its thesis,
+  evidence chain, assumptions, counterarguments, boundaries, and reusable
+  models; optionally perform paper deconstruction, source-grounded thought
+  refinement, cognitive model reconstruction, or a fact/opinion evidence audit.
+  Use only when the user provides or clearly identifies the source and
+  explicitly requests a deep structured analysis package, paper deconstruction,
+  source-grounded cognitive upgrade/model reconstruction, or source-level
+  evidence auditing. Do not trigger for ordinary summaries, quick explanations,
+  casual "analyze this" requests without a substantive source, standalone factual
+  lookup or web research, general advice or brainstorming, technical-blog quality
+  review, translation, rewriting, editing, social-media packaging, title
+  generation, or cover creation.
 ---
 
 # Article Analyzer
