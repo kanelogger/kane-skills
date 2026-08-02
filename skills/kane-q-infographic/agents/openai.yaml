@@ -1,7 +1,7 @@
 interface:
   display_name: "Kane Q Infographic"
-  short_description: "用 Kane Q 固定角色生成漫画信息图"
-  default_prompt: "Use $kane-q-infographic to create a Kane Q comic-style infographic from this content."
+  short_description: "将文章、笔记与结构化内容转化为清晰准确的视觉信息图"
+  default_prompt: "Use $kane-q-infographic to turn this content into a clear visual infographic."
 
 policy:
   allow_implicit_invocation: true

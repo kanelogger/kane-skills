@@ -1,79 +1,61 @@
 ---
 name: kane-q-article-illustrator
-description: Use Kane Q IP as the fixed narrator/visual anchor for article illustrations. Trigger when the user wants to illustrate an article, add images to markdown, generate article visuals, or create comics/infographics based on the confirmed Kane Q character assets.
+description: Plan, generate, and integrate useful illustrations for articles or Markdown. Use when the user asks to illustrate an article, add images to an article, create article visuals, or turn sections into scenes, frameworks, comparisons, flowcharts, or infographics.
 ---
 
 # Kane Q Article Illustrator
 
-Use this skill to generate article illustrations that preserve the confirmed Kane Q character while following the upstream `baoyu-article-illustrator` workflow.
+Turn article content into visuals that improve comprehension, pacing, or recall. Let the article determine the visual type, composition, and style.
 
-## Required Inputs
+## Inputs
 
-- Article content or an article file path.
-- The confirmed Kane Q IP assets bundled in this skill:
-  - `assets/kane-q/front-full-body.png`
-  - `assets/kane-q/three-view.png`
-  - `assets/kane-q/expressions/01-v-sign.png` through `08-starting.png`
-
-If no article is provided, ask for the article before generating an outline or images.
+- Require article content or an article file path.
+- Read the full article and relevant project instructions before proposing visuals.
+- Ask for the article only when no usable content or path is available.
 
 ## Workflow
 
-1. Read this skill first.
-2. Read `references/kane-ip-usage.md` before analyzing the article.
-3. Read `references/IP_DNA.md` when a generation request needs stricter character recovery, new poses, or style debugging.
-4. Use `/Users/kanehua/project/hk-skills/warehouse/adapted/baoyu-article-illustrator/SKILL.md` as the upstream workflow contract.
-5. Follow the upstream pre-check, analysis, confirmation, outline, prompt-file, batch generation, and finalize rules.
-6. Inject Kane Q character rules into every illustration prompt that contains a narrator, guide, emotion marker, or human figure.
-7. Save every prompt file before image generation, exactly as required by upstream `baoyu-article-illustrator`.
-8. Use raster image generation only. Do not replace the image backend with HTML, SVG, canvas, or screenshots.
+1. Identify the article's structure, key claims, difficult concepts, and visual opportunities.
+2. Select only locations where an image adds information, orientation, emotion, or rhythm.
+3. Choose the best form for each location: scene, framework, comparison, process, diagram, chart, timeline, or other suitable format.
+4. Propose the illustration outline and important settings for confirmation. Skip confirmation when the user explicitly requests direct generation.
+5. Write and save one prompt per approved illustration before generating it. Keep prompt filenames aligned with output image filenames.
+6. Generate raster images with the available image-generation workflow.
+7. Inspect each result for article fidelity, composition, text legibility, and obvious generation defects. Regenerate when needed.
+8. Insert image links into the article when requested, without changing unrelated article content.
 
-## Default Visual Strategy
+> Note: When an illustration benefits from a person, prefer Kane Q as the narrator, presenter, observer, or demonstrator. Use additional or different people whenever the article calls for them, and omit people when another visual form communicates better.
 
-- Default type: `mixed`, selecting `framework`, `scene`, `comparison`, `flowchart`, or `infographic` per article section.
-- Default density: `per-section` for long articles, `balanced` for short articles.
-- Default style: simplified flat hand-drawn comic infographic.
-- Default palette: warm off-white background, low-saturation flat colors, dark brown/black linework.
-- Default language: match the article language.
+## Kane Q References
 
-Kane Q should appear only where he improves comprehension: as narrator, pointer, emotional reaction, or action demonstrator. Do not force the character into purely data-dense charts where it reduces readability.
+Read `references/kane-ip-usage.md` only for illustrations that include Kane Q. Use:
 
-## Confirmation
+- `assets/kane-q/three-view.png` as the primary identity reference.
+- One relevant file from `assets/kane-q/expressions/` as an optional pose or emotion reference.
+- `references/IP_DNA.md` only when identity recovery, a new pose, or consistency debugging needs more detail.
 
-Use the upstream confirmation policy. Do not start outline or generation until the user confirms settings, unless the current request explicitly says `直接生成`, `不用确认`, `跳过确认`, or equivalent.
+Treat these assets as character references, not scene templates. Adapt pose, framing, props, environment, supporting people, and visual treatment to the article.
 
-When confirming, include one Kane-specific line:
+## Prompt Content
 
-```text
-IP: Kane Q fixed character, using bundled three-view and expression pack as references.
-```
+For each illustration, specify:
 
-## Prompt Construction
+- The section's communication goal and the exact idea the reader should understand.
+- The visual structure, subject relationships, composition, aspect ratio, and intended placement.
+- Required labels, terms, numbers, or quotes exactly as they appear in the article.
+- A style that fits the article and remains coherent across the illustration set.
+- Kane Q reference assets and concise identity cues only when Kane Q appears.
 
-For each illustration prompt:
+Do not append character instructions to prompts that do not contain Kane Q. Describe any other people according to their role in the article.
 
-- Include the article-specific visual purpose, labels, terms, numbers, quotes, and section position from the upstream workflow.
-- Include the Kane Q prompt capsule from `references/kane-ip-usage.md` when Kane appears.
-- Attach `assets/kane-q/three-view.png` as the primary direct character reference when the backend supports references.
-- Attach one expression image only when it matches the target pose or emotion.
-- Keep all on-character text limited to the small left-chest `Kane.` mark.
+## Quality Check
 
-## Quality Gate
+Before finalizing, verify that:
 
-Before finalizing, check:
+- Every image serves its article section and does not introduce unsupported claims.
+- The selected visual form is clearer than a decorative character scene would be.
+- Labels and generated text are accurate and readable.
+- The illustration set feels coherent without forcing identical compositions.
+- Kane Q is recognizable when used; supporting people and scene details remain free to follow the content.
 
-- Kane still has short black hair, black square-rounded glasses, white T-shirt, small left-chest `Kane.`, dark pants, light shoes.
-- The result uses the confirmed Q-version character, not a redesigned avatar.
-- The article visual remains understandable without relying on decorative character placement.
-- No extra mascot, pet, unrelated person, hoodie, hat, backpack, camera, trekking pole, gloves, large T-shirt print, or long chest text appears.
-- Any generated text inside the image is legible. If not, regenerate from a corrected prompt; do not patch text programmatically.
-
-## Output
-
-Return the upstream final report plus:
-
-```text
-IP: kane-q-article-illustrator
-Character references used: three-view plus selected expression assets
-IP QC: pass/fail with brief reason
-```
+Return the generated image paths, prompt paths, and article path when it was updated.

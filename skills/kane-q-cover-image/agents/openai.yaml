@@ -1,7 +1,7 @@
 interface:
   display_name: "Kane Q Cover Image"
-  short_description: "用 Kane Q 固定角色生成文章封面图"
-  default_prompt: "Use $kane-q-cover-image to create a Kane Q comic-style cover image from this title or article."
+  short_description: "为文章、社交媒体与发布平台规划并生成清晰有力的封面图"
+  default_prompt: "Use $kane-q-cover-image to plan and generate a cover image from this title, article, or brief."
 
 policy:
   allow_implicit_invocation: true
