@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-16-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-17-green.svg)](skills/)
 [![Validation](https://img.shields.io/badge/Validation-passing-brightgreen.svg)](scripts/validate-public-skills)
 
 > 语言版本: [English README](README.md) | [中文 README](README-CN.md)
@@ -27,6 +27,7 @@ Kane 创建的可复用智能体技能库。
 | [`blog-checker`](skills/blog-checker/) | 审阅中文技术博客文章。 | 结构化诊断审阅。 | [SKILL](skills/blog-checker/SKILL.md) |
 | [`concept-fable`](skills/concept-fable/) | 通过三段式中文寓言解释高阶概念。 | 故事、揭示、理论映射、边界与阅读方向。 | [SKILL](skills/concept-fable/SKILL.md) |
 | [`douban-dice-review`](skills/douban-dice-review/) | 用六枚理论骰子撰写简洁的豆瓣式影评。 | 骰子总结与六句影评。 | [SKILL](skills/douban-dice-review/SKILL.md) |
+| [`github-reuse-scout`](skills/github-reuse-scout/) | 开发前先在 GitHub 搜索可复用的开源项目并判断架构能否直接复用；基于现有方案启动开发，再渐进迁移到更熟悉的框架。 | `.reuse/reuse-plan.md` 复用决策与迁移台账。 | [SKILL](skills/github-reuse-scout/SKILL.md) |
 | [`it-system-skill-distiller`](skills/it-system-skill-distiller/) | 将 IT 业务系统提炼为智能体可读的能力包。 | 经过校验的 `distilled/` 包结构。 | [SKILL](skills/it-system-skill-distiller/SKILL.md) |
 | [`kane-q-article-illustrator`](skills/kane-q-article-illustrator/) | 以 Kane Q IP 为固定叙述者与视觉锚点为文章配图。 | 保持 Kane Q 角色一致性的插图文章。 | [SKILL](skills/kane-q-article-illustrator/SKILL.md) |
 | [`kane-q-cover-image`](skills/kane-q-cover-image/) | 以 Kane Q IP 生成文章封面图、社交封面与缩略图。 | 具有 Kane Q 品牌标识的封面图。 | [SKILL](skills/kane-q-cover-image/SKILL.md) |
