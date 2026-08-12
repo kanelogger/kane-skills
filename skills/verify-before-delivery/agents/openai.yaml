@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verify Before Delivery"
+  short_description: "为高影响任务配置分级验证、事实证据、执行检查与独立复核"
+  default_prompt: "Use $verify-before-delivery to complete this task with proportionate evidence and verification."

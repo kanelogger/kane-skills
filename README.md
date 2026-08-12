@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-17-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-19-green.svg)](skills/)
 [![Validation](https://img.shields.io/badge/Validation-passing-brightgreen.svg)](scripts/validate-public-skills)
 
 > Languages: [English README](README.md) | [中文 README](README-CN.md)
@@ -39,6 +39,8 @@ This repository is a public, self-contained skill library. Each package is inspe
 | [`skill-evaluator`](skills/skill-evaluator/) | Build repeatable evals for Agent Skills. | Eval plan, scoring templates, and report structure. | [SKILL](skills/skill-evaluator/SKILL.md) |
 | [`skill-optimizer`](skills/skill-optimizer/) | Audit and improve Agent Skills. | Audit reports, eval plans, mutation proposals, and gates. | [SKILL](skills/skill-optimizer/SKILL.md) |
 | [`subtext-article`](skills/subtext-article/) | Convert subtitles, ASR outputs, or transcripts into a faithful Chinese article. | A package folder with normalized transcript, draft, self-check, and final article. | [SKILL](skills/subtext-article/SKILL.md) |
+| [`tech-claim-auditor`](skills/tech-claim-auditor/) | Verify facts, commands, configuration, versions, performance data, and best practices in IT technical articles. | Traceable verification report and minimally revised article. | [SKILL](skills/tech-claim-auditor/SKILL.md) |
+| [`verify-before-delivery`](skills/verify-before-delivery/) | Add risk-proportionate verification, evidence, and independent review to important tasks. | Deliverables, per-criterion evidence, unresolved items, and review verdict. | [SKILL](skills/verify-before-delivery/SKILL.md) |
 
 ## License
 

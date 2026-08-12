@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-17-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-19-green.svg)](skills/)
 [![Validation](https://img.shields.io/badge/Validation-passing-brightgreen.svg)](scripts/validate-public-skills)
 
 > 语言版本: [English README](README.md) | [中文 README](README-CN.md)
@@ -40,6 +40,8 @@ Kane 创建的可复用智能体技能库。
 | [`skill-evaluator`](skills/skill-evaluator/) | 为智能体技能构建可复用的评估方案。 | 评估计划、评分模板与报告结构。 | [SKILL](skills/skill-evaluator/SKILL.md) |
 | [`skill-optimizer`](skills/skill-optimizer/) | 审计并改进智能体技能。 | 审计报告、评估计划、改进提案与验收标准。 | [SKILL](skills/skill-optimizer/SKILL.md) |
 | [`subtext-article`](skills/subtext-article/) | 将字幕、自动语音识别输出或转录文本转换为忠实的中文文章。 | 包含规范化转录、草稿、自检与终稿的完整文件夹。 | [SKILL](skills/subtext-article/SKILL.md) |
+| [`tech-claim-auditor`](skills/tech-claim-auditor/) | 核验 IT 技术文章中的事实、命令、配置、版本、性能数据与最佳实践。 | 可追溯的核验报告与最小修复稿。 | [SKILL](skills/tech-claim-auditor/SKILL.md) |
+| [`verify-before-delivery`](skills/verify-before-delivery/) | 为重要任务配置分级验证、证据闭环与独立复核。 | 交付物、逐项验证证据、未验证项与复核结论。 | [SKILL](skills/verify-before-delivery/SKILL.md) |
 
 ## 许可
 
