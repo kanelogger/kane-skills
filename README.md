@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-19-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-20-green.svg)](skills/)
 [![Validation](https://img.shields.io/badge/Validation-passing-brightgreen.svg)](scripts/validate-public-skills)
 
 > Languages: [English README](README.md) | [中文 README](README-CN.md)
@@ -26,6 +26,7 @@ This repository is a public, self-contained skill library. Each package is inspe
 | [`blog-checker`](skills/blog-checker/) | Review Chinese technical blog posts. | Structured diagnostic review. | [SKILL](skills/blog-checker/SKILL.md) |
 | [`concept-fable`](skills/concept-fable/) | Explain advanced concepts through a Chinese three-stage fable. | Story, reveal, theory mapping, boundaries, and reading directions. | [SKILL](skills/concept-fable/SKILL.md) |
 | [`douban-dice-review`](skills/douban-dice-review/) | Write a compact Douban-style film review with six theory dice. | Dice summary plus six-sentence review. | [SKILL](skills/douban-dice-review/SKILL.md) |
+| [`git-commit-push`](skills/git-commit-push/) | Stage only the current task's changes, create a Conventional Commit from the staged diff, and push safely. | Verified commit and push result with unrelated changes preserved. | [SKILL](skills/git-commit-push/SKILL.md) |
 | [`github-reuse-scout`](skills/github-reuse-scout/) | Search GitHub for reusable open-source projects before building; decide fork / reference / none with evidence, then gradually migrate borrowed code to a preferred framework. | `.reuse/reuse-plan.md` reuse decision and migration ledger. | [SKILL](skills/github-reuse-scout/SKILL.md) |
 | [`it-system-skill-distiller`](skills/it-system-skill-distiller/) | Distill an IT business system into an AI-readable capability package. | Validated `distilled/` package structure. | [SKILL](skills/it-system-skill-distiller/SKILL.md) |
 | [`kane-q-article-illustrator`](skills/kane-q-article-illustrator/) | Illustrate articles with Kane Q IP as the fixed narrator and visual anchor. | Illustrated article with Kane Q character consistency. | [SKILL](skills/kane-q-article-illustrator/SKILL.md) |

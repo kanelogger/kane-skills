@@ -1,0 +1,4 @@
+interface:
+  display_name: "Git Commit & Push"
+  short_description: "仅提交当前任务相关改动，生成规范提交信息并安全推送"
+  default_prompt: "Use $git-commit-push to stage this task's related changes, create a Conventional Commit, and push it."
