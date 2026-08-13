@@ -8,7 +8,7 @@
 
 `inputs`: Source text, file content, URL content, excerpt, previous `paper_scan` output, optional target reader roles, and optional analysis focus.
 
-`outputs`: `analysis_report` written to the assigned module file. Compact internal notes are allowed only for explicitly narrowed direct refinement tasks.
+`outputs`: `analysis_report` written to the assigned module file, including memorable viewpoints and quotable lines (template §5). Compact internal notes are allowed only for explicitly narrowed direct refinement tasks.
 
 `evidence_policy`: Use `原文明确`, `合理推断`, `创造性延展`, `外部待验证`, and `信息不足`. Separate source claims from your inference. Mark author background, writing context, publication context, data source, intended audience, and external controversy as `信息不足` when absent from the source. Mark factual claims that come from memory or outside the source as `外部待验证`, not `原文明确`.
 
@@ -58,32 +58,42 @@ When this module is selected for output, write a standalone `analysis_report` do
 - 对证据强度做直接判断，并标注证据层级。
 - 对每条 `原文明确` 证据保留可追溯的原文锚点：用简短原文片段、章节名、段落位置或文件行号。不要只写泛化后的结论。
 
-### 5. 背景语境
+### 5. 印象深刻观点与金句
+
+- 挑出全文最有冲击力、最容易被记住或反复引用的观点与金句，控制在 3-8 条。
+- 区分两类：
+  - 印象深刻观点：内容层面的判断——反直觉、切中要害、颠覆常识。
+  - 金句：表达层面的句子——凝练、比喻、对称、可独立传播。
+- 每条逐字引用原文，标注证据层级 `原文明确`，并保留锚点（简短原文片段、章节名、段落位置或文件行号）。
+- 说明每条令人印象深刻的原因：反直觉、精确比喻、情绪共鸣、高度概括，或其他。
+- 没有明显金句时写 `无`，不要硬凑；不改写、不润色原文，改写或补全的表述不收，或标 `合理推断` 并说明。
+
+### 6. 背景语境
 
 - 只在原文提供证据时说明作者身份、写作背景、回应对象、发布语境。
 - 来源缺失时写 `信息不足`，不要补外部故事。
 
-### 6. 隐含假设
+### 7. 隐含假设
 
 - 提取作者没有明说但论证成立所依赖的前提。
 - 区分强假设、弱假设、价值判断和经验判断。
 
-### 7. 反方观点与薄弱处
+### 8. 反方观点与薄弱处
 
 - 给出最强反方观点，而不是随手找反例。
 - 指出原文最可能被攻击的位置：证据不足、边界太宽、因果过强、样本偏差、概念含混。
 
-### 8. 适用边界
+### 9. 适用边界
 
 - 写清这个观点在哪些场景成立、在哪些场景失效。
 - 标出需要额外验证的数据、案例或背景。
 
-### 9. 可复用价值
+### 10. 可复用价值
 
 - 提炼可迁移的方法、框架、判断标准或问题意识。
 - 如果用户提供了目标读者角色，分别说明价值；没有提供时只在必要时用 `合理推断` 给出常见读者价值。
 
-### 10. 信息不足
+### 11. 信息不足
 
 - 汇总所有无法从源材料回答的问题。
 - 说明需要什么材料才能回答。
