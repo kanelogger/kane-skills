@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-20-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-21-green.svg)](skills/)
 [![Validation](https://img.shields.io/badge/Validation-passing-brightgreen.svg)](scripts/validate-public-skills)
 
 > Languages: [English README](README.md) | [中文 README](README-CN.md)
@@ -22,6 +22,7 @@ This repository is a public, self-contained skill library. Each package is inspe
 
 | Skill | Use When | Output | Docs |
 | ----- | -------- | ------ | ---- |
+| [`analyze-china-policy`](skills/analyze-china-policy/) | Verify and interpret Chinese policy documents, compare wording, and assess implementation and impact horizons. | Evidence-based policy identity, three-axis assessment, impact map, and watchpoints. | [SKILL](skills/analyze-china-policy/SKILL.md) |
 | [`article-analyzer`](skills/article-analyzer/) | Analyze articles, papers, reports, or long-form arguments. | A folder of Markdown analysis files plus `99-summary.md`. | [SKILL](skills/article-analyzer/SKILL.md) |
 | [`blog-checker`](skills/blog-checker/) | Review Chinese technical blog posts. | Structured diagnostic review. | [SKILL](skills/blog-checker/SKILL.md) |
 | [`concept-fable`](skills/concept-fable/) | Explain advanced concepts through a Chinese three-stage fable. | Story, reveal, theory mapping, boundaries, and reading directions. | [SKILL](skills/concept-fable/SKILL.md) |

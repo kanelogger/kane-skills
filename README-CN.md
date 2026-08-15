@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-20-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-21-green.svg)](skills/)
 [![Validation](https://img.shields.io/badge/Validation-passing-brightgreen.svg)](scripts/validate-public-skills)
 
 > 语言版本: [English README](README.md) | [中文 README](README-CN.md)
@@ -23,6 +23,7 @@ Kane 创建的可复用智能体技能库。
 
 | 技能 | 使用场景 | 输出 | 文档 |
 | ---- | -------- | ---- | ---- |
+| [`analyze-china-policy`](skills/analyze-china-policy/) | 核验并解释中国政策文件、比较措辞变化、判断执行与影响期限。 | 有证据的文件身份卡、三轴判断、影响地图与观察点。 | [SKILL](skills/analyze-china-policy/SKILL.md) |
 | [`article-analyzer`](skills/article-analyzer/) | 分析文章、论文、报告或长篇论述。 | 一组 Markdown 分析文件及 `99-summary.md`。 | [SKILL](skills/article-analyzer/SKILL.md) |
 | [`blog-checker`](skills/blog-checker/) | 审阅中文技术博客文章。 | 结构化诊断审阅。 | [SKILL](skills/blog-checker/SKILL.md) |
 | [`concept-fable`](skills/concept-fable/) | 通过三段式中文寓言解释高阶概念。 | 故事、揭示、理论映射、边界与阅读方向。 | [SKILL](skills/concept-fable/SKILL.md) |

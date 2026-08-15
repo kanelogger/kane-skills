@@ -1,0 +1,4 @@
+interface:
+  display_name: "Analyze China Policy"
+  short_description: "核验、分层并解释中国政策文件的效力、执行强度与时间尺度"
+  default_prompt: "Use $analyze-china-policy to verify and analyze this Chinese policy document with official-source evidence."
