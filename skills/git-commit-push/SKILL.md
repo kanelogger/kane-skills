@@ -52,7 +52,19 @@ git diff --cached
 
 Require a non-empty staged diff. Confirm every staged path and hunk belongs to one coherent task.
 
-### 3. Generate the Commit Message
+### 3. Determine the Commit Message Language
+
+Choose the natural language for the commit description and body in this order:
+
+1. An explicit language requested by the user for the current commit.
+2. A repository-specific commit convention documented in files such as `CONTRIBUTING.md`.
+3. The dominant natural language in the latest 20 non-merge commits, inspected with `git log -20 --no-merges --format='%s%n%b'`. Use it only when at least 60% of commits containing natural-language text use the same language; ignore Conventional Commit keywords, code identifiers, paths, hashes, and other language-neutral text.
+4. The language used by the user in the current request or conversation.
+5. English when none of the above provides a reliable signal.
+
+Do not choose the output language from the language of this skill's prompt. Keep Conventional Commit `type` values, `scope`, and the `BREAKING CHANGE:` keyword in their standard form; write the human-readable description, body, and breaking-change explanation in the selected language. Preserve technical names in their established spelling.
+
+### 4. Generate the Commit Message
 
 Generate the message strictly from `git diff --cached`, using this exact prompt. Replace the placeholder with the complete staged diff:
 
@@ -60,13 +72,19 @@ Generate the message strictly from `git diff --cached`, using this exact prompt.
 你是一位严格遵守 Conventional Commits 1.0.0 规范的提交信息写手。
 请根据下面的 git diff 输出，生成一条 commit message，要求：
 
+<target_language>
+{按语言选择规则确定的语言}
+</target_language>
+
 1. 第一行格式：type(scope): description
    - type 只能从 feat/fix/docs/refactor/perf/test/chore 中选择
-   - description 用祈使句（如 "add" 而非 "added"），不超过 50 个字符
-2. 空一行，正文说明"为什么"做这个改动（动机、约束、权衡），不要复述 diff 里的代码内容（那是 What，diff 自己已经写了）
-3. 若存在破坏性变更，正文后加 footer: BREAKING CHANGE: <说明>
-4. 严格基于 diff 内容，不虚构 diff 中不存在的信息
-5. 只输出 commit message 本身，不要任何解释
+   - description 必须使用 target_language，不超过 50 个字符
+   - 英文使用祈使句（如 "add" 而非 "added"）；中文使用简洁的动宾短语（如“添加”“修复”“更新”）
+2. 空一行，使用 target_language 说明"为什么"做这个改动（动机、约束、权衡），不要复述 diff 里的代码内容（那是 What，diff 自己已经写了）
+3. 若存在破坏性变更，正文后加 footer: BREAKING CHANGE: <使用 target_language 的说明>
+4. type、scope 和 BREAKING CHANGE: 关键字保持 Conventional Commits 规范形式，其余自然语言内容使用 target_language；技术名称可保留原文
+5. 严格基于 diff 内容，不虚构 diff 中不存在的信息
+6. 只输出 commit message 本身，不要任何解释
 
 <diff>
 {粘贴 git diff --cached 的输出}
@@ -78,11 +96,11 @@ Use only rationale inferable from the changed tests, documentation, behavior, or
 Validate the result before committing:
 
 - Header matches `^(feat|fix|docs|refactor|perf|test|chore)\([^)]+\): .+`.
-- Description is imperative and at most 50 characters.
-- Body follows one blank line and explains why without unsupported claims.
+- Description uses the selected language, follows its stated phrasing rule, and is at most 50 characters.
+- Body follows one blank line, uses the selected language, and explains why without unsupported claims.
 - A breaking footer appears only when the staged diff demonstrates a breaking change.
 
-### 4. Commit
+### 5. Commit
 
 Pass the subject and body as separate message arguments so the shell does not open an editor:
 
@@ -94,7 +112,7 @@ Add a third `-m` argument for a `BREAKING CHANGE:` footer when required. Preserv
 
 If a hook fails, report the failure and leave the commit uncreated. Fix it only when the fix is within the user's task scope.
 
-### 5. Verify and Push
+### 6. Verify and Push
 
 After committing, run:
 
