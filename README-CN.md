@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-21-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-22-green.svg)](skills/)
 [![Validation](https://img.shields.io/badge/Validation-passing-brightgreen.svg)](scripts/validate-public-skills)
 
 > 语言版本: [English README](README.md) | [中文 README](README-CN.md)
@@ -31,6 +31,7 @@ Kane 创建的可复用智能体技能库。
 | [`git-commit-push`](skills/git-commit-push/) | 只暂存当前任务改动，依据暂存区 diff 生成 Conventional Commit，并安全推送。 | 已验证的提交与推送结果，同时保留无关改动。 | [SKILL](skills/git-commit-push/SKILL.md) |
 | [`github-reuse-scout`](skills/github-reuse-scout/) | 开发前先在 GitHub 搜索可复用的开源项目并判断架构能否直接复用；基于现有方案启动开发，再渐进迁移到更熟悉的框架。 | `.reuse/reuse-plan.md` 复用决策与迁移台账。 | [SKILL](skills/github-reuse-scout/SKILL.md) |
 | [`it-system-skill-distiller`](skills/it-system-skill-distiller/) | 将 IT 业务系统提炼为智能体可读的能力包。 | 经过校验的 `distilled/` 包结构。 | [SKILL](skills/it-system-skill-distiller/SKILL.md) |
+| [`kane-prompts`](skills/kane-prompts/) | 从 `prompts/` 中查找、调用、轻量改写或组合常用提示词。 | 基于所选 Markdown 原文的可复制提示词，或按明确要求执行后的产物。 | [SKILL](skills/kane-prompts/SKILL.md) |
 | [`kane-q-article-illustrator`](skills/kane-q-article-illustrator/) | 以 Kane Q IP 为固定叙述者与视觉锚点为文章配图。 | 保持 Kane Q 角色一致性的插图文章。 | [SKILL](skills/kane-q-article-illustrator/SKILL.md) |
 | [`kane-q-cover-image`](skills/kane-q-cover-image/) | 以 Kane Q IP 生成文章封面图、社交封面与缩略图。 | 具有 Kane Q 品牌标识的封面图。 | [SKILL](skills/kane-q-cover-image/SKILL.md) |
 | [`kane-q-infographic`](skills/kane-q-infographic/) | 以 Kane Q 为叙述者创建漫画风格信息图。 | Kane Q 视觉一致的信息图。 | [SKILL](skills/kane-q-infographic/SKILL.md) |

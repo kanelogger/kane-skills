@@ -17,5 +17,6 @@ node_modules/
 dist/
 build/
 coverage/
+skills/*-workspace/
 *.tmp
 .tools

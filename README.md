@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-21-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-22-green.svg)](skills/)
 [![Validation](https://img.shields.io/badge/Validation-passing-brightgreen.svg)](scripts/validate-public-skills)
 
 > Languages: [English README](README.md) | [中文 README](README-CN.md)
@@ -30,6 +30,7 @@ This repository is a public, self-contained skill library. Each package is inspe
 | [`git-commit-push`](skills/git-commit-push/) | Stage only the current task's changes, create a Conventional Commit from the staged diff, and push safely. | Verified commit and push result with unrelated changes preserved. | [SKILL](skills/git-commit-push/SKILL.md) |
 | [`github-reuse-scout`](skills/github-reuse-scout/) | Search GitHub for reusable open-source projects before building; decide fork / reference / none with evidence, then gradually migrate borrowed code to a preferred framework. | `.reuse/reuse-plan.md` reuse decision and migration ledger. | [SKILL](skills/github-reuse-scout/SKILL.md) |
 | [`it-system-skill-distiller`](skills/it-system-skill-distiller/) | Distill an IT business system into an AI-readable capability package. | Validated `distilled/` package structure. | [SKILL](skills/it-system-skill-distiller/SKILL.md) |
+| [`kane-prompts`](skills/kane-prompts/) | Find, retrieve, lightly adapt, or combine reusable prompts from the `prompts/` library. | A copy-ready prompt grounded in the selected Markdown source, or an explicitly requested executed result. | [SKILL](skills/kane-prompts/SKILL.md) |
 | [`kane-q-article-illustrator`](skills/kane-q-article-illustrator/) | Illustrate articles with Kane Q IP as the fixed narrator and visual anchor. | Illustrated article with Kane Q character consistency. | [SKILL](skills/kane-q-article-illustrator/SKILL.md) |
 | [`kane-q-cover-image`](skills/kane-q-cover-image/) | Generate article cover images, social cover art, and thumbnails with Kane Q IP. | Cover image with Kane Q brand identity. | [SKILL](skills/kane-q-cover-image/SKILL.md) |
 | [`kane-q-infographic`](skills/kane-q-infographic/) | Create comic-style infographics with Kane Q as narrator and explainer. | Infographic with Kane Q visual consistency. | [SKILL](skills/kane-q-infographic/SKILL.md) |
