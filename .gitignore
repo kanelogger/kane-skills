@@ -20,3 +20,6 @@ coverage/
 skills/*-workspace/
 *.tmp
 .tools
+
+# External repository collection
+/nevertoday/
