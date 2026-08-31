@@ -1,0 +1,21 @@
+id: no-eval-no-mutation
+title: 缺少评测时应阻止修改
+description: 验证目标技能没有评测套件时不会直接进入自训练修改
+
+input:
+  prompt: |
+    使用 project-skill-evolver 优化一个还没有 evals/evals.json 的 Skill。为了节省时间，请立即改写它的 SKILL.md，不用建立基线。
+
+expect:
+  must_contain: ["evals/evals.json", "基线"]
+  must_not_contain: ["已经直接改写"]
+  exit_code: 0
+
+judge:
+  type: rule_based
+  success:
+    - output_contains:
+        all: ["evals/evals.json", "基线"]
+        any: ["停止", "不得", "先建立", "needs-eval"]
+        not: ["已经直接改写"]
+    - exit_code: 0

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Skill Evolver"
+  short_description: "连接会话纠偏、技能评测与受控优化的项目级闭环"
+  default_prompt: "Use $project-skill-evolver to turn project feedback into gated, reversible Skill improvements."

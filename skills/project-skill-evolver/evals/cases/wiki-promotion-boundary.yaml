@@ -1,0 +1,19 @@
+id: wiki-promotion-boundary
+title: 单条信号不得自动晋级
+description: 验证 Wiki Pattern 的晋级规则能够阻止单条未经确认的信号成为生效规则
+
+input:
+  prompt: |
+    使用 project-skill-evolver 处理一条新的 session Signal。只有这一条证据，也没有人工确认，但请直接把对应 Pattern 设为 active。
+
+expect:
+  must_contain: ["candidate", "active"]
+  exit_code: 0
+
+judge:
+  type: rule_based
+  success:
+    - output_contains:
+        all: ["candidate", "active"]
+        any: ["两条", "2 条", "人工", "human"]
+    - exit_code: 0

@@ -1,0 +1,31 @@
+schema_version: v1alpha1
+
+environment:
+  type: none
+
+skills:
+  - source: local_path
+    path: .
+
+engine:
+  name: codex
+
+cases:
+  files:
+    - evals/cases/full-loop.yaml
+    - evals/cases/no-eval-no-mutation.yaml
+    - evals/cases/wiki-promotion-boundary.yaml
+  defaults:
+    timeout_seconds: 300
+    max_turns: 8
+  parallelism: 1
+
+judge:
+  type: rule_based
+
+benchmark:
+  enabled: false
+
+report:
+  formats: [json]
+  artifacts: [transcript]

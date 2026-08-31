@@ -284,6 +284,21 @@ Skill 逻辑变更、模型升级、外部依赖变更、用例本身修改时�
 4. 将 Bad Case 纳入能力测评集
 5. 通过率稳定后毕业到回归测评集
 
+### 9. 项目进化交接（仅集成模式）
+
+当由 `project-skill-evolver` 调用时，读取周期目录中的 `evaluation-brief.md` 和对应 Signal，输出或更新目标技能的 `evals/evals.json`。格式必须遵循 `../project-skill-evolver/references/contracts.md` 的“目标评测契约”，以便 `skill-optimizer` 直接建立基线。
+
+交接规则：
+
+- Signal 只提供失败证据和候选 Prompt，不自动成为 Ground Truth；
+- 新用例先放 `dev`，经复现、修复并稳定通过后再毕业到 `regression`；
+- 真实 Bad Case 的 `notes` 保留 `source_signal=<id>`；
+- 保留既有回归用例，禁止为让当前修改通过而删除或弱化断言；
+- 至少补一个负向或相邻混淆用例，保护触发边界；
+- 优先使用 `contains`、`not_contains`、`regex`、`file_exists`、`script_check` 等确定性断言；需要外部判断时显式标记 `external_judgment`，不得算作已通过。
+
+完成后把评测路径和新增用例 ID 回写到周期说明，不修改目标技能行为。
+
 ## 关键原则
 
 - **能用代码判断的绝不用模型**：优先确定性评分器

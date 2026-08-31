@@ -1,0 +1,19 @@
+id: full-loop
+title: 应完整连接三个元技能
+description: 验证输出能说明从会话纠偏到门禁回写的完整项目级闭环
+
+input:
+  prompt: |
+    使用 project-skill-evolver 说明如何把一次用户纠偏沉淀为目标 Skill 的可回滚改进。列出关键阶段和持久化位置。
+
+expect:
+  must_contain: ["session-achieve", "skill-evaluator", "skill-optimizer", ".skill-evolution", "evals/evals.json"]
+  exit_code: 0
+
+judge:
+  type: rule_based
+  success:
+    - output_contains:
+        all: ["session-achieve", "skill-evaluator", "skill-optimizer", ".skill-evolution", "evals/evals.json"]
+        any: ["AND gate", "AND 门禁", "回滚"]
+    - exit_code: 0

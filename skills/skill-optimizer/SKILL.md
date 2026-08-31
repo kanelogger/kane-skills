@@ -42,6 +42,8 @@ Read the target skill directory before judging it:
 
 If the user did not provide a target path, ask for the skill directory path.
 
+When invoked by `project-skill-evolver`, also read the cycle `manifest.json`, `evaluation-brief.md`, and `optimizer-brief.md`. Treat Wiki Patterns as mutation hypotheses, not executed evidence. The target's `evals/evals.json` and run traces remain the gate authority.
+
 ### 2. Run Necessity Gate
 
 Before optimizing, decide whether the skill should exist.
@@ -220,6 +222,8 @@ Setup -> Intent Diagnosis -> Eval Planning -> Baseline -> Review -> Ideate -> Mo
 ```
 
 The LLM may translate traces into a patch proposal. Scripts and explicit user-approved edits produce file changes; programmatic gates decide keep or revert. No trace, no mutation. No eval suite, no baseline run, no self-training.
+
+In a project evolution cycle, initialize and mutate only `<cycle>/workspace/source/working`. Do not edit the original target skill during the loop. After `iterate.ts`, pass `logs/last-gate.json` to `project-skill-evolver/scripts/evolution-state.ts record`; only a recorded `keep` or explicitly reviewed `keep-with-warning` is eligible for delivery. `needs-human-review` is not success.
 
 ### 8. Deliver
 

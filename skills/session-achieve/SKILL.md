@@ -82,6 +82,16 @@ achieved-{YYYYMMDD-HHMMSS}.md
 
 **文件名规则**：使用当前系统时间，格式 `achieved-YYYYMMDD-HHMMSS.md`。
 
+### Step 6 — 项目进化交接（仅集成模式）
+
+当且仅当由 `project-skill-evolver` 调用时，在复盘 Markdown 之外生成一个 `signal-{YYYYMMDD-HHMMSS}.json`：
+
+- 使用 `../project-skill-evolver/references/contracts.md` 的 Signal v1 契约；
+- 一个文件只记录一个可观察问题；多个独立问题生成多个 Signal；
+- `evidence.ref` 必须定位到会话轮次、复盘条目或已执行 Trace；
+- `target_skill` 不明确时标记 `[待确认]`，不得猜测后直接入库；
+- 普通复盘模式不生成 Signal，保持原有输出不变。
+
 ---
 
 ## 3. 输出后行为
@@ -89,6 +99,8 @@ achieved-{YYYYMMDD-HHMMSS}.md
 文件生成后，**仅输出一句话**：
 
 > 复盘草稿已生成：`achieved-{YYYYMMDD-HHMMSS}.md`。请检查并修正预填充内容，或直接指出哪些总结不准确。
+
+项目进化集成模式改为一句话列出复盘文件和所有 Signal 文件，随后由 `project-skill-evolver` 的脚本校验入库。
 
 **禁止**：
 - 逐条解释文件内容
