@@ -1,8 +1,8 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-22-green.svg)](skills/)
-[![Validation](https://img.shields.io/badge/Validation-passing-brightgreen.svg)](scripts/validate-public-skills)
+[![Skills](https://img.shields.io/badge/Skills-24-green.svg)](skills/)
+[![Validation](https://img.shields.io/badge/Validation-failing-red.svg)](scripts/validate-public-skills)
 
 > 语言版本: [English README](README.md) | [中文 README](README-CN.md)
 
@@ -15,7 +15,7 @@ Kane 创建的可复用智能体技能库。
 ## 本仓库是什么
 
 - 一组以独立、自包含单元形式封装的**智能体技能（Agent Skills）**。
-- 每个技能都包含 `SKILL.md`（完整协议）和 `README.md`（公开速查）。
+- 每个技能都包含 `SKILL.md`；大多数技能另附 `README.md` 公开速查。
 - 根据需要可附带 `scripts/`、`assets/`、`evals/`、`references/`、`agents/` 等目录。
 
 
@@ -36,10 +36,12 @@ Kane 创建的可复用智能体技能库。
 | [`kane-q-cover-image`](skills/kane-q-cover-image/) | 以 Kane Q IP 生成文章封面图、社交封面与缩略图。 | 具有 Kane Q 品牌标识的封面图。 | [SKILL](skills/kane-q-cover-image/SKILL.md) |
 | [`kane-q-infographic`](skills/kane-q-infographic/) | 以 Kane Q 为叙述者创建漫画风格信息图。 | Kane Q 视觉一致的信息图。 | [SKILL](skills/kane-q-infographic/SKILL.md) |
 | [`merge-drafts`](skills/merge-drafts/) | 将多份草稿合并为一篇润色后的文章。 | 最终合并文章及合并报告。 | [SKILL](skills/merge-drafts/SKILL.md) |
+| [`project-skill-evolver`](skills/project-skill-evolver/) | 将多次会话纠偏沉淀为可追溯、受门禁保护且可回滚的技能改进。 | 项目 Wiki、回归评测、进化周期状态与回滚记录。 | [SKILL](skills/project-skill-evolver/SKILL.md) |
 | [`prompt-optimizer`](skills/prompt-optimizer/) | 将模糊需求转化为可直接复制使用的提示词。 | 一个 `.md` 或 `.xml` 提示词文件。 | [SKILL](skills/prompt-optimizer/SKILL.md) |
 | [`requirement-explorer`](skills/requirement-explorer/) | 将原始业务需求推进成标准软件需求文档。 | 含 Mermaid 流程图和完整性自检的 Markdown 需求文档。 | [SKILL](skills/requirement-explorer/SKILL.md) |
 | [`request-refactor-plan`](skills/request-refactor-plan/) | 将重构想法转化为小步提交的实施计划。 | 重构 RFC / GitHub issue 正文。 | [SKILL](skills/request-refactor-plan/SKILL.md) |
 | [`session-achieve`](skills/session-achieve/) | 复盘多轮对话并提取可复用的提示词。 | 会话复盘与提示词经验。 | [SKILL](skills/session-achieve/SKILL.md) |
+| [`simplify-codebase`](skills/simplify-codebase/) | 以可达性、契约和验证证据审计或简化代码库，移除意外复杂度。 | 排序后的证明记录，或带操作回执的已验证简化结果。 | [SKILL](skills/simplify-codebase/SKILL.md) |
 | [`skill-evaluator`](skills/skill-evaluator/) | 为智能体技能构建可复用的评估方案。 | 评估计划、评分模板与报告结构。 | [SKILL](skills/skill-evaluator/SKILL.md) |
 | [`skill-optimizer`](skills/skill-optimizer/) | 审计并改进智能体技能。 | 审计报告、评估计划、改进提案与验收标准。 | [SKILL](skills/skill-optimizer/SKILL.md) |
 | [`subtext-article`](skills/subtext-article/) | 将字幕、自动语音识别输出或转录文本转换为忠实的中文文章。 | 包含规范化转录、草稿、自检与终稿的完整文件夹。 | [SKILL](skills/subtext-article/SKILL.md) |

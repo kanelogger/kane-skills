@@ -1,8 +1,8 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-22-green.svg)](skills/)
-[![Validation](https://img.shields.io/badge/Validation-passing-brightgreen.svg)](scripts/validate-public-skills)
+[![Skills](https://img.shields.io/badge/Skills-24-green.svg)](skills/)
+[![Validation](https://img.shields.io/badge/Validation-failing-red.svg)](scripts/validate-public-skills)
 
 > Languages: [English README](README.md) | [中文 README](README-CN.md)
 
@@ -15,7 +15,7 @@ This repository is a public, self-contained skill library. Each package is inspe
 ## What this repo is
 
 - A collection of **Agent Skills** packaged as independent, self-contained units.
-- Every skill ships with a `SKILL.md` (the full protocol) and a `README.md` (a quick public reference).
+- Every skill ships with a `SKILL.md`; most also include a `README.md` (a quick public reference).
 - Optional extras include `scripts/`, `assets/`, `evals/`, `references/`, and `agents/` when the skill needs them.
 
 ## Skills
@@ -35,10 +35,12 @@ This repository is a public, self-contained skill library. Each package is inspe
 | [`kane-q-cover-image`](skills/kane-q-cover-image/) | Generate article cover images, social cover art, and thumbnails with Kane Q IP. | Cover image with Kane Q brand identity. | [SKILL](skills/kane-q-cover-image/SKILL.md) |
 | [`kane-q-infographic`](skills/kane-q-infographic/) | Create comic-style infographics with Kane Q as narrator and explainer. | Infographic with Kane Q visual consistency. | [SKILL](skills/kane-q-infographic/SKILL.md) |
 | [`merge-drafts`](skills/merge-drafts/) | Merge several drafts into one polished article. | Final merged article plus merge report. | [SKILL](skills/merge-drafts/SKILL.md) |
+| [`project-skill-evolver`](skills/project-skill-evolver/) | Turn recurring session corrections into traceable, gated, and reversible Skill improvements. | Project Wiki, regression evals, evolution-cycle state, and rollback records. | [SKILL](skills/project-skill-evolver/SKILL.md) |
 | [`prompt-optimizer`](skills/prompt-optimizer/) | Turn vague requirements into copy-ready prompts. | A `.md` or `.xml` prompt file. | [SKILL](skills/prompt-optimizer/SKILL.md) |
 | [`requirement-explorer`](skills/requirement-explorer/) | Turn raw business needs into a standard software requirements document. | Markdown requirements document with Mermaid flows and a completeness check. | [SKILL](skills/requirement-explorer/SKILL.md) |
 | [`request-refactor-plan`](skills/request-refactor-plan/) | Turn a refactor idea into a small-commit implementation plan. | Refactor RFC / GitHub issue body. | [SKILL](skills/request-refactor-plan/SKILL.md) |
 | [`session-achieve`](skills/session-achieve/) | Review a multi-turn conversation and extract reusable prompts. | Session review and prompt lessons. | [SKILL](skills/session-achieve/SKILL.md) |
+| [`simplify-codebase`](skills/simplify-codebase/) | Audit or simplify codebases by removing accidental complexity with reachability and contract evidence. | Ranked proof records, or a validated simplification with an operation receipt. | [SKILL](skills/simplify-codebase/SKILL.md) |
 | [`skill-evaluator`](skills/skill-evaluator/) | Build repeatable evals for Agent Skills. | Eval plan, scoring templates, and report structure. | [SKILL](skills/skill-evaluator/SKILL.md) |
 | [`skill-optimizer`](skills/skill-optimizer/) | Audit and improve Agent Skills. | Audit reports, eval plans, mutation proposals, and gates. | [SKILL](skills/skill-optimizer/SKILL.md) |
 | [`subtext-article`](skills/subtext-article/) | Convert subtitles, ASR outputs, or transcripts into a faithful Chinese article. | A package folder with normalized transcript, draft, self-check, and final article. | [SKILL](skills/subtext-article/SKILL.md) |
