@@ -21,5 +21,8 @@ skills/*-workspace/
 *.tmp
 .tools
 
+# Local WeChat preferences and API credentials
+.kane-skills/
+
 # External repository collection
 /nevertoday/
