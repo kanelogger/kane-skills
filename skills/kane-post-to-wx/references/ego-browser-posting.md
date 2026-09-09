@@ -55,6 +55,24 @@ ${BUN_X} {baseDir}/scripts/wechat-ego-browser.ts --markdown article.md --resume 
 
 Never take control back before the user confirms login is complete.
 
+### Recovery after login or browser failure
+
+Treat the browser flow as a state machine:
+
+```text
+new task space -> login-required -> explicit user confirmation
+  -> resume same task space -> editor-ready -> verified preview/saved
+  -> close task space only after the result marker is confirmed
+```
+
+- `login-required` is an intentional handoff. Keep the reported task space open; do not retry or create another one before the user confirms login.
+- Resume with the exact same `--resume --task-space <id>` values. `takeOverTaskSpace()` may transfer control without returning a task object, so the CLI ID remains the authoritative fallback.
+- If a resumed run fails after the editor opens, retry the same task space. The publisher first prefers an editor opened by the current action and otherwise reuses an existing usable editor tab.
+- The title field can exist before its page handlers are ready. The publisher waits for the editor, pauses briefly, and retries transient input races.
+- A successful `--submit` result must include `appmsgid`; a preview result must remain available for manual inspection. Only then may the task space be completed.
+
+Never select the first arbitrary `appmsg` tab when multiple editor tabs exist; stale tabs can contain a different draft or an incomplete previous attempt.
+
 ## Verification and Task-Space Lifecycle
 
 - Article mode verifies the title and non-empty body before it can save.

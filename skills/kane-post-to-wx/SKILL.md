@@ -1,6 +1,6 @@
 ---
 name: kane-post-to-wx
-description: Posts content to WeChat Official Account (微信公众号) via API or ego-browser. Supports article posting (文章) with HTML, markdown, or plain text input, and image-text posting (贴图, formerly 图文) with multiple images. Markdown article workflows use a personal style profile by default and convert ordinary external links into bottom citations. Use when user mentions "发布公众号", "post to wechat", "微信公众号", or "贴图/图文/文章".
+description: Posts content to WeChat Official Account (微信公众号) via API or ego-browser. Supports article (文章) and image-text (贴图/图文) workflows from Markdown, HTML, or plain text, with metadata, images, drafts, and login recovery. Use when the user explicitly asks to publish to WeChat Official Account. Do not use for Weibo/X publishing, WeChat group summaries, or ordinary article writing and formatting.
 metadata:
   openclaw:
     homepage: https://github.com/kanelogger/kane-skills#kane-post-to-wx
@@ -151,7 +151,7 @@ Details: `references/image-text-posting.md`.
 
 ### Step 0: Load Preferences
 
-Check and load EXTEND.md (see "Preferences" above). If not found, complete first-time setup before any other questions. Resolve and cache for later steps: `default_theme`, `default_color`, `default_author`, `need_open_comment`, `only_fans_can_comment`.
+Check and load EXTEND.md (see "Preferences" above). Hard gate: until preferences are loaded or first-time setup has been saved, do not read the article, inspect its images, run `--dry-run`, ask about publishing method/theme, or open a browser task space. Resolve and cache for later: `default_theme`, `default_color`, `default_author`, `need_open_comment`, `only_fans_can_comment`.
 
 ### Step 1: Determine Input Type
 
@@ -243,7 +243,18 @@ ${BUN_X} {baseDir}/scripts/wechat-ego-browser.ts --markdown <markdown_file> [--t
 ${BUN_X} {baseDir}/scripts/wechat-ego-browser.ts --html <html_file>
 ```
 
-The default is verified preview mode. Add `--submit` only when the user explicitly asked to save the draft. On first login, the script hands the isolated ego-browser task space to the user. After the user confirms login is complete, rerun with the reported `--resume --task-space <id>` arguments. Full flow: `references/ego-browser-posting.md`.
+The default is verified preview mode. Add `--submit` only when the user explicitly asked to save the draft. On first login, the script hands the isolated ego-browser task space to the user. After the user explicitly confirms login is complete, rerun with the exact reported `--resume --task-space <id>` arguments; never create a new task space for the same article.
+
+**Browser recovery contract:**
+
+- `login-required` is a handoff state, not a failure. Keep the reported task space open and wait for explicit user confirmation before resuming.
+- A resumed run must retain the same task-space ID even if `takeOverTaskSpace()` returns no task object.
+- The publisher prefers a newly opened editor tab and, on recovery, reuses an existing usable editor tab instead of composing into an arbitrary stale tab.
+- The editor title field is asynchronous. The publisher waits for the editor and retries transient input races before failing.
+- If a run fails after opening the editor, rerun the exact same command with the same task-space ID. Do not open a second task space or manually duplicate the article.
+- Close the task space only after a `preview-ready` or `saved` result has been emitted and verified. Login handoff and failed composition leave it available for recovery.
+
+Read `references/ego-browser-posting.md` for the state transitions and recovery sequence.
 
 Legacy Chrome CDP scripts remain available for rollback, but are not the default browser path.
 
@@ -264,7 +275,8 @@ Article:
 
 Result:
 ✓ Draft saved to WeChat Official Account
-• media_id: [media_id]                         ← API method only
+• appmsgid: [appmsgid]                         ← Browser method
+• media_id: [media_id]                         ← API method
 
 Next Steps (API):
 → Manage drafts: https://mp.weixin.qq.com (登录后进入「内容管理」→「草稿箱」)
@@ -297,8 +309,10 @@ Files created:
 |-------|-----|
 | Missing API credentials | Follow guided setup in Step 2 |
 | Access token error | Verify credentials valid and not expired |
-| Not logged in (browser) | Complete QR login in the handed-off ego-browser task space, confirm completion, then rerun with `--resume` |
-| ego-browser unavailable | Open/install ego lite and ensure its `ego-browser` CLI is available |
+| Not logged in (browser) | Complete QR login in the handed-off ego-browser task space, confirm completion, then rerun with the exact `--resume --task-space <id>` arguments |
+| `Failed to fill #title` | The editor raced its asynchronous load; rerun the same task-space command after the script's wait/retry path, without creating another task space |
+| `Cannot read properties of undefined (reading 'id')` | Keep the same task space; the resume path must use the CLI task-space ID when takeover returns no object, then reuse the existing editor |
+| Multiple WeChat editor tabs | Prefer the editor opened by the current action or an existing usable editor; do not select an arbitrary first `appmsg` tab |
 | Chrome not found | Applies only to legacy scripts; set `WECHAT_BROWSER_CHROME_PATH` |
 | Title/summary missing | Use auto-generation or provide manually |
 | No cover image | Add frontmatter cover or place `imgs/cover.png` in article directory |
@@ -316,6 +330,7 @@ Files created:
 | `references/image-text-posting.md` | Image-text parameters, auto-compression |
 | `references/article-posting.md` | Article themes, image handling |
 | `references/ego-browser-posting.md` | ego-browser task spaces, login handoff, preview, and submit flow |
+| `evals/evals.json` | Regression and trigger cases for login handoff, editor races, task-space recovery, and draft-save proof |
 | `references/multi-account.md` | Multi-account compatibility, credentials, Chrome profiles, CLI |
 | `references/api-setup.md` | Guided credential setup |
 | `references/config/first-time-setup.md` | First-time EXTEND.md setup |

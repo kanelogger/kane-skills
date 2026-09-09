@@ -300,18 +300,58 @@ async function emit(result) {
   cliLog(RESULT_PREFIX + JSON.stringify(result));
 }
 
-async function chooseEditorTab() {
-  await wait(2);
+async function isEditorReady() {
+  return await js(String.raw\`(() => Boolean(
+    document.querySelector('#title')
+    && (
+      document.querySelector('.rich_media_content .ProseMirror')
+      || document.querySelector('.ProseMirror[contenteditable="true"], .js_pmEditorArea')
+    )
+  ))()\`);
+}
+
+async function findExistingEditorTab() {
   const tabs = await listTabs();
-  const candidates = tabs.filter((tab) => String(tab.url || '').includes('mp.weixin.qq.com'));
-  const editor = candidates.find((tab) => /appmsg|operate_appmsg|newspic/.test(String(tab.url || '')))
-    || candidates[candidates.length - 1];
-  if (!editor) throw new Error('WeChat editor tab was not found');
-  await switchTab(editor.targetId || editor.id);
-  return editor;
+  const candidates = tabs
+    .filter((tab) => /appmsg|operate_appmsg|newspic/.test(String(tab.url || '')))
+    .sort((a, b) => Number(Boolean(b.active)) - Number(Boolean(a.active)));
+  for (const editor of candidates) {
+    await switchTab(editor.targetId || editor.id);
+    try {
+      await waitForElement('#title', { timeout: 5 });
+      if (await isEditorReady()) {
+        await wait(1);
+        return editor;
+      }
+    } catch {
+      // Try the next editor tab if this tab is stale.
+    }
+  }
+  return null;
+}
+
+async function chooseEditorTab(previousTabs = []) {
+  const previousIds = new Set(
+    previousTabs.map((tab) => tab.targetId || tab.id).filter(Boolean),
+  );
+  for (let attempt = 0; attempt < 30; attempt++) {
+    const tabs = await listTabs();
+    const candidates = tabs.filter((tab) => /appmsg|operate_appmsg|newspic/.test(String(tab.url || '')));
+    const fresh = candidates.filter((tab) => !previousIds.has(tab.targetId || tab.id));
+    const editor = fresh.at(-1) || candidates.find((tab) => tab.active) || candidates.at(-1);
+    if (editor) {
+      await switchTab(editor.targetId || editor.id);
+      await waitForElement('#title', { timeout: 30 });
+      await wait(1);
+      return editor;
+    }
+    await wait(1);
+  }
+  throw new Error('WeChat editor tab was not found after opening the editor');
 }
 
 async function openEditor(menuNames) {
+  const previousTabs = await listTabs();
   const target = await js(String.raw\`(() => {
     const names = \${JSON.stringify(menuNames)};
     const items = [...document.querySelectorAll('.new-creation__menu .new-creation__menu-item')];
@@ -328,24 +368,29 @@ async function openEditor(menuNames) {
   })()\`);
   if (!target?.ok) throw new Error('WeChat creation menu was not found: ' + JSON.stringify(target));
   await click([target.x, target.y], { label: 'open WeChat editor' });
-  await chooseEditorTab();
+  await chooseEditorTab(previousTabs);
 }
 
 async function setInput(selector, value) {
   if (!value) return;
-  const result = await js(String.raw\`(() => {
-    const selector = \${JSON.stringify(selector)};
-    const value = \${JSON.stringify(value)};
-    const element = document.querySelector(selector);
-    if (!element) return { ok: false };
-    element.focus();
-    element.value = value;
-    element.dispatchEvent(new Event('input', { bubbles: true }));
-    element.dispatchEvent(new Event('change', { bubbles: true }));
-    element.dispatchEvent(new Event('blur', { bubbles: true }));
-    return { ok: element.value === value };
-  })()\`);
-  if (!result?.ok) throw new Error('Failed to fill ' + selector);
+  let result;
+  for (let attempt = 0; attempt < 5; attempt++) {
+    result = await js(String.raw\`(() => {
+      const selector = \${JSON.stringify(selector)};
+      const value = \${JSON.stringify(value)};
+      const element = document.querySelector(selector);
+      if (!element) return { ok: false, reason: 'missing' };
+      element.focus();
+      element.value = value;
+      element.dispatchEvent(new Event('input', { bubbles: true }));
+      element.dispatchEvent(new Event('change', { bubbles: true }));
+      element.dispatchEvent(new Event('blur', { bubbles: true }));
+      return { ok: element.value === value };
+    })()\`);
+    if (result?.ok) return;
+    await wait(0.5);
+  }
+  throw new Error('Failed to fill ' + selector + ': ' + JSON.stringify(result));
 }
 
 async function saveDraft() {
@@ -409,11 +454,13 @@ async function uploadArticleImage(image) {
   throw new Error('Image did not appear in article editor: ' + image.path);
 }
 
-async function composeArticle() {
-  await openEditor(['文章']);
+async function composeArticle(reuseExisting = false) {
+  if (!reuseExisting) await openEditor(['文章']);
   await waitForElement('#title', { timeout: 30 });
+  await wait(1);
   await setInput('#title', payload.title);
   await setInput('#author', payload.author);
+
 
   const inserted = await js(String.raw\`(() => {
     const html = \${JSON.stringify(payload.html)};
@@ -447,9 +494,11 @@ async function composeArticle() {
   if (!verified?.ok) throw new Error('Article verification failed: ' + JSON.stringify(verified));
 }
 
-async function composeImageText() {
-  await openEditor(['贴图', '图文']);
+async function composeImageText(reuseExisting = false) {
+  if (!reuseExisting) await openEditor(['贴图', '图文']);
   await waitForElement('#title', { timeout: 30 });
+  await wait(1);
+
   const documentNode = await cdp('DOM.getDocument', { depth: -1, pierce: true });
   const inputNode = await cdp('DOM.querySelector', {
     nodeId: documentNode.root.nodeId,
@@ -485,23 +534,27 @@ async function composeImageText() {
 const task = payload.resume
   ? await takeOverTaskSpace(payload.taskSpace)
   : await useOrCreateTaskSpace(payload.taskSpace);
-await openOrReuseTab(WECHAT_URL, { wait: true, timeout: 30 });
+const taskSpaceId = task?.id ?? payload.taskSpace;
+const existingEditor = payload.resume ? await findExistingEditorTab() : null;
+if (!existingEditor) {
+  await openOrReuseTab(WECHAT_URL, { wait: true, timeout: 30 });
+}
 const info = await pageInfo();
 
 if (!String(info.url || '').includes('/cgi-bin/')) {
-  const handoff = await handOffTaskSpace(task.id);
-  if (!handoff?.done) throw new Error('Could not hand the login task space to the user: ' + JSON.stringify(handoff));
-  await emit({ status: 'login-required', taskSpaceId: task.id });
+  const handoff = await handOffTaskSpace(taskSpaceId);
+  if (!handoff?.done) throw new Error('Could not hand off the login task space: ' + JSON.stringify(handoff));
+  await emit({ status: 'login-required', taskSpaceId });
 } else {
-  if (payload.mode === 'article') await composeArticle();
-  else await composeImageText();
+  if (payload.mode === 'article') await composeArticle(Boolean(existingEditor));
+  else await composeImageText(Boolean(existingEditor));
 
   if (payload.submit) {
     const appmsgid = await saveDraft();
-    await emit({ status: 'saved', taskSpaceId: task.id, appmsgid, title: payload.title, imageCount: payload.images.length });
+    await emit({ status: 'saved', taskSpaceId, appmsgid, title: payload.title, imageCount: payload.images.length });
   } else {
     await captureScreenshot();
-    await emit({ status: 'preview-ready', taskSpaceId: task.id, title: payload.title, imageCount: payload.images.length });
+    await emit({ status: 'preview-ready', taskSpaceId, title: payload.title, imageCount: payload.images.length });
   }
 }
 `;
@@ -530,7 +583,8 @@ function parseEgoResult(output: string): EgoResult {
 function completeTaskSpace(taskSpaceId: string | number, keep: boolean): void {
   const script = `
 const task = await useOrCreateTaskSpace(${JSON.stringify(taskSpaceId)});
-const result = await completeTaskSpace(task.id, { keep: ${keep} });
+const taskId = task?.id ?? ${JSON.stringify(taskSpaceId)};
+const result = await completeTaskSpace(taskId, { keep: ${keep} });
 cliLog(${JSON.stringify(RESULT_PREFIX)} + JSON.stringify(result));
 `;
   const result = parseEgoResult(runEgoBrowser(script)) as unknown as { done?: boolean; skipped?: string };

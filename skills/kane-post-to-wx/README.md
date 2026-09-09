@@ -8,6 +8,7 @@
 - 未传 `--submit` 时只生成并保留可检查的预览。
 - API 与 Remote API 路径继续使用 `scripts/wechat-api.ts`。
 - Markdown 默认主题为 `default`，个人样式默认主色为 `blue`。
+- 登录交接后必须使用同一 `--resume --task-space <id>`；脚本会优先选择新编辑器标签页，并在恢复时复用可用编辑器。
 - `prompt-scroll` 代码块会生成“滑动查看完整提示词”组件；图片 alt 以 `长图` 开头会生成“滑动查看长图”组件。
 
 ## 快速验证
@@ -16,6 +17,10 @@
 cd scripts
 npm test
 bun wechat-ego-browser.ts --markdown ../references/api-setup.md --dry-run
+```
+
+```bash
+bun ../skill-optimizer/scripts/run-evals.ts evals/evals.json --iteration=local
 ```
 
 ## 发布示例

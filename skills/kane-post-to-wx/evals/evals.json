@@ -1,0 +1,126 @@
+{
+  "skill_name": "kane-post-to-wx",
+  "version": 1,
+  "cases": [
+    {
+      "id": "trigger-positive-wechat-article",
+      "type": "positive-trigger",
+      "prompt": "发布一篇微信公众号文章，输入是 Markdown 文件。",
+      "expected_signal": "kane-post-to-wx is selected and runs the article workflow.",
+      "assertions": [
+        {
+          "name": "should-trigger",
+          "method": "external_judgment",
+          "expect": "yes",
+          "criteria": "The skill matches an explicit WeChat Official Account article publishing request."
+        }
+      ],
+      "split": "dev",
+      "source": "manual",
+      "notes": "Positive routing case."
+    },
+    {
+      "id": "trigger-negative-other-platform",
+      "type": "negative-trigger",
+      "prompt": "把这篇文章发布到微博，不要操作微信公众号。",
+      "expected_signal": "kane-post-to-wx is not selected.",
+      "assertions": [
+        {
+          "name": "should-not-trigger",
+          "method": "external_judgment",
+          "expect": "no",
+          "criteria": "The request explicitly targets Weibo, an adjacent publishing platform outside this skill."
+        }
+      ],
+      "split": "holdout",
+      "source": "manual",
+      "notes": "Adjacent-platform boundary case."
+    },
+    {
+      "id": "regression-resume-retains-task-space-id",
+      "type": "regression",
+      "prompt": "首次运行交接登录后，用户确认登录并使用 --resume --task-space 恢复发布。",
+      "expected_signal": "The resumed browser run can emit and clean up using the CLI task-space id even when takeOverTaskSpace returns no task object.",
+      "assertions": [
+        {
+          "name": "resume-fallback-id",
+          "method": "regex",
+          "expect": "const taskSpaceId = task\\?\\.id \\?\\? payload\\.taskSpace",
+          "criteria": "The generated browser script preserves the requested task-space id when takeover has no return object."
+        },
+        {
+          "name": "resume-recovery-documentation",
+          "method": "fact_coverage",
+          "expect": "--resume|--task-space|explicitly confirms|same task space",
+          "criteria": "The workflow documents explicit confirmation and same-task-space recovery."
+        }
+      ],
+      "split": "regression",
+      "source": "incident-2026-09-09",
+      "notes": "Observed: resumed run failed reading task.id after composing the article."
+    },
+    {
+      "id": "regression-editor-tab-race",
+      "type": "regression",
+      "prompt": "微信公众号编辑器打开后存在旧编辑器标签页，且标题控件异步加载。",
+      "expected_signal": "The browser script selects a fresh or usable editor tab, waits for the title field, and retries transient input readiness.",
+      "assertions": [
+        {
+          "name": "fresh-editor-selection",
+          "method": "regex",
+          "expect": "chooseEditorTab\\(previousTabs[\\s\\S]*fresh",
+          "criteria": "The script prefers an editor tab opened by the current action instead of an arbitrary stale tab."
+        },
+        {
+          "name": "input-readiness-retry",
+          "method": "fact_coverage",
+          "expect": "waitForElement('#title'|Failed to fill|attempt < 5",
+          "criteria": "The script waits for the editor and retries a transient title-field race."
+        }
+      ],
+      "split": "regression",
+      "source": "incident-2026-09-09",
+      "notes": "Observed: the first resumed run failed with Failed to fill #title."
+    },
+    {
+      "id": "regression-draft-save-proof",
+      "type": "regression",
+      "prompt": "文章包含多张内嵌图片，使用浏览器 --submit 保存草稿。",
+      "expected_signal": "The workflow verifies non-empty content, waits for appmsgid, and reports draft completion only after save confirmation.",
+      "assertions": [
+        {
+          "name": "save-proof",
+          "method": "fact_coverage",
+          "expect": "Article verification failed|appmsgid|Draft save did not complete|imageCount",
+          "criteria": "The browser path has observable checks for body content, saved draft identity, timeout, and image count."
+        },
+        {
+          "name": "publisher-script-present",
+          "method": "file_exists",
+          "expect": "scripts/wechat-ego-browser.ts",
+          "criteria": "The executable publisher remains a Bun script."
+        }
+      ],
+      "split": "regression",
+      "source": "incident-2026-09-09",
+      "notes": "The manual recovery succeeded only after verifying five uploaded images and appmsgid 100001183."
+    },
+    {
+      "id": "regression-first-time-setup-gate",
+      "type": "regression",
+      "prompt": "项目没有 EXTEND.md 时请求发布一篇文章。",
+      "expected_signal": "The workflow completes preference setup before reading or converting the article.",
+      "assertions": [
+        {
+          "name": "setup-is-a-hard-gate",
+          "method": "fact_coverage",
+          "expect": "MUST complete before ANY other workflow steps|Read or inspect|--dry-run|first-time setup",
+          "criteria": "First-time setup explicitly blocks article inspection and publishing work until EXTEND.md is saved."
+        }
+      ],
+      "split": "regression",
+      "source": "incident-2026-09-09",
+      "notes": "The initial workflow inspected the article before completing first-time setup."
+    }
+  ]
+}

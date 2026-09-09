@@ -10,9 +10,9 @@ description: First-time setup flow for kane-post-to-wx preferences
 When no EXTEND.md is found, guide user through preference setup.
 
 **BLOCKING OPERATION**: This setup MUST complete before ANY other workflow steps. Do NOT:
-- Ask about content or files to publish
-- Ask about themes or publishing methods
-- Proceed to content conversion or publishing
+- Read or inspect the article, image paths, frontmatter, or metadata.
+- Run Markdown conversion, `--dry-run`, browser automation, or publishing.
+- Ask about article-specific title, summary, cover, account, or publishing details beyond the setup questions below.
 
 ONLY ask the questions in this setup flow, save EXTEND.md, then continue.
 
