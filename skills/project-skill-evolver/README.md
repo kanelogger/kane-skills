@@ -172,7 +172,7 @@ bun skills/project-skill-evolver/scripts/self-test.ts
 校验 Skill 包结构：
 
 ```bash
-python3 /Users/kanehua/.codex/skills/.system/skill-creator/scripts/quick_validate.py \
+python3 "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-creator/scripts/quick_validate.py" \
   skills/project-skill-evolver
 ```
 

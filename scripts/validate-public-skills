@@ -26,8 +26,18 @@ if find . -name ".DS_Store" -print -quit | grep -q .; then
   fail ".DS_Store files are present"
 fi
 
-if grep -R -n -E '/Users/kanehua|/Users/[^ ]+|kane_inbox|kane_vault|kane_echoes' README.md catalog.md docs skills 2>/dev/null; then
-  fail "private machine paths or private project names found"
+public_files=()
+while IFS= read -r -d '' public_file; do
+  public_files+=("$public_file")
+done < <(git ls-files -c -o --exclude-standard -z -- README.md catalog.md docs skills)
+
+if [ "${#public_files[@]}" -gt 0 ]; then
+  if grep -n -E '/Users/kanehua|/Users/[^ ]+|kane_inbox|kane_vault|kane_echoes' "${public_files[@]}"; then
+    fail "private machine paths or private project names found"
+  else
+    grep_status=$?
+    [ "$grep_status" -eq 1 ] || fail "private path scan could not complete"
+  fi
 fi
 
 if [ "$failures" -gt 0 ]; then
