@@ -12,7 +12,8 @@ Publish one coherent task as one auditable commit. Treat the staged diff as the 
 - Preserve pre-existing and unrelated changes. Never discard, overwrite, restore, stash, or include them.
 - Stage explicit paths only. Never use `git add .`, `git add -A`, `git add --all`, or a broad glob.
 - Do not amend, rebase, force-push, bypass hooks, or change branches unless the user explicitly requests it.
-- Never commit secrets, credentials, private keys, environment files, build output, or other likely generated artifacts. Stop and report the paths when detected.
+- Check for sensitive information before every commit. Suspected secrets, credentials, private keys, or environment files require explicit user approval for the reviewed content under the sensitive-information gate below.
+- Never commit build output or other likely generated artifacts.
 - Stop before committing if the intended file set is ambiguous or the staged diff contains unrelated changes.
 - Stop before pushing when the branch, remote, or upstream cannot be determined safely.
 
@@ -52,6 +53,18 @@ git diff --cached
 
 Require a non-empty staged diff. Confirm every staged path and hunk belongs to one coherent task.
 
+#### Sensitive-Information Gate (Required Before Commit)
+
+`git status` lists paths and states, not file contents. Never treat a clean-looking status list or diff summary as a sensitive-information check.
+
+- Inspect the candidate tracked changes and untracked file contents before staging, then check the exact staged diff and full staged versions of added or modified files (for example, `git show :path/to/file`). The index may differ from the working tree. Include staged changes that existed before this workflow; exclude unrelated unstaged files from this commit's approval scope.
+- Look for API keys, access/refresh tokens, passwords, login/account credentials, private keys, connection strings with credentials, and sensitive personal account information. Check suspicious filenames such as `.env`, `.env.*`, credential files, and key files as well as values embedded in code, configuration, documentation, fixtures, and URLs. A variable name alone or an obvious placeholder is not evidence of a real secret; unresolved cases remain suspected findings.
+- Use an available local secret scanner with redacted output to supplement inspection. Do not install tools or upload contents to an external service just to scan. A missing scanner does not waive inspection; if any candidate content cannot be inspected, report that gap and require approval as an unresolved finding. Do not claim that a scan proves the absence of secrets.
+- When there are no findings or inspection gaps, continue without an extra confirmation. Otherwise, finish reviewing the candidate and present only file paths, line numbers when available, finding types, and the risk of storing the data in Git history and publishing it to the push destination. Never echo sensitive values in the question, commit message, or final report. Attribute the confirmation requirement to this section and link this `SKILL.md`.
+- Ask one direct question in the user's language, for example: “本次待提交内容中发现疑似敏感信息：<路径、行号和类型，不含原值>。提交会将其写入 Git 历史，并在推送时发布到远端。是否仍要提交这些内容并继续本次推送？” If the request is commit-only, omit the push wording and do not expand its scope.
+- An explicit yes authorizes the reviewed candidate and requested publication scope. A prior generic “commit/push everything” instruction is not approval of newly discovered findings; reuse prior approval only if it already covers the same findings, content, and destination. If the user declines, cancel the commit/push workflow. If no answer or an ambiguous answer is received, pause without committing or pushing. Preserve the working tree and index; do not silently remove findings, unstage files, or create a partial commit.
+- Immediately before `git commit`, verify that the staged content still matches the inspected candidate. If it changed, repeat the check; request approval again only for findings or publication scope not covered by existing approval.
+
 ### 3. Determine the Commit Message Language
 
 Choose the natural language for the commit description and body in this order:
@@ -66,7 +79,7 @@ Do not choose the output language from the language of this skill's prompt. Keep
 
 ### 4. Generate the Commit Message
 
-Generate the message strictly from `git diff --cached`, using this exact prompt. Replace the placeholder with the complete staged diff:
+Generate the message strictly from `git diff --cached`, using this exact prompt. Replace the placeholder with the complete staged diff, masking any sensitive values in the prompt only; preserve the actual staged content. Never reproduce credentials in the generated message, even after the user approves their inclusion in the commit.
 
 ```text
 你是一位严格遵守 Conventional Commits 1.0.0 规范的提交信息写手。
@@ -101,6 +114,8 @@ Validate the result before committing:
 - A breaking footer appears only when the staged diff demonstrates a breaking change.
 
 ### 5. Commit
+
+Proceed only after the sensitive-information gate passes or the user explicitly approves its reviewed findings. A refusal cancels this workflow; a pending answer blocks this step and push.
 
 Pass the subject and body as separate message arguments so the shell does not open an editor:
 
