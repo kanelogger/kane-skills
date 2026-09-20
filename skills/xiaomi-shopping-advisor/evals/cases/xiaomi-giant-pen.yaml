@@ -1,0 +1,25 @@
+id: xiaomi-giant-pen
+title: 小米巨能写购买推荐实测
+description: 验证 Skill 能否把文章中的巨能写作为真实商品测试入口，区分低频书写与高频备考，并生成带图片和对比的 HTML 报告
+
+input:
+  prompt: |
+    使用 $xiaomi-shopping-advisor，为中国大陆市场生成“小米巨能写是否值得买”的当前网购推荐。
+
+    文章中的历史实测只作为待核验线索：小米巨能写曾以 9.9 元 10 支销售；单支机器书写约 4 万字；没有软胶握位，防滑和长时间握持一般；偶尔书写的成年人可能够用，高中生或长期备考用户更适合更顺滑、握持更好的产品。
+
+    请实际核验当前在售的精确型号、价格、规格和产品图片。以当前小米具体型号为锚点，至少加入一个便宜或同价候选和一个更贵的书写升级候选。分别回答办公室低频书写者与每天书写 4 小时的备考学生应该买什么，并解释差价买到的容量、握持、顺滑度或可靠性变化。
+
+    把最终交付物生成到 `shopping-report/`：主文件必须是 `shopping-report/index.html`，每个对比产品必须有本地图片，包含响应式对比表、减配/升级审计、来源和调研日期。完成后运行 Skill 自带的报告校验器并修复错误。
+
+expect:
+  must_contain: ["shopping-report/index.html"]
+  must_not_contain: ["闭眼买", "全网最佳", "绝对安全"]
+  files_exist:
+    - "shopping-report/index.html"
+  exit_code: 0
+
+judge:
+  type: script
+  script_path: evals/scripts/check-giant-pen-report.sh
+  timeout_seconds: 60

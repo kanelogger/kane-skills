@@ -1,0 +1,25 @@
+id: xiaomi-rainbow-battery
+title: 小米彩虹电池购买推荐实测
+description: 验证 Skill 能否把文章中的彩虹电池作为真实商品测试入口，统一每节价格和规格并生成带图片和对比的 HTML 报告
+
+input:
+  prompt: |
+    使用 $xiaomi-shopping-advisor，为中国大陆市场生成“小米彩虹电池是否值得买”的当前网购推荐。
+
+    文章中的历史实测只作为待核验线索：小米彩虹碱性电池曾从 9.9 元 10 节涨到 13.9 元 10 节；包装可作为收纳盒；文章用四驱车比较时，小米成绩高于南孚和京东京造。单次四驱车结果不能自动代表容量、耐漏液能力、低功耗设备续航或当前批次表现。
+
+    请锁定同一规格的当前精确 SKU，优先比较 5 号 AA 碱性电池 10 节装；若当前小米规格不同，明确归一化方法。实际核验当前价格、保质期/防漏液承诺、适用设备和产品图片，并加入至少两个当前可购买的同规格竞争产品。比较每节成本、公开性能证据、包装价值和高低耗电场景，不得把文章单次实测写成普遍结论。
+
+    把最终交付物生成到 `shopping-report/`：主文件必须是 `shopping-report/index.html`，每个对比产品必须有本地图片，包含响应式对比表、减配/升级审计、来源和调研日期。完成后运行 Skill 自带的报告校验器并修复错误。
+
+expect:
+  must_contain: ["shopping-report/index.html"]
+  must_not_contain: ["闭眼买", "全网最佳", "绝对安全"]
+  files_exist:
+    - "shopping-report/index.html"
+  exit_code: 0
+
+judge:
+  type: script
+  script_path: evals/scripts/check-rainbow-battery-report.sh
+  timeout_seconds: 60

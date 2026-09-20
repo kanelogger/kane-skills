@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-28-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-29-green.svg)](skills/)
 [![Validation](https://img.shields.io/badge/Validation-failing-red.svg)](scripts/validate-public-skills)
 
 > Languages: [English README](README.md) | [中文 README](README-CN.md)
@@ -20,7 +20,7 @@ This repository is a public, self-contained skill library. Each package is inspe
 
 ## Skills
 
-The 28 skills are grouped by primary use case. The grouping is documentation-only; package directories remain direct children of `skills/` so existing skill paths and loaders stay stable.
+The 29 skills are grouped by primary use case. The grouping is documentation-only; package directories remain direct children of `skills/` so existing skill paths and loaders stay stable.
 
 ### Content analysis and writing (6)
 
@@ -39,6 +39,12 @@ The 28 skills are grouped by primary use case. The grouping is documentation-onl
 | ----- | -------- | ------ | ---- |
 | [`analyze-china-policy`](skills/analyze-china-policy/) | Verify and interpret Chinese policy documents, compare wording, and assess implementation and impact horizons. | Evidence-based policy identity, three-axis assessment, impact map, and watchpoints. | [SKILL](skills/analyze-china-policy/SKILL.md) |
 | [`tech-claim-auditor`](skills/tech-claim-auditor/) | Verify facts, commands, configuration, versions, performance data, and best practices in IT technical articles. | Traceable verification report and minimally revised article. | [SKILL](skills/tech-claim-auditor/SKILL.md) |
+
+### Consumer decisions (1)
+
+| Skill | Use When | Output | Docs |
+| ----- | -------- | ------ | ---- |
+| [`xiaomi-shopping-advisor`](skills/xiaomi-shopping-advisor/) | Use a comparable Xiaomi model as an anchor to test cheaper compromises and pricier upgrades. | An evidence-based HTML buying guide with real product images and responsive comparisons. | [SKILL](skills/xiaomi-shopping-advisor/SKILL.md) |
 
 ### Prompt and session knowledge (3)
 

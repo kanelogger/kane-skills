@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="data:,">
+  <title>{{CATEGORY}}购买建议｜{{RESEARCH_DATE}}</title>
+  <style>
+    :root {
+      --ink: #17211b; --muted: #5f6e64; --line: #dce5de; --paper: #f5f7f3;
+      --card: #fff; --brand: #ff6900; --brand-soft: #fff0e5; --good: #16794b;
+      --good-soft: #e9f7ef; --trade: #956300; --trade-soft: #fff7db;
+      --risk: #b42318; --risk-soft: #fff0ee; --shadow: 0 16px 40px rgba(27,43,32,.08);
+      --radius: 22px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); background: var(--paper); font: 16px/1.65 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+    a { color: inherit; text-underline-offset: .2em; }
+    a:focus-visible { outline: 3px solid var(--brand); outline-offset: 4px; border-radius: 4px; }
+    img { display: block; max-width: 100%; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 14ch; margin-bottom: 18px; font-size: clamp(2.3rem,6vw,5.2rem); line-height: .98; letter-spacing: -.055em; }
+    h2 { margin-bottom: 20px; font-size: clamp(1.65rem,3vw,2.55rem); line-height: 1.08; letter-spacing: -.035em; }
+    h3 { margin-bottom: 10px; font-size: 1.2rem; line-height: 1.25; }
+    .shell { width: min(1200px,calc(100% - 32px)); margin-inline: auto; }
+    .section { padding: 72px 0; scroll-margin-top: 24px; }
+    .eyebrow { margin: 0 0 12px; color: var(--brand); font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .lede { max-width: 760px; color: var(--muted); font-size: 1.12rem; }
+    .pill { display: inline-flex; min-height: 32px; align-items: center; padding: 4px 11px; border-radius: 999px; background: #edf2ee; color: #425148; font-size: .82rem; font-weight: 800; }
+    .pill.anchor { background: var(--brand-soft); color: #a64100; }
+    .pill.good { background: var(--good-soft); color: var(--good); }
+    .pill.trade { background: var(--trade-soft); color: var(--trade); }
+    .pill.risk { background: var(--risk-soft); color: var(--risk); }
+    .hero { position: relative; overflow: hidden; padding: 72px 0 58px; background: #14221a; color: #fff; }
+    .hero::after { content: ""; position: absolute; width: 440px; height: 440px; right: -180px; top: -180px; border-radius: 50%; background: radial-gradient(circle,rgba(255,105,0,.5),rgba(255,105,0,0) 70%); }
+    .hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0,1.25fr) minmax(300px,.75fr); gap: 48px; align-items: end; }
+    .hero .eyebrow { color: #ffb17a; }
+    .hero .lede { margin-bottom: 26px; color: #d7e1da; }
+    .meta { display: flex; flex-wrap: wrap; gap: 10px 20px; color: #b8c7bd; font-size: .92rem; }
+    .verdict { padding: 26px; border: 1px solid rgba(255,255,255,.14); border-radius: var(--radius); background: rgba(255,255,255,.08); backdrop-filter: blur(8px); }
+    .verdict strong { display: block; margin-bottom: 8px; color: #ffb17a; font-size: .88rem; letter-spacing: .08em; text-transform: uppercase; }
+    .verdict p { margin: 0; font-size: 1.2rem; font-weight: 700; line-height: 1.45; }
+    .quick-picks { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: -28px; position: relative; z-index: 2; }
+    .pick { padding: 22px; border: 1px solid var(--line); border-radius: 18px; background: var(--card); box-shadow: var(--shadow); }
+    .pick span { display: block; margin-bottom: 5px; color: var(--muted); font-size: .86rem; font-weight: 700; }
+    .pick b { font-size: 1.1rem; }
+    .product-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 20px; }
+    .product-card { display: flex; min-width: 0; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: var(--card); box-shadow: 0 8px 24px rgba(27,43,32,.05); }
+    .product-image { display: grid; min-height: 270px; place-items: center; padding: 26px; background: #fff; }
+    .product-image img { width: 100%; height: 230px; object-fit: contain; }
+    .product-body { display: flex; flex: 1; flex-direction: column; padding: 24px; }
+    .card-top { display: flex; justify-content: space-between; gap: 10px; align-items: start; }
+    .price { margin: 12px 0 16px; font-size: 1.9rem; font-weight: 850; letter-spacing: -.035em; }
+    .price small { color: var(--muted); font-size: .82rem; font-weight: 600; }
+    .compact { margin: 0 0 18px; padding-left: 1.2em; color: #39483e; }
+    .compact li + li { margin-top: 7px; }
+    .source-link { display: inline-flex; min-height: 44px; align-items: center; margin-top: auto; font-weight: 800; color: #a64100; }
+    .table-note { margin: -10px 0 14px; color: var(--muted); font-size: .9rem; }
+    .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--card); box-shadow: var(--shadow); }
+    .comparison-table { width: 100%; min-width: 860px; border-collapse: collapse; }
+    .comparison-table th, .comparison-table td { padding: 17px 18px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .comparison-table thead th { position: sticky; top: 0; background: #edf2ee; font-size: .9rem; }
+    .comparison-table th:first-child { width: 180px; }
+    .comparison-table .anchor-col { background: #fff8f2; }
+    .comparison-table tr:last-child th, .comparison-table tr:last-child td { border-bottom: 0; }
+    .status { font-weight: 800; white-space: nowrap; }
+    .status.good { color: var(--good); } .status.trade { color: var(--trade); } .status.risk { color: var(--risk); }
+    .audit-grid, .scenario-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 20px; }
+    .audit-card, .scenario-card, .evidence-card { padding: 26px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--card); }
+    .audit-card.save { border-top: 5px solid var(--trade); } .audit-card.spend { border-top: 5px solid var(--good); }
+    .delta { display: flex; justify-content: space-between; gap: 20px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+    .delta:last-child { border-bottom: 0; } .delta b { max-width: 42%; text-align: right; }
+    .scenario-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+    .evidence-list { margin: 0; padding-left: 1.3em; } .evidence-list li + li { margin-top: 12px; }
+    .evidence-list a { overflow-wrap: anywhere; }
+    .footnote, footer { color: var(--muted); font-size: .88rem; }
+    footer { padding: 32px 0 54px; }
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 28px; }
+      .quick-picks, .product-grid, .scenario-grid { grid-template-columns: 1fr; }
+      .product-image { min-height: 230px; } .product-image img { height: 190px; }
+      .audit-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .shell { width: min(100% - 22px,1200px); } .section { padding: 52px 0; } .hero { padding-top: 52px; }
+      .quick-picks { margin-top: -18px; } .pick, .product-body, .audit-card, .scenario-card, .evidence-card { padding: 20px; }
+      .delta { display: block; } .delta b { display: block; max-width: none; margin-top: 5px; text-align: left; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+  <header class="hero" id="summary">
+    <div class="shell hero-grid">
+      <div>
+        <p class="eyebrow">小米锚点式购买分析</p>
+        <h1>{{CATEGORY}}怎么选</h1>
+        <p class="lede">{{ONE_SENTENCE_REASON}}</p>
+        <div class="meta"><span>市场：{{MARKET}}</span><span>预算：{{BUDGET}}</span><span>调研：<time datetime="{{RESEARCH_DATE}}">{{RESEARCH_DATE}}</time></span></div>
+      </div>
+      <aside class="verdict" aria-label="购买结论"><strong>一句话结论</strong><p>{{VERDICT}}</p></aside>
+    </div>
+  </header>
+
+  <main>
+    <div class="shell quick-picks" aria-label="快速选择">
+      <div class="pick"><span>大多数人</span><b>{{DEFAULT_PICK}}</b></div>
+      <div class="pick"><span>预算优先</span><b>{{BUDGET_PICK}}</b></div>
+      <div class="pick"><span>满足条件才升级</span><b>{{UPGRADE_PICK}}</b></div>
+    </div>
+
+    <section class="section" id="products">
+      <div class="shell"><p class="eyebrow">候选产品</p><h2>先看产品，再看差价</h2><p class="lede">所有价格均为 {{RESEARCH_DATE}} 的参考到手价，具体条件见来源区。</p>
+        <div class="product-grid">
+          <article class="product-card">
+            <a class="product-image" href="{{BUDGET_IMAGE_SOURCE_URL}}" aria-label="查看预算款图片来源"><img src="assets/products/{{BUDGET_IMAGE_FILE}}" alt="{{BUDGET_FULL_MODEL}}"></a>
+            <div class="product-body"><div class="card-top"><span class="pill trade">预算候选</span><span class="pill">{{BUDGET_EVIDENCE}}</span></div><h3>{{BUDGET_FULL_MODEL}}</h3><div class="price">{{BUDGET_PRICE}} <small>{{BUDGET_PRICE_CONDITION}}</small></div><p><b>适合：</b>{{BUDGET_AUDIENCE}}</p><ul class="compact"><li>{{BUDGET_PRO_1}}</li><li>{{BUDGET_PRO_2}}</li><li>{{BUDGET_CON}}</li></ul><a class="source-link" href="{{BUDGET_PRODUCT_URL}}">查看产品来源 →</a></div>
+          </article>
+          <article class="product-card">
+            <a class="product-image" href="{{ANCHOR_IMAGE_SOURCE_URL}}" aria-label="查看基准款图片来源"><img src="assets/products/{{ANCHOR_IMAGE_FILE}}" alt="{{ANCHOR_FULL_MODEL}}"></a>
+            <div class="product-body"><div class="card-top"><span class="pill anchor">比较基准</span><span class="pill">{{ANCHOR_EVIDENCE}}</span></div><h3>{{ANCHOR_FULL_MODEL}}</h3><div class="price">{{ANCHOR_PRICE}} <small>{{ANCHOR_PRICE_CONDITION}}</small></div><p><b>适合：</b>{{ANCHOR_AUDIENCE}}</p><ul class="compact"><li>{{ANCHOR_PRO_1}}</li><li>{{ANCHOR_PRO_2}}</li><li>{{ANCHOR_CON}}</li></ul><a class="source-link" href="{{ANCHOR_PRODUCT_URL}}">查看产品来源 →</a></div>
+          </article>
+          <article class="product-card">
+            <a class="product-image" href="{{UPGRADE_IMAGE_SOURCE_URL}}" aria-label="查看升级款图片来源"><img src="assets/products/{{UPGRADE_IMAGE_FILE}}" alt="{{UPGRADE_FULL_MODEL}}"></a>
+            <div class="product-body"><div class="card-top"><span class="pill good">升级候选</span><span class="pill">{{UPGRADE_EVIDENCE}}</span></div><h3>{{UPGRADE_FULL_MODEL}}</h3><div class="price">{{UPGRADE_PRICE}} <small>{{UPGRADE_PRICE_CONDITION}}</small></div><p><b>适合：</b>{{UPGRADE_AUDIENCE}}</p><ul class="compact"><li>{{UPGRADE_PRO_1}}</li><li>{{UPGRADE_PRO_2}}</li><li>{{UPGRADE_CON}}</li></ul><a class="source-link" href="{{UPGRADE_PRODUCT_URL}}">查看产品来源 →</a></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="comparison">
+      <div class="shell"><p class="eyebrow">核心对比</p><h2>差别集中在这些地方</h2><p class="table-note">手机端可左右滑动查看完整表格。</p>
+        <div class="table-scroll" tabindex="0" aria-label="产品对比表，可横向滚动">
+          <table class="comparison-table">
+            <thead><tr><th>项目</th><th>{{BUDGET_SHORT_MODEL}}</th><th class="anchor-col">{{ANCHOR_SHORT_MODEL}} · 基准</th><th>{{UPGRADE_SHORT_MODEL}}</th></tr></thead>
+            <tbody>
+              <tr><th>到手价</th><td>{{BUDGET_PRICE_DELTA}}</td><td class="anchor-col">{{ANCHOR_PRICE}} · 基准</td><td>{{UPGRADE_PRICE_DELTA}}</td></tr>
+              <tr><th>{{METRIC_1_NAME}}</th><td>{{BUDGET_METRIC_1}}</td><td class="anchor-col">{{ANCHOR_METRIC_1}}</td><td>{{UPGRADE_METRIC_1}}</td></tr>
+              <tr><th>{{METRIC_2_NAME}}</th><td>{{BUDGET_METRIC_2}}</td><td class="anchor-col">{{ANCHOR_METRIC_2}}</td><td>{{UPGRADE_METRIC_2}}</td></tr>
+              <tr><th>安全 / 兼容</th><td>{{BUDGET_SAFETY}}</td><td class="anchor-col">{{ANCHOR_SAFETY}}</td><td>{{UPGRADE_SAFETY}}</td></tr>
+              <tr><th>耗材 / 配件</th><td>{{BUDGET_OWNERSHIP}}</td><td class="anchor-col">{{ANCHOR_OWNERSHIP}}</td><td>{{UPGRADE_OWNERSHIP}}</td></tr>
+              <tr><th>保修 / 维护</th><td>{{BUDGET_SUPPORT}}</td><td class="anchor-col">{{ANCHOR_SUPPORT}}</td><td>{{UPGRADE_SUPPORT}}</td></tr>
+              <tr><th>最终判断</th><td><span class="status trade">取舍</span> {{BUDGET_JUDGMENT}}</td><td class="anchor-col"><span class="status">基准</span> {{ANCHOR_JUDGMENT}}</td><td><span class="status good">提升</span> {{UPGRADE_JUDGMENT}}</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="price-audit">
+      <div class="shell"><p class="eyebrow">差价审计</p><h2>每一元差价买到了什么</h2>
+        <div class="audit-grid">
+          <article class="audit-card save"><span class="pill trade">{{BUDGET_SHORT_MODEL}}</span><h3>少花的钱牺牲了什么</h3><div class="delta"><span>{{BUDGET_CUT_1}}</span><b>{{BUDGET_CUT_1_IMPACT}}</b></div><div class="delta"><span>{{BUDGET_CUT_2}}</span><b>{{BUDGET_CUT_2_IMPACT}}</b></div><div class="delta"><span>结论</span><b>{{BUDGET_VALUE_VERDICT}}</b></div></article>
+          <article class="audit-card spend"><span class="pill good">{{UPGRADE_SHORT_MODEL}}</span><h3>多花的钱买到了什么</h3><div class="delta"><span>{{UPGRADE_GAIN_1}}</span><b>{{UPGRADE_GAIN_1_IMPACT}}</b></div><div class="delta"><span>{{UPGRADE_GAIN_2}}</span><b>{{UPGRADE_GAIN_2_IMPACT}}</b></div><div class="delta"><span>结论</span><b>{{UPGRADE_VALUE_VERDICT}}</b></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="scenarios">
+      <div class="shell"><p class="eyebrow">按场景选择</p><h2>谁应该买哪一款</h2>
+        <div class="scenario-grid">
+          <article class="scenario-card"><span class="pill trade">预算优先</span><h3>{{BUDGET_SHORT_MODEL}}</h3><p>{{BUDGET_SCENARIO}}</p></article>
+          <article class="scenario-card"><span class="pill anchor">大多数人</span><h3>{{DEFAULT_SHORT_MODEL}}</h3><p>{{DEFAULT_SCENARIO}}</p></article>
+          <article class="scenario-card"><span class="pill good">高频 / 升级</span><h3>{{UPGRADE_SHORT_MODEL}}</h3><p>{{UPGRADE_SCENARIO}}</p></article>
+        </div>
+        <div class="evidence-card" style="margin-top:20px"><h3>这些情况暂时不要买</h3><p>{{DO_NOT_BUY_CONDITIONS}}</p></div>
+      </div>
+    </section>
+
+    <section class="section" id="evidence">
+      <div class="shell"><p class="eyebrow">证据与边界</p><h2>结论从哪里来</h2>
+        <div class="evidence-card">
+          <ol class="evidence-list">
+            <li><b>[官方规格]</b> <a href="{{SOURCE_1_URL}}">{{SOURCE_1_TITLE}}</a> — {{SOURCE_1_SCOPE}}</li>
+            <li><b>[官方规格]</b> <a href="{{SOURCE_2_URL}}">{{SOURCE_2_TITLE}}</a> — {{SOURCE_2_SCOPE}}</li>
+            <li><b>[独立实测]</b> <a href="{{SOURCE_3_URL}}">{{SOURCE_3_TITLE}}</a> — {{SOURCE_3_SCOPE}}</li>
+          </ol>
+          <p class="footnote"><b>价格条件：</b>{{PRICE_NOTES}}</p><p class="footnote"><b>待核实：</b>{{UNRESOLVED_ITEMS}}</p>
+          <p class="footnote">产品图片版权归原权利人，本报告仅用于商品识别与购买分析。图片来源分别见产品卡片链接。</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer><div class="shell">生成于 {{RESEARCH_DATE}} · 价格与库存会变化，购买前请再次核对精确型号和最终结算价。</div></footer>
+</body>
+</html>

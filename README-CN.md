@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-28-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-29-green.svg)](skills/)
 [![Validation](https://img.shields.io/badge/Validation-failing-red.svg)](scripts/validate-public-skills)
 
 > 语言版本: [English README](README.md) | [中文 README](README-CN.md)
@@ -21,7 +21,7 @@ Kane 创建的可复用智能体技能库。
 
 ## 技能列表
 
-28 个技能按主要使用目的分组。分类仅用于文档导航；技能目录仍保持在 `skills/` 的直接子目录中，避免改变现有路径和加载约定。
+29 个技能按主要使用目的分组。分类仅用于文档导航；技能目录仍保持在 `skills/` 的直接子目录中，避免改变现有路径和加载约定。
 
 ### 内容分析与写作（6）
 
@@ -40,6 +40,12 @@ Kane 创建的可复用智能体技能库。
 | ---- | -------- | ---- | ---- |
 | [`analyze-china-policy`](skills/analyze-china-policy/) | 核验并解释中国政策文件，比较措辞变化，判断执行强度和影响期限。 | 有证据的文件身份卡、三轴判断、影响地图与观察点。 | [SKILL](skills/analyze-china-policy/SKILL.md) |
 | [`tech-claim-auditor`](skills/tech-claim-auditor/) | 核验 IT 技术文章中的事实、命令、配置、版本、性能数据与最佳实践。 | 可追溯的核验报告与最小修复稿。 | [SKILL](skills/tech-claim-auditor/SKILL.md) |
+
+### 消费决策（1）
+
+| 技能 | 使用场景 | 输出 | 文档 |
+| ---- | -------- | ---- | ---- |
+| [`xiaomi-shopping-advisor`](skills/xiaomi-shopping-advisor/) | 以可比的小米型号为锚点，核验便宜款减配与贵款升级是否值得。 | 带真实产品图、响应式对比和来源证据的 HTML 网购报告。 | [SKILL](skills/xiaomi-shopping-advisor/SKILL.md) |
 
 ### 提示词与会话知识（3）
 
