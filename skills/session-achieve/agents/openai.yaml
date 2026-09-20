@@ -1,0 +1,6 @@
+interface:
+  display_name: "会话复盘"
+  short_description: "基于可见证据复盘多轮协作并提炼可复用经验"
+  default_prompt: "使用 $session-achieve 复盘当前会话，列出关键纠偏、验证证据和仍待确认的事项。"
+policy:
+  allow_implicit_invocation: true
