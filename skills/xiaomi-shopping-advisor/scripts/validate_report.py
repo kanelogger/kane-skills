@@ -51,7 +51,10 @@ class ReportParser(HTMLParser):
         current_card = self._stack[-1][1] if self._stack else None
         if "product-card" in classes:
             current_card = len(self.cards)
-            self.cards.append({"images": 0})
+            self.cards.append({"images": 0, "missing_images": 0})
+
+        if "image-unavailable" in classes and current_card is not None:
+            self.cards[current_card]["missing_images"] += 1
 
         self._stack.append((tag, current_card))
 
@@ -104,7 +107,7 @@ def resolve_report_path(raw_path: str) -> tuple[Path, Path]:
     return html_path, html_path.parent
 
 
-def validate(raw_path: str, min_products: int) -> list[str]:
+def validate(raw_path: str, min_products: int, require_images: bool = False) -> list[str]:
     html_path, report_root = resolve_report_path(raw_path)
     errors: list[str] = []
 
@@ -134,9 +137,14 @@ def validate(raw_path: str, min_products: int) -> list[str]:
     if len(parser.cards) < min_products:
         errors.append(f"found {len(parser.cards)} product cards; expected at least {min_products}")
     for number, card in enumerate(parser.cards, start=1):
-        if card["images"] != 1:
+        media_count = card["images"] + card["missing_images"]
+        if require_images and card["images"] != 1:
             errors.append(f"product card {number} must contain exactly one image")
-    if len(parser.images) < min_products:
+        elif not require_images and media_count != 1:
+            errors.append(
+                f"product card {number} must contain one image or one image-unavailable state"
+            )
+    if require_images and len(parser.images) < min_products:
         errors.append(f"found {len(parser.images)} images; expected at least {min_products}")
 
     for number, image in enumerate(parser.images, start=1):
@@ -182,13 +190,18 @@ def main() -> int:
         "--min-products",
         type=int,
         default=3,
-        help="Minimum number of product cards and local images (default: 3)",
+        help="Minimum number of product cards (default: 3)",
+    )
+    parser.add_argument(
+        "--require-images",
+        action="store_true",
+        help="Require exactly one valid local image in every product card",
     )
     args = parser.parse_args()
     if args.min_products < 1:
         parser.error("--min-products must be at least 1")
 
-    errors = validate(args.report, args.min_products)
+    errors = validate(args.report, args.min_products, require_images=args.require_images)
     if errors:
         for error in errors:
             print(f"FAIL: {error}", file=sys.stderr)

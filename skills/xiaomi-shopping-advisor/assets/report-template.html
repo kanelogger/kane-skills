@@ -50,6 +50,7 @@
     .product-card { display: flex; min-width: 0; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: var(--card); box-shadow: 0 8px 24px rgba(27,43,32,.05); }
     .product-image { display: grid; min-height: 270px; place-items: center; padding: 26px; background: #fff; }
     .product-image img { width: 100%; height: 230px; object-fit: contain; }
+    .image-unavailable { color: var(--muted); background: #f8faf8; text-align: center; font-weight: 700; }
     .product-body { display: flex; flex: 1; flex-direction: column; padding: 24px; }
     .card-top { display: flex; justify-content: space-between; gap: 10px; align-items: start; }
     .price { margin: 12px 0 16px; font-size: 1.9rem; font-weight: 850; letter-spacing: -.035em; }
@@ -114,6 +115,10 @@
     <section class="section" id="products">
       <div class="shell"><p class="eyebrow">候选产品</p><h2>先看产品，再看差价</h2><p class="lede">所有价格均为 {{RESEARCH_DATE}} 的参考到手价，具体条件见来源区。</p>
         <div class="product-grid">
+          <!-- If an exact-model image cannot be verified after two attempts, replace that card's
+               product-image link with:
+               <div class="product-image image-unavailable" role="img" aria-label="完整型号：未取得可验证图片">未取得可验证的精确型号图片</div>
+          -->
           <article class="product-card">
             <a class="product-image" href="{{BUDGET_IMAGE_SOURCE_URL}}" aria-label="查看预算款图片来源"><img src="assets/products/{{BUDGET_IMAGE_FILE}}" alt="{{BUDGET_FULL_MODEL}}"></a>
             <div class="product-body"><div class="card-top"><span class="pill trade">预算候选</span><span class="pill">{{BUDGET_EVIDENCE}}</span></div><h3>{{BUDGET_FULL_MODEL}}</h3><div class="price">{{BUDGET_PRICE}} <small>{{BUDGET_PRICE_CONDITION}}</small></div><p><b>适合：</b>{{BUDGET_AUDIENCE}}</p><ul class="compact"><li>{{BUDGET_PRO_1}}</li><li>{{BUDGET_PRO_2}}</li><li>{{BUDGET_CON}}</li></ul><a class="source-link" href="{{BUDGET_PRODUCT_URL}}">查看产品来源 →</a></div>

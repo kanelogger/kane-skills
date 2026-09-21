@@ -9,6 +9,8 @@ skills:
 
 engine:
   name: codex
+  kwargs:
+    bypass_sandbox: "true"
 
 cases:
   files:
@@ -16,7 +18,7 @@ cases:
     - evals/cases/xiaomi-rainbow-battery.yaml
   defaults:
     timeout_seconds: 900
-    max_turns: 20
+    max_turns: 12
     collect_artifacts:
       - "shopping-report/**"
   parallelism: 1
