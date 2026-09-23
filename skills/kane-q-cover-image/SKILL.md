@@ -19,10 +19,12 @@ Create a cover that communicates the topic quickly and works at the intended pub
 2. Confirm the target platform or aspect ratio when it cannot be inferred safely.
 3. Choose a suitable cover type, such as typography-led, conceptual, scene, metaphor, portrait, minimal, or mixed.
 4. Define palette, rendering style, text level, mood, focal point, and title-safe area from the content and destination.
-5. Present the proposed direction for confirmation. Skip confirmation when the user explicitly requests direct generation.
-6. Save the complete approved prompt before generation.
-7. Generate the cover through the available raster image-generation workflow.
-8. Inspect the result at full size and thumbnail size; regenerate when the concept, hierarchy, typography, or visual quality is weak.
+5. Search for visual source material when the concept depends on a specific real subject, place, product, person, or current event, or when the user asks to use source imagery. Prefer user-provided material and authoritative or official sources. When a found image is needed as a generation input, obtain the full image from its source page into the output's reference-material folder, confirm it is usable, and record its source URL and usage terms. Do not treat search-result thumbnails as verified source files. Skip research when a visual metaphor can be generated accurately from the brief alone.
+6. Present the proposed direction for confirmation. Skip confirmation when the user explicitly requests direct generation.
+7. Save the complete approved prompt before generation.
+8. Resolve any selected reference asset relative to this skill's root directory (the directory containing this `SKILL.md`), verify that the local file exists, and pass its absolute path as an image input to the generation tool. For image-generation tools that accept `referenced_image_paths`, include every selected local reference there; writing a path or saying “use the reference” in prompt text alone does not attach the image. Pass relevant user-provided or researched visual references the same way when available and permitted.
+9. Generate the cover through the available raster image-generation workflow.
+10. Inspect the result at full size and thumbnail size; regenerate when the concept, hierarchy, typography, or visual quality is weak.
 
 > Note: When the cover benefits from a person, prefer Kane Q as the hero, narrator, observer, or demonstrator. Use additional or different people whenever the concept calls for them, and omit people when typography, objects, or an abstract metaphor makes a stronger cover.
 
@@ -35,6 +37,8 @@ Read `references/kane-cover-usage.md` only when the cover includes Kane Q. Use:
 - `references/IP_DNA.md` only when identity recovery, a new pose, or consistency debugging needs more detail.
 
 Treat character assets as identity references, not cover templates. Adapt pose, crop, scale, clothing, environment, supporting people, and rendering to the cover concept.
+
+When Kane Q appears, attach `assets/kane-q/three-view.png` as the primary image reference on every generation call. Attach one relevant expression image as an additional reference when it helps with pose or emotion. Resolve these paths from this skill's root directory and pass the actual local files to the image tool; do not rely on prompt text alone. If the selected tool cannot accept image inputs, state that the reference could not be attached and use identity cues from the usage guide as a fallback.
 
 ## Prompt Content
 
