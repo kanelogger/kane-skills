@@ -16,3 +16,5 @@ Merge multiple draft documents into one polished article by selecting the strong
 ## Public Notes
 
 This package contains only the workflow instructions. Bring your own drafts as task inputs.
+
+The Chinese typography rules are included directly in this skill so the package remains independently usable when copied or distributed. Preserve source-fidelity exceptions.

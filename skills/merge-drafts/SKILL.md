@@ -84,6 +84,8 @@ Review the merged draft for these specific issues:
 | **Detail richness** | Preserve specific examples, data, and operational details |
 | **Readability** | Ensure smooth, engaging prose throughout |
 
+For the final Chinese prose pass, check that Chinese text is separated from adjacent Latin words and Arabic numerals, Chinese sentences use consistent full-width punctuation without spaces before it, numbers use half-width digits, and proper names follow their official spelling and capitalization. Avoid unintended repeated punctuation. Keep code, URLs, Markdown syntax, exact quotations, official names, and technical notation intact. Follow an explicit house style or source-fidelity requirement when it differs, and record material exceptions in the merge report instead of silently changing source wording.
+
 ### Step 6: Generate Merge Report
 
 Create a detailed report documenting the merge process:

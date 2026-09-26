@@ -26,3 +26,4 @@ For a file input, the skill creates a package folder:
 
 The bundled scripts normalize common subtitle and transcript formats. Public examples can be added later under `examples/` after checking that the source content is shareable.
 
+The Chinese typography rules are included directly in this skill so the package remains independently usable when copied or distributed. Preserve source-fidelity exceptions.

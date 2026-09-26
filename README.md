@@ -17,6 +17,7 @@ This repository is a public, self-contained skill library. Each package is inspe
 - A collection of **Agent Skills** packaged as independent, self-contained units.
 - Every skill ships with a `SKILL.md`; most also include a `README.md` (a quick public reference).
 - Optional extras include `scripts/`, `assets/`, `evals/`, `references/`, and `agents/` when the skill needs them.
+- Skills should remain usable when copied individually, so Chinese typography defaults live inside each relevant skill. The small amount of intentional duplication avoids a dependency on a repository-level shared file.
 
 ## Skills
 

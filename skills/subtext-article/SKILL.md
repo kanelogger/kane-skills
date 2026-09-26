@@ -36,6 +36,7 @@ Leave a trail at every successful step. For file inputs, every successful output
    - no important claim, data point, example, or turn in logic removed;
    - no remaining timestamp noise or obvious oral filler;
    - article length is about 70%-90% of the useful transcript length unless the user asks otherwise.
+   - check Chinese/Latin and Chinese/number spacing, full-width punctuation in Chinese sentences, punctuation spacing, half-width digits, repeated punctuation, and official spelling/capitalization of proper names. Keep code, URLs, Markdown syntax, fidelity-sensitive quotations, and technical notation intact. Follow explicit house style or source-fidelity requirements, and record material exceptions rather than silently normalizing them.
 7. Save the final article as `article.md` in the package. Final chat response should report the package path and key artifacts, not paste the full article unless the user asks for inline output.
 
 ## Package Output
