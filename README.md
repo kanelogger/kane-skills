@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-30-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-31-green.svg)](skills/)
 [![Validation](https://img.shields.io/badge/Validation-failing-red.svg)](scripts/validate-public-skills)
 
 > Languages: [English README](README.md) | [中文 README](README-CN.md)
@@ -21,9 +21,9 @@ This repository is a public, self-contained skill library. Each package is inspe
 
 ## Skills
 
-The 30 skills are grouped by primary use case. The grouping is documentation-only; package directories remain direct children of `skills/` so existing skill paths and loaders stay stable.
+The 31 skills are grouped by primary use case. The grouping is documentation-only; package directories remain direct children of `skills/` so existing skill paths and loaders stay stable.
 
-### Content analysis and writing (7)
+### Content analysis and writing (8)
 
 | Skill | Use When | Output | Docs |
 | ----- | -------- | ------ | ---- |
@@ -31,6 +31,7 @@ The 30 skills are grouped by primary use case. The grouping is documentation-onl
 | [`blog-checker`](skills/blog-checker/) | Review Chinese technical blog posts. | Structured diagnostic review. | [SKILL](skills/blog-checker/SKILL.md) |
 | [`chinese-doc-formatter`](skills/chinese-doc-formatter/) | Format Chinese plain text or Markdown structure and typography while preserving meaning. | Formatted Markdown copy or audit-only report. | [SKILL](skills/chinese-doc-formatter/SKILL.md) |
 | [`concept-fable`](skills/concept-fable/) | Explain advanced concepts through a Chinese three-stage fable. | Story, reveal, theory mapping, boundaries, and reading directions. | [SKILL](skills/concept-fable/SKILL.md) |
+| [`document-clarifier`](skills/document-clarifier/) | Revise completed prose for clarity while preserving facts and established domain terms. | Clearer text or a file copy that preserves the original. | [SKILL](skills/document-clarifier/SKILL.md) |
 | [`douban-dice-review`](skills/douban-dice-review/) | Write a compact Douban-style film review with six theory dice. | Dice summary plus six-sentence review. | [SKILL](skills/douban-dice-review/SKILL.md) |
 | [`merge-drafts`](skills/merge-drafts/) | Merge several drafts into one polished article. | Final merged article plus merge report. | [SKILL](skills/merge-drafts/SKILL.md) |
 | [`subtext-article`](skills/subtext-article/) | Convert subtitles, ASR outputs, or transcripts into a faithful Chinese article. | A package folder with normalized transcript, draft, self-check, and final article. | [SKILL](skills/subtext-article/SKILL.md) |
