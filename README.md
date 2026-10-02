@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-31-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-37-green.svg)](skills/)
 [![Validation](https://img.shields.io/badge/Validation-failing-red.svg)](scripts/validate-public-skills)
 
 > Languages: [English README](README.md) | [中文 README](README-CN.md)
@@ -21,7 +21,7 @@ This repository is a public, self-contained skill library. Each package is inspe
 
 ## Skills
 
-The 31 skills are grouped by primary use case. The grouping is documentation-only; package directories remain direct children of `skills/` so existing skill paths and loaders stay stable.
+The 37 skills are grouped by primary use case. The grouping is documentation-only; package directories remain direct children of `skills/` so existing skill paths and loaders stay stable.
 
 ### Content analysis and writing (8)
 
@@ -48,6 +48,17 @@ The 31 skills are grouped by primary use case. The grouping is documentation-onl
 | Skill | Use When | Output | Docs |
 | ----- | -------- | ------ | ---- |
 | [`xiaomi-shopping-advisor`](skills/xiaomi-shopping-advisor/) | Use a comparable Xiaomi model as an anchor to test cheaper compromises and pricier upgrades. | An evidence-based HTML buying guide with real product images and responsive comparisons. | [SKILL](skills/xiaomi-shopping-advisor/SKILL.md) |
+
+### Job search (6)
+
+| Skill | Use When | Output | Docs |
+| ----- | -------- | ------ | ---- |
+| [`job-search-plan`](skills/job-search-plan/) | Plan and track a job search, then review its funnel. | Action plan and progress log. | [SKILL](skills/job-search-plan/SKILL.md) |
+| [`job-experience-decoder`](skills/job-experience-decoder/) | Extract verifiable value from work, project, startup, or internship experience. | Reusable evidence-backed value point library. | [SKILL](skills/job-experience-decoder/SKILL.md) |
+| [`job-direction-mapper`](skills/job-direction-mapper/) | Compare feasible roles and career transitions against actual demand. | Prioritized role directions with evidence gaps. | [SKILL](skills/job-direction-mapper/SKILL.md) |
+| [`job-resume-tailor`](skills/job-resume-tailor/) | Tailor a resume to a target job description. | Matched resume and evidence gap list. | [SKILL](skills/job-resume-tailor/SKILL.md) |
+| [`job-opportunity-outreach`](skills/job-opportunity-outreach/) | Evaluate openings and plan application channels and follow-up. | Opportunity queue and outreach plan. | [SKILL](skills/job-opportunity-outreach/SKILL.md) |
+| [`job-interview-prep`](skills/job-interview-prep/) | Prepare or simulate a job interview using real experience. | Introduction, case bank, answers, and review notes. | [SKILL](skills/job-interview-prep/SKILL.md) |
 
 ### Prompt and session knowledge (3)
 

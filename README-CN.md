@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-31-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-37-green.svg)](skills/)
 [![Validation](https://img.shields.io/badge/Validation-failing-red.svg)](scripts/validate-public-skills)
 
 > 语言版本: [English README](README.md) | [中文 README](README-CN.md)
@@ -22,7 +22,7 @@ Kane 创建的可复用智能体技能库。
 
 ## 技能列表
 
-31 个技能按主要使用目的分组。分类仅用于文档导航；技能目录仍保持在 `skills/` 的直接子目录中，避免改变现有路径和加载约定。
+37 个技能按主要使用目的分组。分类仅用于文档导航；技能目录仍保持在 `skills/` 的直接子目录中，避免改变现有路径和加载约定。
 
 ### 内容分析与写作（8）
 
@@ -49,6 +49,17 @@ Kane 创建的可复用智能体技能库。
 | 技能 | 使用场景 | 输出 | 文档 |
 | ---- | -------- | ---- | ---- |
 | [`xiaomi-shopping-advisor`](skills/xiaomi-shopping-advisor/) | 以可比的小米型号为锚点，核验便宜款减配与贵款升级是否值得。 | 带真实产品图、响应式对比和来源证据的 HTML 网购报告。 | [SKILL](skills/xiaomi-shopping-advisor/SKILL.md) |
+
+### 求职（6）
+
+| 技能 | 使用场景 | 输出 | 文档 |
+| ---- | -------- | ---- | ---- |
+| [`job-search-plan`](skills/job-search-plan/) | 安排求职节奏、跟踪进度并复盘转化。 | 行动计划与进度记录。 | [SKILL](skills/job-search-plan/SKILL.md) |
+| [`job-experience-decoder`](skills/job-experience-decoder/) | 从工作、项目、创业或实习经历中提取可核验价值。 | 可复用的价值点资产库。 | [SKILL](skills/job-experience-decoder/SKILL.md) |
+| [`job-direction-mapper`](skills/job-direction-mapper/) | 结合真实岗位需求比较方向与转行路径。 | 附证据缺口的岗位方向排序。 | [SKILL](skills/job-direction-mapper/SKILL.md) |
+| [`job-resume-tailor`](skills/job-resume-tailor/) | 针对目标 JD 调整简历。 | 匹配版简历与证据缺口清单。 | [SKILL](skills/job-resume-tailor/SKILL.md) |
+| [`job-opportunity-outreach`](skills/job-opportunity-outreach/) | 筛选岗位并规划投递渠道与跟进。 | 机会队列与触达计划。 | [SKILL](skills/job-opportunity-outreach/SKILL.md) |
+| [`job-interview-prep`](skills/job-interview-prep/) | 用真实经历准备或模拟面试。 | 自我介绍、案例库、回答与复盘记录。 | [SKILL](skills/job-interview-prep/SKILL.md) |
 
 ### 提示词与会话知识（3）
 

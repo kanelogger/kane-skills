@@ -1,0 +1,13 @@
+id: finance-to-product
+title: 财务转产品的方向与补证
+input:
+  prompt: |
+    我做了五年财务，熟悉报销和预算流程，会 Excel，但没有正式产品经理经历，想做企业软件产品经理。帮我判断方向和下一步。
+judge:
+  type: agent_judge
+  model: openai/gpt-4
+  criteria:
+    - "指出财务流程经验可迁移的部分，同时明确产品需求分析和交付证据的缺口。"
+    - "提出具体可展示的验证项目，并要求将练习项目与正式工作经历区分。"
+    - "不保证转型成功，不用未经核查的当前招聘趋势为方向背书。"
+  pass_threshold: 0.8
