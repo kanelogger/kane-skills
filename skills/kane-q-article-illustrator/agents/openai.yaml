@@ -1,7 +1,0 @@
-interface:
-  display_name: "Kane Q Article Illustrator"
-  short_description: "为文章规划、生成并整合内容导向的场景、图解与信息图"
-  default_prompt: "Use $kane-q-article-illustrator to plan and generate illustrations for this article."
-
-policy:
-  allow_implicit_invocation: true

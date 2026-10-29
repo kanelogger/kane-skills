@@ -1,4 +1,0 @@
-interface:
-  display_name: "小米锚点购物顾问"
-  short_description: "用小米作价格锚点，快速审查便宜款减配与贵款升级"
-  default_prompt: "Use $xiaomi-shopping-advisor to research this product category and give me a concise, evidence-based buying recommendation."
