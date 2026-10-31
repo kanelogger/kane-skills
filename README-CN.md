@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-14-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-13-green.svg)](skills/)
 
 > 语言版本: [English README](README.md) | [中文 README](README-CN.md)
 
@@ -21,7 +21,7 @@ Kane 创建的可复用智能体技能库。
 
 ## 技能列表
 
-14 个技能按主要使用目的分组。分类仅用于文档导航；技能目录仍保持在 `skills/` 的直接子目录中，避免改变现有路径和加载约定。
+13 个技能按主要使用目的分组。分类仅用于文档导航；技能目录仍保持在 `skills/` 的直接子目录中，避免改变现有路径和加载约定。
 
 ### 内容分析与写作（7）
 
@@ -34,12 +34,6 @@ Kane 创建的可复用智能体技能库。
 | [`douban-dice-review`](skills/douban-dice-review/) | 用六枚理论骰子撰写简洁的豆瓣式影评。 | 骰子总结与六句影评。 | [SKILL](skills/douban-dice-review/SKILL.md) |
 | [`merge-drafts`](skills/merge-drafts/) | 将多份草稿合并为一篇润色后的文章。 | 最终合并文章及合并报告。 | [SKILL](skills/merge-drafts/SKILL.md) |
 | [`subtext-article`](skills/subtext-article/) | 将字幕、自动语音识别输出或转录文本转换为忠实的中文文章。 | 包含规范化转录、草稿、自检与终稿的完整文件夹。 | [SKILL](skills/subtext-article/SKILL.md) |
-
-### 提示词库（1）
-
-| 技能 | 使用场景 | 输出 | 文档 |
-| ---- | -------- | ---- | ---- |
-| [`kane-prompts`](skills/kane-prompts/) | 从 `prompts/` 中查找、调用、轻量改写或组合常用提示词。 | 基于所选 Markdown 原文的可复制提示词，或按明确要求执行后的产物。 | [SKILL](skills/kane-prompts/SKILL.md) |
 
 ### 产品与工程工作流（5）
 

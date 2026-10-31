@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-14-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-13-green.svg)](skills/)
 
 > Languages: [English README](README.md) | [中文 README](README-CN.md)
 
@@ -20,7 +20,7 @@ This repository is a public, self-contained skill library. Each package is inspe
 
 ## Skills
 
-The 14 skills are grouped by primary use case. The grouping is documentation-only; package directories remain direct children of `skills/` so existing skill paths and loaders stay stable.
+The 13 skills are grouped by primary use case. The grouping is documentation-only; package directories remain direct children of `skills/` so existing skill paths and loaders stay stable.
 
 ### Content analysis and writing (7)
 
@@ -33,12 +33,6 @@ The 14 skills are grouped by primary use case. The grouping is documentation-onl
 | [`douban-dice-review`](skills/douban-dice-review/) | Write a compact Douban-style film review with six theory dice. | Dice summary plus six-sentence review. | [SKILL](skills/douban-dice-review/SKILL.md) |
 | [`merge-drafts`](skills/merge-drafts/) | Merge several drafts into one polished article. | Final merged article plus merge report. | [SKILL](skills/merge-drafts/SKILL.md) |
 | [`subtext-article`](skills/subtext-article/) | Convert subtitles, ASR outputs, or transcripts into a faithful Chinese article. | A package folder with normalized transcript, draft, self-check, and final article. | [SKILL](skills/subtext-article/SKILL.md) |
-
-### Prompt library (1)
-
-| Skill | Use When | Output | Docs |
-| ----- | -------- | ------ | ---- |
-| [`kane-prompts`](skills/kane-prompts/) | Find, retrieve, lightly adapt, or combine reusable prompts from the `prompts/` library. | A copy-ready prompt grounded in the selected Markdown source, or an explicitly requested executed result. | [SKILL](skills/kane-prompts/SKILL.md) |
 
 ### Product and engineering workflows (5)
 
