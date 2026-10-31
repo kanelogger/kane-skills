@@ -1,34 +1,34 @@
-# Module: paper_scan
+# 模块：paper_scan
 
-## Module Contract
+## 模块契约
 
-`purpose`: Quickly deconstruct a paper before deeper analysis. Identify the problem, prior bottleneck, core mechanism, innovation delta, evidence, and boundary conditions.
+`purpose`：在深入分析之前先把论文快速拆解一遍。识别问题、前人瓶颈、核心机制、创新增量、证据与边界条件。
 
-`trigger`: Run for papers, academic methods, arXiv-style inputs, DOI/PDF paper tasks, abstracts, methods, experiments, benchmarks, SOTA claims, or when the user asks for "论文速读", "快速读懂论文", "paper scan", "分析这篇论文", "方法论文分析".
+`trigger`：论文、学术方法、arXiv 类输入、DOI/PDF 论文任务、摘要、方法、实验、基准测试、SOTA（当前最优）宣称，或用户提出「论文速读」「快速读懂论文」「paper scan」「分析这篇论文」「方法论文分析」时执行。
 
-`inputs`: Paper text, abstract, notes, extracted content, method section, experiment summary, benchmark table, or user focus such as method, contribution, limitation, application, or critique.
+`inputs`：论文全文、摘要、笔记、提取内容、方法章节、实验概要、基准测试表格，或用户指定的侧重方向，例如方法、贡献、局限、应用或批评。
 
-`outputs`: `paper_brief` written to the assigned module file, normally `01-paper_scan.md`.
+`outputs`：写入指定模块文件的 `paper_brief`，通常是 `01-paper_scan.md`。
 
-`evidence_policy`: Use `原文明确`, `合理推断`, `外部待验证`, and `信息不足` on every comparison or performance claim. Do not assert SOTA improvement unless the paper itself provides comparison evidence or the user provides context. If a benchmark, baseline, dataset reputation, or SOTA status comes from outside memory, mark it `外部待验证`.
+`evidence_policy`：每一条对比或性能宣称都要用 `原文明确`、`合理推断`、`外部待验证` 与 `信息不足` 标注。除非论文自己给了对比证据、或用户补充了对比背景，否则不得断言 SOTA 提升。基准测试、基线、数据集口碑或 SOTA 地位若来自模型记忆而非论文，标 `外部待验证`。
 
-`skip_conditions`: Skip for non-academic articles unless the user explicitly asks for paper-style analysis. Skip if the source is only a short quote without enough method or contribution detail.
+`skip_conditions`：非学术文章跳过本模块，除非用户明确要求按论文规格分析。原文只是一段短引用、方法与贡献细节不足时，也跳过。
 
-`reference_prompt`: `references/paper_scan.md`
+`reference_prompt`：`references/paper_scan.md`
 
-## Execution Rules
+## 执行规则
 
-Act like a reviewer doing first-pass deconstruction. Ignore academic filler, motivation boilerplate, and broad field background unless they are needed to understand the specific delta.
+像审稿人做第一遍拆解那样去读。学术套话、动机样板段和领域大背景一律忽略，除非不读这些就读不懂具体增量。
 
-Do not turn paper scanning into a full article analysis. The output should be compact, high-density, and oriented around mechanism and novelty.
+不要把论文速读做成完整的文章分析。产物应当紧凑、高密度，围绕机制与新颖性展开。
 
-If the paper does not provide enough evidence for novelty, benchmark comparison, dataset quality, baseline strength, or generality, say `信息不足`.
+论文若没给足证据说明新颖性、基准对比、数据集质量、基线强度或泛化性，就写 `信息不足`。
 
-Before writing, audit every claimed comparison. If the paper says "better than X", you may report that as `原文明确`; if you add "X is the current SOTA" from memory, label it `外部待验证` or omit it.
+动笔之前逐条审计对比宣称。论文说「优于 X」，可以把它作为 `原文明确` 照实写；如果凭记忆补上「X 是当前 SOTA」，就必须标 `外部待验证` 或者直接删掉。
 
-When this module is selected for output, write a standalone `paper_brief` document in the output folder and end it with `本模块小结`. In `combined` mode, this file comes before deeper analysis, refinement, or upgrade files. Do not produce downstream files unless the router selected those modules.
+本模块被选中输出时，在输出文件夹写一份独立成篇的 `paper_brief` 文档，并以 `本模块小结` 收尾。在 `combined`（多模块串联）模式下，这份文件排在更深的分析、精炼或升级文件之前。路由没有选中这些模块时，不要生成下游文件。
 
-## Output Template: paper_brief
+## 输出模板：paper_brief
 
 ### 1. 核心痛点
 

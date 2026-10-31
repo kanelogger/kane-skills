@@ -1,48 +1,48 @@
-# Module: thought_refine
+# 模块：thought_refine
 
-## Module Contract
+## 模块契约
 
-`purpose`: Convert analysis or verbose source material into sharp, high-density thinking output. Produce a conclusion-first thesis, not a line-by-line summary.
+`purpose`：把分析结果或啰嗦的原文素材转成锐利、高密度的思考产物。产出结论先行的论点，而不是逐句摘要。
 
-`trigger`: Run as the second standard step after `deep_analysis` in the default article package, and as the third standard step after `paper_scan -> deep_analysis` in the default paper package. Also run when the user asks for "思想精炼", "提炼主线", "压缩观点", "高密度表达", "结论先行", "把啰嗦内容变清楚", or when communication clarity is the explicit output goal.
+`trigger`：默认文章包中作为 `deep_analysis` 之后的第二步标准步骤执行；默认论文包中作为 `paper_scan -> deep_analysis` 之后的第三步标准步骤执行。用户要求「思想精炼」「提炼主线」「压缩观点」「高密度表达」「结论先行」「把啰嗦内容变清楚」，或表达清晰本身就是本次输出目标时，也执行本模块。
 
-`inputs`: Preferred input is `deep_analysis` output. Also accept raw notes, conversation excerpts, rough drafts, verbose claims, or article text when the user directly asks for refinement.
+`inputs`：首选输入是 `deep_analysis` 的输出。用户直接要求精炼时，也接受原始笔记、对话片段、粗糙草稿、啰嗦的主张或文章原文。
 
-`outputs`: `refined_thesis` written to the assigned module file, normally `01-thought_refine.md` for direct refinement or later-numbered in combined mode.
+`outputs`：写入指定模块文件的 `refined_thesis`。直接精炼时通常写入 `01-thought_refine.md`，在 combined 模式下按串联顺序使用更靠后的编号。
 
-`evidence_policy`: Preserve the author's actual claim. Mark sharpened interpretations as `合理推断` when they go beyond explicit wording. Do not add new examples, claims, statistics, context, or outside knowledge. If a tempting factual enhancement is not in the source, omit it or mark it `外部待验证` in the evidence boundary.
+`evidence_policy`：守住作者的真实主张。锐化后的解读一旦超出明确措辞，标 `合理推断`。不新增例子、主张、统计数据、语境或外部知识。若某处事实性强化很吸引人、原文却查无依据，就删掉它，或在证据边界里标 `外部待验证`。
 
-`skip_conditions`: Skip only when the user explicitly asks for full deep analysis only, asks to preserve original order, or says not to refine. Default package runs this module.
+`skip_conditions`：仅在用户明确要求只做完整深度分析、要求保留原始顺序，或明确说不要精炼时跳过。默认分析包会执行本模块。
 
-`reference_prompt`: `references/thought_refine.md`
+`reference_prompt`：`references/thought_refine.md`
 
-## Execution Rules
+## 执行规则
 
-This module is for structure and density, not for new thinking. The output must make the original idea clearer without changing what the author means.
+本模块负责结构和密度，不负责新思考。产物必须让原有想法更清楚，而不改变作者的意思。
 
-Before writing, do a containment check: every concrete number, example, named entity, timeline, and causal claim in the refined output must come from the source or prior `deep_analysis`. If it does not, remove it. Do not make the author's forecasts sound more certain than the original wording.
+动笔之前先做一次内容围栏检查（containment check）：精炼产物里出现的每一个具体数字、例子、具名实体、时间线、因果判断，都必须来自原文或此前的 `deep_analysis`。找不到出处的，删掉。不得把作者的预测说得比原话更确定。
 
-If no prior `deep_analysis` exists, do only a lightweight internal extraction before writing:
+此前没有 `deep_analysis` 时，动笔前只做一次轻量内部提取：
 
-- core claim;
-- source anchors that must not be changed;
-- meaning boundaries and missing evidence.
+- 核心主张；
+- 不得改动的原文锚点；
+- 意思边界与缺失的证据。
 
-Do not write a full `analysis_report` file for the lightweight internal extraction. Do not expand the task into article analysis. The module file should contain `refined_thesis` only unless the router selected a combined chain with earlier module files.
+不要为这次轻量内部提取另写完整的 `analysis_report` 文件。不要把任务扩大成文章分析。除非路由选中了带前置模块文件的串联链条，否则模块文件里只应写 `refined_thesis`。
 
-When this module is selected for output, write a standalone `refined_thesis` document in the output folder and end it with `本模块小结`. If a lightweight internal `deep_analysis` was used only to extract the core claim, do not expose it as a separate file.
+本模块被选中输出时，在输出文件夹写一份独立成篇的 `refined_thesis` 文档，并以 `本模块小结` 收尾。如果轻量内部 `deep_analysis` 只用来提取核心主张，不要把它单独写成一份文件。
 
-## Refinement Process
+## 精炼流程
 
-1. Diagnose the source of verbosity: repeated process narration, loose structure, filler words, weak thesis, mixed goals, or unsupported leaps.
-2. Extract the one core idea the text is trying to convey.
-3. Identify the communication purpose: decision, information, persuasion, reflection, critique, alignment, or action.
-4. Rebuild the logic as conclusion first, then up to three primary support points.
-5. Cut filler, vague modifiers, redundant transitions, and repeated claims.
-6. Keep professional terms when they carry real meaning; define or ground them when needed.
-7. Check that every sharpened claim still traces back to the source.
+1. 先诊断啰嗦的成因：过程复述过多、结构松散、填充词堆积、论点偏弱、目标混杂，或出现无据跳跃。
+2. 抽出全文想传达的那一个核心想法。
+3. 明确表达目的：决策、信息、说服、反思、批评、对齐，还是行动。
+4. 按结论先行重建逻辑，再给最多三个主要支撑点。
+5. 删掉填充词、含糊限定语、冗余过渡句和重复主张。
+6. 保留承载真实含义的专业术语；必要时给出定义，或落到具体语境。
+7. 逐条核对：每个被锐化的主张是否仍能追溯到原文。
 
-## Output Template: refined_thesis
+## 输出模板：refined_thesis
 
 ### 核心结论
 

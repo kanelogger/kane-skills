@@ -1,39 +1,39 @@
-# Module: deep_analysis
+# 模块：deep_analysis
 
-## Module Contract
+## 模块契约
 
-`purpose`: Build the main understanding layer for articles, essays, technical articles, business commentary, reports, and papers after `paper_scan`. Extract thesis, concepts, structure, evidence, context, hidden assumptions, counterarguments, boundaries, and reusable value.
+`purpose`：为文章、随笔、技术文章、商业评论、报告，以及 `paper_scan` 之后的论文，搭建主理解层。抽出核心论点、关键概念、结构、证据、语境、隐含假设、反方观点、边界与可复用价值。
 
-`trigger`: Run by default for article analysis tasks. Run after `paper_scan` for paper deep analysis. Run before `thought_refine` or `cognitive_upgrade` only as an internal foundation when the source has not yet been analyzed.
+`trigger`：文章分析任务默认执行。论文做深度分析时，在 `paper_scan` 之后执行。仅在原文尚未分析时，才以内部基础的身份前置到 `thought_refine` 或 `cognitive_upgrade` 之前执行。
 
-`inputs`: Source text, file content, URL content, excerpt, previous `paper_scan` output, optional target reader roles, and optional analysis focus.
+`inputs`：原文内容、文件内容、URL 内容、节选、上一环节的 `paper_scan` 输出，以及可选的目标读者角色与可选的分析侧重。
 
-`outputs`: `analysis_report` written to the assigned module file, including memorable viewpoints and quotable lines (template §5). Compact internal notes are allowed only for explicitly narrowed direct refinement tasks.
+`outputs`：写入指定模块文件的 `analysis_report`，其中包含印象深刻观点与金句（模板第 5 节）。只有在用户明确收窄为直接精炼任务时，才允许只留内部简要笔记。
 
-`evidence_policy`: Use `原文明确`, `合理推断`, `创造性延展`, `外部待验证`, and `信息不足`. Separate source claims from your inference. Mark author background, writing context, publication context, data source, intended audience, and external controversy as `信息不足` when absent from the source. Mark factual claims that come from memory or outside the source as `外部待验证`, not `原文明确`.
+`evidence_policy`：使用 `原文明确`、`合理推断`、`创造性延展`、`外部待验证` 与 `信息不足`。把原文主张和你自己的推断分开。作者背景、写作语境、发布语境、数据来源、目标读者、外部争议，原文没有交代这些内容时，一律标 `信息不足`。来自记忆或原文之外的事实性说法，标 `外部待验证`，不得标 `原文明确`。
 
-`skip_conditions`: Skip for pure paper quick read, pure text polishing, pure translation, social-media packaging, title generation, or external fact-checking unless the user explicitly asks for analysis.
+`skip_conditions`：纯论文速读、纯文本润色、纯翻译、社交媒体包装、标题生成、外部事实核查，这些情况都不执行本模块，除非用户明确提出要做分析。
 
-`reference_prompt`: `references/deep_analysis.md`
+`reference_prompt`：`references/deep_analysis.md`
 
-## Execution Rules
+## 执行规则
 
-Read the source as an argument system, not as a paragraph sequence. Identify the claim, the mechanism that supports it, the evidence used, the assumptions it depends on, and the conditions under which it breaks.
+读原文时把它当论证系统读，而不是段落序列。找出主张、支撑主张的机制、所用的证据、所依赖的假设，以及这套论证在什么条件下失效。
 
-Do not turn missing context into biography or background knowledge. If a claim requires outside verification, mark it `信息不足` and name the missing evidence.
+不要把缺失的语境补成人物传记或背景知识。某条主张需要外部核验时，标 `信息不足`，并点明缺的是哪份证据。
 
-Run an evidence audit before writing:
+动笔前先做证据审计：
 
-- Any number, date, entity name, comparison, causal claim, market share, policy claim, resource dependency, or technical benchmark labeled `原文明确` must appear in the source.
-- If it does not appear in the source, downgrade it to `合理推断`, `外部待验证`, or `信息不足`.
-- Preserve modality: "will", "may", "plans to", "is expected to", "if", "scenario", and "forecast" must not become established fact.
-- Do not invent missing intermediate premises when criticizing the source. If a critique depends on outside facts, label those facts `外部待验证`.
+- 任何标为 `原文明确` 的数字、日期、实体名称、对比、因果判断、市场份额、政策主张、资源依赖或技术基准，都必须出现在原文里。
+- 原文里没有的，降为 `合理推断`、`外部待验证` 或 `信息不足`。
+- 保持情态强度：「will」「may」「plans to」「is expected to」「if」「scenario」「forecast」这些词承载的只是可能性、计划或预测，不得写成既成事实。
+- 批评原文时不要自己补上缺失的中间前提。批评若要依赖外部事实，那些事实须标 `外部待验证`。
 
-In the default package, always write a standalone `analysis_report` file. If the user explicitly asks for direct refinement only, this module may be a hidden pre-step: extract only core thesis, source anchors, assumptions, and boundaries, and do not write a standalone `analysis_report` file.
+默认分析包里一律写出独立成篇的 `analysis_report` 文件。用户明确只要直接精炼时，本模块可以退为隐式前置步骤：只提取核心论点、原文锚点、假设与边界，不写独立的 `analysis_report` 文件。
 
-When this module is selected for output, write a standalone `analysis_report` document in the output folder and end it with `本模块小结`. In `combined` mode, this file is one step in the chain; the overall final synthesis goes into `99-summary.md` after all selected module files.
+本模块被选中输出时，在输出文件夹写一份独立成篇的 `analysis_report` 文档，并以 `本模块小结` 收尾。在 `combined`（多模块串联）模式下，这份文件只是链条中的一环；整体最终综合写在所有已选模块文件之后生成的 `99-summary.md` 里。
 
-## Output Template: analysis_report
+## 输出模板：analysis_report
 
 ### 1. 核心论点
 

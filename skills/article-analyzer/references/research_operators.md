@@ -1,92 +1,92 @@
-# Research Operators
+# 研究算子
 
-Use this reference only when the source or user goal requires deeper research analysis than the default `deep_analysis` template.
+只有当原文或用户目标需要比默认 `deep_analysis` 模板更深的研究分析时，才使用本参考文件。
 
-## Selection Rules
+## 选择规则
 
-Do not run every operator by default. Select the smallest useful set:
+默认不要把所有算子都执行一遍。选取最小有效集：
 
-- Single article or essay: choose 2-3 operators.
-- Long report, paper, or business commentary: choose 3-5 operators.
-- Multi-source literature review, due diligence, or research synthesis: choose 4-7 operators.
-- Full research package: run all relevant operators only when the user explicitly asks for comprehensive research.
+- 单篇文章或随笔：选 2-3 个算子。
+- 长报告、论文或商业评论：选 3-5 个算子。
+- 多源文献综述、尽调或研究综合：选 4-7 个算子。
+- 完整研究包：只有用户明确提出要做全面研究时，才把相关算子全部执行一遍。
 
-Preserve the evidence labels from the main skill: `原文明确`, `合理推断`, `创造性延展`, `信息不足`.
+沿用主技能的证据标注：`原文明确`、`合理推断`、`创造性延展`、`信息不足`。
 
-## Operators
+## 算子
 
-| Operator | Use When | Output |
+| 算子 | 适用场景 | 输出 |
 | --- | --- | --- |
-| `insight_synthesizer` | The user wants the most important takeaways, breakthrough insight, or executive-level understanding. | 3 high-leverage insights, why each matters, what conventional assumption it challenges, and evidence label. |
-| `contradiction_auditor` | There are multiple sources, drafts, authors, time periods, or competing claims. | Contradiction table: claim A, claim B, source support, stronger evidence, likely cause of disagreement, unresolved evidence needed. |
-| `implementation_planner` | The user needs to turn research into action, SOP, product plan, study plan, or decision workflow. | Step plan with prerequisites, actions, tools/frameworks, expected result, risks, and failure traps. |
-| `question_generator` | The user wants research gaps, product opportunities, next inquiry, or deeper questions. | 10-15 unanswered expert questions ranked by potential value, with why the source does not answer them. |
-| `assumption_miner` | The argument depends on unstated premises, market beliefs, causal claims, or expert intuition. | Hidden assumptions with criticality, failure probability, what changes if false, and validation method. |
-| `framework_builder` | The user needs a reusable model, decision tree, taxonomy, or operating framework. | Components, relationships, decision tree, usage rules, edge cases, and failure conditions. |
-| `evidence_mapper` | The user needs rigor, internal claim checking, or confidence calibration based on the provided source. | Main claims mapped to evidence type: anecdotal, correlational, experimental, meta-analytic, authority claim, or unsupported. Flag confident claims with weak evidence. |
-| `fact_opinion_auditor` | The user explicitly asks for fact-checking, claim verification, fact/view separation, evidence support, reference-link checking, authoritative news/source checking, or excluding self-media. | Two lists: author-claimed facts and author-stated opinions. Each item includes verification status, supporting/contradicting source, source class, and evidence note. |
-| `audience_translator` | The output must serve different readers or stakeholders. | Same insight translated for executives, builders/engineers, and end users, using role-specific stakes and examples. |
-| `timeline_builder` | The source contains dates, milestones, historical evolution, product cycles, policy changes, or technology shifts. | Timeline of events, inflection points, acceleration/deceleration signals, and implications for future trajectory. |
-| `weakness_detector` | The user wants critique, peer review, due diligence, risk analysis, or a stronger argument. | Method flaws, logic gaps, overclaims, unsupported jumps, and extra evidence needed to strengthen the claim. |
+| `insight_synthesizer` | 用户想要最重要的要点、突破性洞见或面向管理层的理解。 | 3 条高杠杆洞见，说明各自为何重要、挑战了哪条常规假设，并给出证据标注。 |
+| `contradiction_auditor` | 存在多个来源、草稿、作者、时间段或相互竞争的主张。 | 矛盾表：主张 A、主张 B、来源支撑、更强的证据、分歧的可能原因、仍待补齐的证据。 |
+| `implementation_planner` | 用户要把研究转成行动、SOP（标准作业流程）、产品方案、学习计划或决策流程。 | 分步计划：前提条件、动作、工具/框架、预期结果、风险与失败陷阱。 |
+| `question_generator` | 用户想要研究空白、产品机会、下一步追问或更深的问题。 | 10-15 个专家级未解问题，按潜在价值排序，并说明原文为何回答不了。 |
+| `assumption_miner` | 论证依赖未明说的前提、市场信念、因果主张或专家直觉。 | 隐含假设清单：关键程度、失效概率、假设不成立会改变什么、验证方法。 |
+| `framework_builder` | 用户需要可复用的模型、决策树、分类体系或运行框架。 | 构成要素、关系、决策树、使用规则、边界情况与失效条件。 |
+| `evidence_mapper` | 用户需要严谨性、内部主张核查，或基于所给来源的置信度校准。 | 主要主张映射到证据类型：轶事、相关性、实验、元分析、权威背书或无支撑。标出证据单薄却语气笃定的主张。 |
+| `fact_opinion_auditor` | 用户明确要求事实核查、主张核验、事实与观点分离、证据支撑、参考链接核查、权威新闻/来源核查，或排除自媒体。 | 两张清单：作者声称的事实，作者陈述的观点。每项含核验状态、支撑或反驳来源、来源类别与证据备注。 |
+| `audience_translator` | 产物要服务不同读者或利益相关方。 | 同一洞见分译为管理层、构建者/工程师、终端用户三版，用各角色的切身利害和例子。 |
+| `timeline_builder` | 原文包含日期、里程碑、历史演进、产品周期、政策变化或技术变迁。 | 事件时间线、转折点、加速/降速信号，以及对未来走向的含义。 |
+| `weakness_detector` | 用户要求批评、同行评审、尽调、风险分析，或需要立一个更强的主张。 | 方法缺陷、逻辑缺口、过度宣称、无据跳跃，以及要把主张加固还需哪些证据。 |
 
-## Composition Patterns
+## 组合模式
 
-### Article Deep Dive
+### 文章深挖
 
-Use `insight_synthesizer`, `evidence_mapper`, `assumption_miner`, and `weakness_detector`.
+使用 `insight_synthesizer`、`evidence_mapper`、`assumption_miner` 与 `weakness_detector`。
 
-### Fact / Opinion Audit
+### 事实与观点核验
 
-Use `fact_opinion_auditor` when the user explicitly requests external verification or asks whether facts and opinions are evidence-supported. If reference links are provided, check those first, then use authoritative primary sources or reputable news reports when browsing/search is available. Exclude self-media, anonymous reposts, content farms, and unsupported social posts from supporting evidence.
+用户明确要求外部核验，或询问事实与观点是否有证据支撑时，使用 `fact_opinion_auditor`。若提供了参考链接，先查这些链接；具备浏览或搜索能力时，再用权威的一手来源或信誉良好的新闻报道。自媒体、匿名转载、内容农场和无据社媒帖子不得算作支撑证据。
 
-For each author-claimed fact, output:
+对每一条作者声称的事实，输出：
 
-- claim;
-- verification status: `已证实`, `部分支持`, `未找到可靠证据`, `与可靠来源冲突`, or `无法核验`;
-- evidence source and source class;
-- evidence note.
+- 主张；
+- 核验状态：`已证实`、`部分支持`、`未找到可靠证据`、`与可靠来源冲突` 或 `无法核验`；
+- 证据来源与来源类别；
+- 证据备注。
 
-For each author-stated opinion, output:
+对每一条作者陈述的观点，输出：
 
-- opinion;
-- support status: `事实证据支撑`, `逻辑推论支撑`, `弱证据`, `无可靠证据`, or `无法判断`;
-- supporting facts or missing evidence;
-- evidence note.
+- 观点；
+- 支撑状态：`事实证据支撑`、`逻辑推论支撑`、`弱证据`、`无可靠证据` 或 `无法判断`；
+- 支撑事实或缺失的证据；
+- 证据备注。
 
-Do not mark a claim as supported by self-media. Do not treat repeated coverage as independent evidence when reports cite the same original source. Do not use external verification when the user asked for source-faithful analysis only.
+自媒体不能作为某条主张的支撑依据。多家报道转引同一原始来源时，不算独立证据。用户只要忠实于原文的分析时，不要动用外部核验。
 
-### Paper / Method Review
+### 论文与方法评审
 
-Use `evidence_mapper`, `assumption_miner`, `weakness_detector`, and optionally `implementation_planner` when practical application matters.
+使用 `evidence_mapper`、`assumption_miner`、`weakness_detector`；实际应用是重点时，可加 `implementation_planner`。
 
-### Multi-Source Synthesis
+### 多源综合
 
-Use `contradiction_auditor`, `evidence_mapper`, `framework_builder`, and `timeline_builder` when sources evolve over time.
+来源随时间演进时，使用 `contradiction_auditor`、`evidence_mapper`、`framework_builder` 与 `timeline_builder`。
 
-### Decision / Investment / Due Diligence
+### 决策 / 投资 / 尽调
 
-Use `contradiction_auditor`, `evidence_mapper`, `assumption_miner`, `weakness_detector`, and `implementation_planner`.
+使用 `contradiction_auditor`、`evidence_mapper`、`assumption_miner`、`weakness_detector` 与 `implementation_planner`。
 
-### Product / Opportunity Discovery
+### 产品与机会发现
 
-Use `insight_synthesizer`, `question_generator`, `assumption_miner`, `framework_builder`, and `audience_translator`.
+使用 `insight_synthesizer`、`question_generator`、`assumption_miner`、`framework_builder` 与 `audience_translator`。
 
-## Output Integration
+## 输出整合
 
-Do not create a separate report section for every selected operator unless the user asks for an exhaustive package. Integrate operator outputs into the selected module file:
+除非用户要求穷举式分析包，否则不要为每个选中的算子单开一节报告。把算子输出整合进已选的模块文件：
 
-- `deep_analysis`: evidence, assumptions, contradictions, weaknesses, timeline, and reusable value.
-- `thought_refine`: distilled insights and role-specific expression.
-- `cognitive_upgrade`: framework, hidden variable, decision tree, and edge cases.
-- `fact_opinion_audit`: fact/opinion extraction, verification status, evidence sources, unsupported claims, and verification limits.
-- `99-summary`: selected operators, final conclusion, unresolved evidence gaps, and recommended next step.
+- `deep_analysis`: 证据、假设、矛盾、薄弱点、时间线与可复用价值。
+- `thought_refine`: 提炼后的洞见与分角色表达。
+- `cognitive_upgrade`: 框架、隐含变量、决策树与边界情况。
+- `fact_opinion_audit`: 事实与观点提取、核验状态、证据来源、无支撑主张与核验局限。
+- `99-summary`: 所选算子、最终结论、未解决证据缺口与建议的下一步。
 
-## Failure Guards
+## 失败防护
 
-- Do not use expert role-play as a substitute for evidence.
-- Do not call an insight "breakthrough" unless the source supports a real shift in model, mechanism, or decision.
-- Do not treat equal disagreement as resolved; mark why both sides may be credible.
-- Do not invent dates, sources, benchmarks, author intent, or external controversy.
-- Do not turn research analysis into a generic question list when the source already supports concrete conclusions.
-- Do not label a fact as verified without naming the source used for verification.
-- Do not collapse `未找到可靠证据` into false; absence of found evidence is not disproof.
+- 不得用专家角色扮演顶替证据。
+- 除非原文支持模型、机制或决策上发生了真实转变，否则不得把某个洞见称为「突破」。
+- 双方势均力敌不等于已经解决；要写清双方各自为何可能站得住脚。
+- 不得编造日期、来源、基准测试、作者意图或外部争议。
+- 原文已经支持具体结论时，不得把研究分析退化成泛泛的问题清单。
+- 没有点名核验所用的来源，不得把某条事实标为已核验。
+- 不得把 `未找到可靠证据` 直接判成假；找不到证据不等于反证。

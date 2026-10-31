@@ -1,55 +1,55 @@
-# Module: cognitive_upgrade
+# 模块：cognitive_upgrade
 
-## Module Contract
+## 模块契约
 
-`purpose`: Move beyond direct analysis to construct a higher-level model. Identify thesis, antithesis, common goal, missing variable, synthesis, blind spot, test scenario, and action algorithm.
+`purpose`：在直接分析之上再进一步，建构一个更高层次的模型。识别正题（thesis）、反题（antithesis）、共同目标、被忽略变量、综合、认知盲区、测试场景与行动算法。
 
-`trigger`: Run only when the user explicitly asks for "提维", "升维", "认知升级", "底层模型", "新框架", "重构模型", "更高维度怎么看", or equivalent model reconstruction. Do not run as part of the default article or paper package.
+`trigger`：只在用户明确提出「提维」「升维」「认知升级」「底层模型」「新框架」「重构模型」「更高维度怎么看」，或提出同等的模型重构要求时执行。不要作为默认文章包或论文包的一部分执行。
 
-`inputs`: Preferred input is `deep_analysis` output. Also accept a user-provided claim, view, argument, article, or conversation excerpt if it can support thesis/antithesis reconstruction.
+`inputs`：首选输入是 `deep_analysis` 的输出。用户提供的某个主张、观点、论证、文章或对话片段，只要能支撑正题/反题的重建，也可以作为输入。
 
-`outputs`: `upgrade_model` written to the assigned module file, after a source-faithful analysis file when the route requires one.
+`outputs`：写入指定模块文件的 `upgrade_model`；路由要求时，它排在忠实于原文的分析文件之后。
 
-`evidence_policy`: Treat the synthesis model as `创造性延展` by default. Preserve traceability back to source claims. Separate the author's view from the analyst's upgraded model. Mark unsupported background as `信息不足`. Any factual claim not present in the source or prior verified analysis must be labeled `外部待验证` and must not appear under `原文明确`.
+`evidence_policy`：综合模型默认按 `创造性延展` 对待。每条建构都要能追溯回原文主张。把作者的观点和分析者升级后的模型分开。原文没有支撑的背景标 `信息不足`。原文里没有、此前的分析里也没有核验过的事实性说法，一律标 `外部待验证`，不得出现在 `原文明确` 名下。
 
-`skip_conditions`: Skip when the user does not explicitly ask for cognitive upgrade/model reconstruction, asks for a narrow evidence-only output, or the source is too thin to support a meaningful thesis/antithesis pair. When the user explicitly asks for upgrade but the source is thin, create the `cognitive_upgrade` file and mark the upgrade as blocked by `信息不足`.
+`skip_conditions`：用户没有明确提出认知升级/模型重构，或要求一份只讲证据的窄范围输出，或原文太单薄、撑不起一组有意义的正题/反题时，跳过本模块。用户明确提出升级要求、但原文单薄时，仍要建出 `cognitive_upgrade` 文件，并把升级标记为受 `信息不足` 阻塞。
 
-`reference_prompt`: `references/cognitive_upgrade.md`
+`reference_prompt`：`references/cognitive_upgrade.md`
 
-## Execution Rules
+## 执行规则
 
-This module is not faithful summary. It is controlled model construction based on source anchors.
+本模块不做忠实摘要，做的是以原文锚点为依据的受控模型建构。
 
-If no prior `deep_analysis` exists, first do a compact internal extraction:
+此前没有 `deep_analysis` 时，先做一次紧凑的内部提取：
 
-- author's explicit claim;
-- strongest evidence or examples;
-- hidden assumption;
-- boundary of what the source can support.
+- 作者的明确主张；
+- 最有力的证据或例子；
+- 隐含假设；
+- 原文能支撑到什么程度的边界。
 
-Do not merge source-faithful analysis and creative synthesis into one undifferentiated report. When the source is an article, paper, or long argument, write a prior `deep_analysis` file unless the user supplied an already analyzed claim. The upgrade file must clearly separate source claims from creative synthesis.
+不要把忠实于原文的分析和创造性综合并成一份不分层的报告。原文若是文章、论文或长论证，除非用户提供的是已经分析过的现成主张，否则先写出一份 `deep_analysis` 文件。升级文件必须清楚区分原文主张和创造性综合。
 
-Run a strict upgrade firewall:
+严格执行升级防火墙：
 
-- The `作者原始观点` section may contain only `原文明确`, `合理推断`, and `信息不足`. Do not put external facts there.
-- New models, analogies, investment-style labels, decision algorithms, scenarios, and blind-spot diagnoses are `创造性延展`.
-- External facts used to motivate the new model must be listed as `外部待验证`; they cannot be used as proof that the source is correct.
-- Do not import domain knowledge into the final integrated conclusion unless the user requested external research and it was verified in the current task.
+- `作者原始观点` 一节只允许出现 `原文明确`、`合理推断` 与 `信息不足`，不得放入外部事实。
+- 新模型、类比、投资风格标签、决策算法、场景与盲区诊断，都归入 `创造性延展`。
+- 用来给新模型找理由的外部事实必须列为 `外部待验证`，不能拿来当作「原文正确」的证明。
+- 除非用户要求外部调研且本次任务已核验，否则不得把领域知识带进最终综合结论。
 
-When this module is selected for output, write a standalone `upgrade_model` document in the output folder and end it with `本模块小结`. Place it after source-faithful analysis files and before `99-summary.md`.
+本模块被选中输出时，在输出文件夹写一份独立成篇的 `upgrade_model` 文档，并以 `本模块小结` 收尾。位置排在忠实于原文的分析文件之后、`99-summary.md` 之前。
 
-## Upgrade Algorithm
+## 升级算法
 
-1. `Thesis`: Extract the source's core logic. Label it `原文明确` or `合理推断`.
-2. `Antithesis`: Build the strongest opposite logic that can also be valid under some condition. Label it `合理推断` unless explicitly present.
-3. `Common_Goal`: Find the deeper goal both sides are trying to serve.
-4. `Missing_Variable`: Identify the variable ignored by both sides. It should change the frame, not merely average the two positions.
-5. `Synthesis`: Rebuild the model around the missing variable. Label as `创造性延展` unless the source explicitly states it.
-6. `Ego_Trap`: Name the cognitive blind spot that made the old framing sticky.
-7. `Scenario`: Define where the new model should be tested.
-8. `Algorithm`: Give a practical action rule or decision procedure.
+1. `Thesis`（正题）：抽出原文的核心逻辑。标 `原文明确` 或 `合理推断`。
+2. `Antithesis`（反题）：构造一条相反、但在某些条件下同样成立的逻辑。除非原文已经明说，否则标 `合理推断`。
+3. `Common_Goal`（共同目标）：找出正题和反题真正想服务的更深层目标。
+4. `Missing_Variable`（被忽略变量）：指出双方都忽略的变量。它应当改变问题的框架，而不只是把两个立场取平均。
+5. `Synthesis`（综合）：围绕这个缺失变量重构模型。除非原文自己写出，否则标 `创造性延展`。
+6. `Ego_Trap`（自我陷阱）：点出认知盲区，说明旧框架为什么总也甩不掉。
+7. `Scenario`（测试场景）：界定新模型该在什么场景下接受检验。
+8. `Algorithm`（行动算法）：给出可落地的行动规则或决策流程。
 
-## Output Template: upgrade_model
+## 输出模板：upgrade_model
 
 ### 1. 作者原始观点
 
