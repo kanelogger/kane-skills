@@ -1,6 +1,6 @@
 ---
 name: concept-fable
-description: Create high-density Chinese explanatory fables that extract a real advanced, relatively niche concept from a user-specified field, hide the concept inside a three-stage story, then reveal and map it. Use when the user asks for 概念寓言, 三段式寓言, 用寓言解释领域概念, story-based concept explanation, Concept Reveal, or asks to turn a domain into a fable with theory mapping, misleading intuition, boundaries, controversy, confidence, and reading directions.
+description: Create high-density Chinese explanatory fables that extract a real advanced, relatively niche concept from a user-specified field, hide the concept inside a three-stage story, then reveal and map it. Use when the user asks for 概念寓言, 三段式概念寓言, 用寓言解释概念, 把高级理论写成故事, story-based concept explanation, Concept Reveal, or asks to turn a domain into a fable with theory mapping, misleading intuition, boundaries, controversy, confidence, and reading directions.
 ---
 
 # Concept Fable
@@ -10,6 +10,8 @@ Turn a user-provided field into a three-stage explanatory fable that lets the re
 ## Input Contract
 
 Require a field, domain, discipline, or topic. Treat it as `{变量}`.
+
+Accept an optional target reader and length. Default to smart non-specialist readers and 1500–2500 Chinese characters for the complete response, including the fable and explanation. Follow user-specified audience and length; adapt vocabulary and explanatory depth without changing the concept's mechanism.
 
 If the field is too broad, choose a representative subfield that exposes a deeper mechanism, then explain that choice in the reveal section.
 
@@ -30,7 +32,9 @@ Select a concept that satisfies all criteria:
 - Obscure but important, with strong explanatory power.
 - Concrete enough to become an observable story with a real cognitive reversal.
 
-Check the concept name, definition, theoretical relations, historical context, typical use cases, and controversy before committing. If confidence is weak, switch concepts or state uncertainty directly.
+Check the concept name, definition, theoretical relations, historical context, typical use cases, validity conditions, mainstream interpretations, and controversy before committing. Switch concepts if evidence is weak, controversy prevents a defensible explanation, or the fable would distort the mechanism. If no reliable concept and mapping remain, stop and explain the evidence gap.
+
+Use external retrieval to verify the concept when reliable sources are accessible, preferring primary sources. In `核验来源`, list 1–3 reliable sources actually consulted, with titles and links, and explain what they support. If no external retrieval was performed, write `未进行外部检索` and disclose material uncertainty. Never invent sources or imply verification that did not occur. If the evidence cannot support a reliable concept and mapping, stop and explain the evidence gap.
 
 ## Story Workflow
 
@@ -86,7 +90,7 @@ Introduce an anomaly that the old model cannot absorb. Let characters apply plau
 
 Expose the real mechanism through a decisive action, experiment, audit, reversal, or design change. Make earlier details become newly legible. Let the reader naturally feel the old model collapse near the ending, while still withholding the formal name until after the story.
 
-Avoid cheap twists, symbolic fog, empty philosophizing, fairy-tale tone, and hard-packed lesson delivery. Prefer concrete mechanisms, concrete consequences, and internally consistent rules. Do not let the narrator explain the hidden theory inside the fable; leave explicit explanation for `Concept Reveal` and later sections. The tone can approach Borges, Ted Chiang, Stanislaw Lem, Calvino, selected Black Mirror episodes, or a scientist writing fiction to explain a hard idea.
+Avoid cheap twists, symbolic fog, empty philosophizing, fairy-tale tone, and hard-packed lesson delivery. Prefer concrete mechanisms, concrete consequences, and internally consistent rules. Do not let the narrator explain the hidden theory inside the fable; leave explicit explanation for `Concept Reveal` and later sections. Use calm, restrained, speculative narration that explains a hard idea through events. Do not imitate any living author's distinctive style.
 
 Before final output, silently review the fable against these failure modes and rewrite if any are present:
 
@@ -103,7 +107,7 @@ Before final output, silently review the fable against these failure modes and r
 
 ## Required Output
 
-Output exactly this structure. Do not add preface, process notes, disclaimers, or transitional filler.
+For a request supported by a reliable concept and mapping, output this structure without process notes, generic disclaimers, or transitional filler. A necessary premise correction may precede the fable. If the required field is missing, ask for it; if reliable evidence is insufficient, give the brief evidence-gap response specified above instead of filling the template with an invented story.
 
 ```markdown
 # 寓言正文
@@ -128,11 +132,13 @@ Output exactly this structure. Do not add preface, process notes, disclaimers, o
 
 # 适用边界与争议
 
-[说明该概念在哪些条件下成立，哪些地方容易被误用；若存在争议，直接写明。]
+[说明该概念在哪些条件下成立，哪些地方容易被误用，以及主流理解与已知争议。]
 
-# 置信度
+# 置信度与依据
 
-[高 / 中 / 低 / 未知]：[简短说明依据。]
+**置信度**：[高 / 中 / 低 / 未知]：[简短说明定义、映射与边界的可靠程度。]
+
+**核验来源**：[列出 1–3 个实际查阅的可靠来源及其标题、链接和支持的要点；未检索则写“未进行外部检索”。禁止编造。]
 
 # 延伸阅读方向
 
@@ -150,8 +156,9 @@ After the fable, directly explain:
 - the most misleading intuition in the story;
 - why the common-sense solution fails;
 - the concept's valid boundary;
-- controversy, if any;
-- confidence: `高`, `中`, `低`, or `未知`, with a short reason.
+- mainstream interpretations and known controversy, if any;
+- confidence: `高`, `中`, `低`, or `未知`, with a short reason;
+- verification sources or the explicit no-retrieval disclosure, following Concept Selection.
 
 ## Style Rules
 
@@ -173,6 +180,6 @@ If the user's field, premise, or concept framing is wrong, say so directly befor
 
 If the user expresses a strong position, give the strongest rebuttal first, then support or revise it.
 
-Accuracy is the standard. User approval is not the standard.
+Revise conclusions with the evidence and keep value statements unrelated to concept explanation out of the response. Accuracy is the standard. User approval is not the standard.
 
 Ban filler such as `好问题`, `完全正确`, `见解独到`, `值得注意的是`, and generic disclaimers.
