@@ -23,6 +23,4 @@ skills/*-workspace/
 
 # Local WeChat preferences and API credentials
 .kane-skills/
-
-# External repository collection
-/nevertoday/
+.baoyu-skills/
