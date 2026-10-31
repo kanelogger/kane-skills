@@ -1,45 +1,45 @@
-# Boundaries and Lifecycle
+# 边界与生命周期
 
-Purpose: prove which boundary or lifecycle mechanisms protect distinct owners and transitions. Finish with every mechanism in the selected candidate mapped to a guarantee or classified as redundant.
+目的：证明哪些边界或生命周期机制在保护不同的所有者与状态流转，最后让选中候选项里的每个机制都对应到某项保证，或被判定为冗余。
 
-## Locate the real boundary
+## 找到真实边界
 
-For every validator, copy, freeze, capture, retry, rollback, or containment layer, identify the value's origin, current owner, next owner, mutation rights, lifetime, and failure domain.
+对每一个校验器、拷贝、冻结、快照捕获、重试、回滚或隔离层，确认取值的来源、当前所有者、下一个所有者、修改权、存活期和故障域。
 
-Typical borrowed handoffs include private, same-process calls whose types and ownership conventions are enforced by one component boundary. Typical owned boundaries include untrusted input, configuration parsing, model or tool JSON, queues, storage, network protocols, plugins, workers, subprocesses, and data crossing asynchronous lifetime boundaries.
+典型的「借来的交接」包括进程内私有调用，其类型与所有权约定由某一处组件边界保证。典型的「自有边界」包括不可信输入、配置解析、模型或工具的 JSON、队列、存储、网络协议、插件、worker、子进程，以及跨越异步生命周期边界的数据。
 
-Defense on an owned boundary is part of the contract until evidence proves otherwise. Defense on a borrowed handoff may be removable when it protects only impossible or owner-violating behavior. Tests built from hostile getters, fake typed values, post-handoff mutation, or callback replacement reveal an assumed contract; determine whether production actually promises that contract before treating the test as authoritative.
+在自有边界上的防御，除非有证据推翻，否则本身就是契约的一部分。借来的交接上的防御，只有在它仅防范不可能发生或违反所有者的行为时才可移除。用敌对 getter、伪造的类型化取值、交接后修改、回调替换搭出来的测试，暴露的是一种假定的契约；在把测试当作权威之前，先判断生产代码是否真的承诺了这份契约。
 
-Never trade away authorization, input trust validation, data-loss prevention, accessibility essentials, durable-format compatibility, or security isolation as an incidental cleanup.
+绝不把授权、输入信任校验、数据防丢失、可访问性基本要求、持久格式兼容或安全隔离当作顺手的清理代价让渡出去。
 
-## Draw the lifecycle graph
+## 画出生命周期图
 
-List the actors that can create, publish, start, settle, cancel, stop, flush, and dispose the resource. Then map every flag, promise, queue, sentinel, callback, controller, and terminal result to:
+列出所有能创建、发布、启动、结算、取消、停止、刷新和释放该资源的角色。然后把每个 flag、promise、队列、哨兵、回调、控制器和终态结果映射到：
 
-- the owner that writes it;
-- readers that make decisions from it;
-- the transition it represents;
-- the race or failure it prevents;
-- the cleanup or quiescence guarantee it completes.
+- 写入它的所有者；
+- 依据它做决定的读者；
+- 它代表的流转；
+- 它防范的竞态或故障；
+- 它完成的清理或静止保证。
 
-Two mechanisms are redundant only when they represent the same transition for the same owner and protect the same failure window. Similar names are not enough. The lifecycle analysis is complete when every mechanism in scope is mapped to an owner, transition, failure window, and terminal guarantee, with unknowns made explicit.
+只有当两个机制代表同一所有者的同一流转，并防范同一故障窗口时，它们才是冗余的。名字相似并不够。范围内每个机制都对应到所有者、流转、故障窗口和终态保证，未明之处被明确写出时，生命周期分析才算完成。
 
-Preserve distinct mechanisms when they separately guarantee atomic publication and rollback, isolate callback failures, arbitrate competing terminal outcomes, own a worker or process, bridge different durability levels, or make disposal wait until no work can escape.
+当多个机制分别保证原子发布与回滚、隔离回调失败、仲裁竞争的终态结果、拥有某个 worker 或进程、桥接不同持久化等级，或让释放一直等到不可能再有工作逃逸时，要保留这些不同的机制。
 
-When several mechanisms truly mirror one fact, choose the representation already observed at the strongest boundary. Route other readers to that owner and remove synchronization glue rather than creating another coordinator that leaves both truths alive.
+当多个机制确实在映照同一个事实时，选择已经在最强边界上被观察到的那种表示。把其他读者改路由到该所有者，并删掉同步胶水，而不是再引入一个协调者，让两个真相都继续活着。
 
-## Prove quiescence
+## 证明静止
 
-For cleanup changes, completion means more than returning from `dispose` or setting a stopped flag. Establish that no owned task can publish, mutate durable state, retain resources, or invoke callbacks after the terminal boundary.
+对清理类改动，完成意味着不只是从 `dispose` 返回或把停止标志置上。要确立：在终态边界之后，没有任何自有任务还能发布、修改持久状态、占用资源或触发回调。
 
-Inspect timers, event listeners, streams, child processes, workers, pending promises, queues, retries, abort handlers, file descriptors, and deferred writes. Name the check that would reveal a late effect.
+检查定时器、事件监听器、流、子进程、worker、待决 promise、队列、重试、中止处理器、文件描述符和延迟写入。写明哪项检查能暴露迟到的影响。
 
-## Model races before deletion
+## 删除前先建模竞态
 
-For asynchronous candidates, write a small event table when ordering matters:
+对异步候选项，顺序有影响时先写一张小事件表：
 
 ```text
 Event or transition | owner | allowed predecessors | terminal effect | late-event behavior
 ```
 
-Exercise at least the normal path, cancellation before start, cancellation during work, competing terminal outcomes, partial publication failure, and repeated cleanup when those states are reachable. Remove a branch only after its ordering guarantee is represented elsewhere or proven unnecessary.
+只要这些状态可达，至少要覆盖：正常路径、启动前取消、执行中取消、竞争的终态结果、部分发布失败、重复清理。只有在其顺序保证已在别处表达，或被证明不必要时，才删除对应分支。

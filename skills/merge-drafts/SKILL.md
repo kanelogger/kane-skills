@@ -1,160 +1,160 @@
 ---
 name: merge-drafts
-description: Merges multiple draft documents into a single high-quality article. Reads all drafts, selects the best one as the base, integrates highlights and missing content from other drafts, and produces a polished final output. Trigger when user asks to "merge drafts", "合并稿子", "合稿", "把这几篇合成一篇", "综合这几份稿子", "combine drafts", "merge articles", "merge documents", or when multiple draft files are provided with merge intent. Also triggers for "consolidate drafts", "整合稿件", "统稿", or when user wants to synthesize multiple versions into one cohesive piece.
+description: 把多份稿件合并成一篇高质量成稿。通读所有稿件，选出一份作为底稿，吸收其余稿件中的亮点与缺失内容，最终产出打磨后的成稿。当用户提出「merge drafts」「合并稿子」「合稿」「把这几篇合成一篇」「综合这几份稿子」「combine drafts」「merge articles」「merge documents」，或给出多份稿件并表达合并意图时使用。也适用于「consolidate drafts」「整合稿件」「统稿」，以及用户希望把多个版本综合成一篇连贯成稿的场景。
 ---
 
-# Merge Drafts
+# 稿件合并（Merge Drafts）
 
-Merge multiple draft documents into a single high-quality, cohesive article.
+把多份稿件合并成一篇高质量、连贯的成稿。
 
-## Input
+## 输入
 
-- **Draft files**: 2 or more draft files (`.md`, `.txt`, or other text formats). Paths provided by user or discovered in specified directory.
-- **Analysis file** (optional): `analysis.md` in the same directory as drafts. Contains reference material, research notes, or editorial guidance.
+- **稿件文件**：2 份及以上稿件（`.md`、`.txt` 或其他文本格式）。路径由用户提供，或在指定目录中查找。
+- **分析文件**（可选）：与稿件同目录的 `analysis.md`，包含参考资料、研究笔记或编辑指引。
 
-## Output
+## 输出
 
-All output files are saved to `{drafts-directory}/merged/`:
+所有输出文件写入 `{drafts-directory}/merged/`：
 
-| File | Description |
-|------|-------------|
-| `merged_article.md` | Final merged and polished article |
-| `merge_report.md` | Detailed merge report explaining decisions |
+| 文件 | 说明 |
+|------|------|
+| `merged_article.md` | 最终合并并打磨后的成稿 |
+| `merge_report.md` | 详细合并报告，说明各项决策 |
 
-## Workflow
+## 工作流
 
-### Step 1: Read and Assess All Drafts
+### 第 1 步：通读并评估全部稿件
 
-Read every draft file and the optional `analysis.md`. For each draft, evaluate:
+读取每一份稿件与可选的 `analysis.md`。对每份稿件评估：
 
-| Criterion | Assessment |
+| 维度 | 考察点 |
 |-----------|------------|
-| **Structure** | Clear outline? Logical flow? Proper headings? |
-| **Coverage** | Completeness of information? Missing sections? |
-| **Expression** | Writing quality? Clarity? Engagement? |
-| **Highlights** | Unique insights? Compelling examples? Strong data? |
+| **结构** | 提纲是否清晰？逻辑是否连贯？标题层级是否合适？ |
+| **覆盖度** | 信息是否完整？是否缺少章节？ |
+| **表达** | 写作质量如何？是否清楚？是否有吸引力？ |
+| **亮点** | 有无独到见解、有力例证或过硬的数据？ |
 
-Take notes on strengths and weaknesses of each draft.
+记录每份稿件的优点与不足。
 
-If drafts contain competing claims, conflicting data, or incompatible conclusions, record the conflict locally before choosing what to merge: claim A, claim B, source file, supporting evidence, preferred resolution, and unresolved user decision if evidence is insufficient.
+如果稿件之间存在互相冲突的主张、冲突的数据或不兼容的结论，先在本地记录冲突，再决定合并什么：主张 A、主张 B、来源文件、支撑证据、倾向的处理方式，以及证据不足时需由用户决定的未决项。
 
-### Step 2: Select Base Draft
+### 第 2 步：选定底稿
 
-Choose the **best draft as the foundation**. Selection criteria (in priority order):
+选出**最适合作为基础的那份稿件**。选择标准按优先级排列：
 
-1. **Clearest structure** — well-organized, logical flow
-2. **Most complete** — covers the topic most thoroughly
-3. **Best expression** — highest writing quality
-4. **Minimal changes needed** — requires least modification to become final
+1. **结构最清晰** —— 组织良好、逻辑顺畅
+2. **内容最完整** —— 对该主题的覆盖最充分
+3. **表达最好** —— 写作质量最高
+4. **改动最少** —— 距离成稿所需的修改最小
 
-**Document the choice**: Record why this draft was selected over others.
+**记录选择理由**：说明这份稿件为什么胜过其他稿件。
 
-### Step 3: Extract from Other Drafts
+### 第 3 步：从其他稿件中提取素材
 
-For each non-base draft, systematically extract:
+对每一份非底稿稿件，系统地提取：
 
-- **Missing content** — information not present in base draft
-- **Better expressions** — clearer or more engaging ways to phrase the same content
-- **Unique angles** — perspectives or arguments only found in this draft
-- **Data and examples** — specific facts, figures, case studies, or anecdotes
+- **缺失内容** —— 底稿中没有的信息
+- **更好的表达** —— 针对同一内容的更清晰或更有吸引力的写法
+- **独特视角** —— 仅在此稿中出现的观点或论证
+- **数据与案例** —— 具体事实、数字、案例或轶事
 
-Take detailed notes organized by section/topic.
+按章节或主题整理成详细笔记。
 
-### Step 4: Merge onto Base Draft
+### 第 4 步：在底稿上合并
 
-Integrate extracted content into the base draft. Follow these principles:
+把提取出的内容并入底稿，遵循以下原则：
 
-- **Fuse, don't paste** — weave content together so it reads as one coherent piece, not a collage
-- **Supplement missing content** — add information from other drafts where the base is incomplete
-- **Upgrade expressions** — replace weaker phrasing with stronger alternatives from other drafts
-- **Blend perspectives** — integrate unique angles smoothly into the narrative flow
-- **Unify style** — ensure consistent voice, tone, and terminology throughout
-- **Maintain flow** — transitions between sections should feel natural
+- **融合，而非粘贴** —— 让内容交织成一篇连贯文章，而不是拼贴集
+- **补齐缺失内容** —— 底稿不完整之处，用其他稿件的信息补上
+- **升级表达** —— 用其他稿件中更有力的写法替换较弱的表述
+- **融合视角** —— 把独到的角度自然地编入叙事脉络
+- **统一风格** —— 全文保持一致的语态、语气与术语
+- **保持流畅** —— 章节之间的过渡要自然
 
-### Step 5: Polish
+### 第 5 步：打磨
 
-Review the merged draft for these specific issues:
+针对以下具体问题复查合并稿：
 
-| Check | Action |
+| 检查项 | 处理动作 |
 |-------|--------|
-| **Seamlessness** | Eliminate any visible "stitching" between different drafts |
-| **Style consistency** | Ensure uniform voice, tone, and terminology |
-| **Redundancy** | Remove repeated points or overlapping content |
-| **Logic** | Verify coherent argument flow and transitions |
-| **Detail richness** | Preserve specific examples, data, and operational details |
-| **Readability** | Ensure smooth, engaging prose throughout |
+| **无接缝** | 消除稿件之间任何可见的「缝合痕迹」 |
+| **风格一致** | 保证语态、语气与术语统一 |
+| **冗余** | 删除重复的观点或重叠的内容 |
+| **逻辑** | 核对论证脉络与过渡是否连贯 |
+| **细节密度** | 保留具体例子、数据和可操作的细节 |
+| **可读性** | 保证全文行文顺畅、有阅读吸引力 |
 
-For the final Chinese prose pass, check that Chinese text is separated from adjacent Latin words and Arabic numerals, Chinese sentences use consistent full-width punctuation without spaces before it, numbers use half-width digits, and proper names follow their official spelling and capitalization. Avoid unintended repeated punctuation. Keep code, URLs, Markdown syntax, exact quotations, official names, and technical notation intact. Follow an explicit house style or source-fidelity requirement when it differs, and record material exceptions in the merge report instead of silently changing source wording.
+最后做一遍中文文风校对：中文与相邻的拉丁字母、阿拉伯数字之间要留出间隔；中文句子统一使用全角标点，且标点前不留空格；数字使用半角；专有名词沿用官方写法与大小写。避免出现非预期的重复标点。代码、URL、Markdown 语法、逐字引文、官方名称与技术记号保持原样。若存在明确的体例规范或原文保真要求，以规范为准；实质性例外写进合并报告，不要悄悄改动原文措辞。
 
-### Step 6: Generate Merge Report
+### 第 6 步：生成合并报告
 
-Create a detailed report documenting the merge process:
+按下面结构写出详细的合并过程报告：
 
 ```markdown
-# Merge Report
+# 合并报告
 
-## Base Draft Selection
-- **Selected**: [filename]
-- **Reason**: [why this draft was chosen]
+## 底稿选择
+- **选定**：[文件名]
+- **理由**：[为什么选这份稿子]
 
-## Draft Contributions
+## 各稿贡献
 
-### [Draft 1 filename]
-- **Strengths**: [what this draft did well]
-- **Contributions**: [specific content integrated]
+### [稿件 1 文件名]
+- **优点**：[这份稿子做得好的地方]
+- **贡献**：[被并入的具体内容]
 
-### [Draft 2 filename]
-- **Strengths**: [what this draft did well]
-- **Contributions**: [specific content integrated]
+### [稿件 2 文件名]
+- **优点**：[这份稿子做得好的地方]
+- **贡献**：[被并入的具体内容]
 
-## Key Modifications
-1. [major change 1]
-2. [major change 2]
+## 主要改动
+1. [主要改动 1]
+2. [主要改动 2]
 ...
 
-## Statistics
-- Total drafts: [N]
-- Base draft: [filename]
-- Final word count: [N]
-- Sections added: [N]
-- Sections revised: [N]
+## 统计
+- 稿件总数：[N]
+- 底稿：[文件名]
+- 成稿字数：[N]
+- 新增章节：[N]
+- 修改章节：[N]
 ```
 
-## Quality Standards
+## 质量标准
 
-The final merged article should:
+最终成稿应满足：
 
-- **Read as one voice** — indistinguishable from a single author's work
-- **Be better than any individual draft** — leverage the best of all inputs
-- **Preserve all unique value** — no good content from any draft is lost
-- **Maintain accuracy** — all facts, data, and examples remain correct
-- **Be publication-ready** — polished prose suitable for immediate use
+- **读起来像同一个人的作品** —— 与单一作者写的文章难以区分
+- **优于任何单份稿件** —— 用上了所有输入中最好的部分
+- **保留全部独有价值** —— 任何稿件中的好内容都没有丢失
+- **保持准确** —— 事实、数据和例子都正确
+- **可直接发布** —— 文风到位，无需再加工
 
-## Edge Cases
+## 边界情况
 
-| Situation | Handling |
+| 情况 | 处理方式 |
 |-----------|----------|
-| **Conflicting information** | Flag for user decision; default to most credible source or note both views |
-| **Contradictory structures** | Prefer base draft structure; integrate alternative organization as subsections if valuable |
-| **Highly divergent styles** | Standardize to base draft style; if base is poor, elevate to best available style |
-| **Missing analysis.md** | Proceed without it; no dependency |
-| **Single draft provided** | Inform user that merging requires 2+ drafts; offer to polish the single draft instead |
-| **Very long drafts** (>5000 words each) | Consider chunking by sections; merge section by section |
-| **Research-heavy drafts** | Keep this skill focused on merging. Flag research conflicts in `merge_report.md`; do not run a separate research workflow unless the user explicitly asks for one. |
+| **信息冲突** | 标出并交用户决定；默认采用最可信的来源，或并列保留两种说法 |
+| **结构互相矛盾** | 优先沿用底稿结构；如有价值，可把另一种组织方式作为小节并入 |
+| **风格差异极大** | 统一到底稿风格；若底稿本身较差，则提升到现有稿件中最好的风格 |
+| **缺少 `analysis.md`** | 直接继续，不做依赖 |
+| **只提供了一份稿件** | 告知用户合并需要 2 份及以上稿件，并改提打磨单稿 |
+| **稿件很长**（每份超过 5000 字） | 考虑按章节切块，逐节合并 |
+| **稿件研究成分很重** | 本技能只管合并。研究层面的冲突记在 `merge_report.md` 中；除非用户明确要求，不要另起一套研究流程。 |
 
-## Example
+## 示例
 
-**User input**:
+**用户输入**：
 ```
 请帮我合并这几篇稿子：draft-v1.md, draft-v2.md, draft-v3.md
 ```
 
-**Process**:
-1. Read all three drafts + analysis.md if present
-2. Assess: draft-v2 has best structure and coverage
-3. Extract: v1 has better intro hook, v3 has unique case study and more recent data
-4. Merge: use v2 as base, integrate v1's hook and v3's case study and data
-5. Polish: ensure transitions smooth, remove redundant background section from v3
-6. Output: merged_article.md + merge_report.md
+**过程**：
+1. 读取三份稿件，若存在 `analysis.md` 一并读取
+2. 评估：draft-v2 的结构与覆盖度最好
+3. 提取：v1 的开头钩子更好，v3 有独有案例和更新的数据
+4. 合并：以 v2 为底稿，并入 v1 的钩子和 v3 的案例与数据
+5. 打磨：检查过渡是否顺畅，删掉 v3 中重复的背景章节
+6. 输出：`merged_article.md` + `merge_report.md`
 
-**Final output**: A cohesive article that opens with v1's compelling hook, follows v2's clear structure, and includes v3's rich case study and updated statistics.
+**最终产出**：一篇文章，以 v1 有吸引力的开头起笔，沿用 v2 清晰的结构，并包含 v3 扎实的案例与更新后的数据。

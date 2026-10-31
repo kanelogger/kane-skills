@@ -1,16 +1,16 @@
 # requirement-explorer
 
-Guide business experts through structured requirement exploration and generate a standard software requirements document.
+引导业务专家完成结构化的需求探索，并生成标准的软件需求文档。
 
-## Use when
+## 适用场景
 
-- Turning raw business needs into a structured requirements document.
-- Running interactive requirement interviews and confirmations.
-- Clarifying business objects, business functions, process flows, approval rules, roles, permissions, and data visibility.
-- Preparing requirements for later ontology or modeling work.
+- 把原始业务需求推进成结构化的需求文档。
+- 开展交互式需求访谈与需求确认。
+- 理清业务对象、业务功能、流程、审批规则、岗位角色、权限与数据可见范围。
+- 为后续本体/建模工作准备需求材料。
 
-## Output
+## 输出
 
-- A Markdown requirements document with scenarios/processes, business functions and rules, business objects, roles, glossary, and pending clarifications.
-- Mermaid source blocks for process and approval diagrams.
-- A completeness check against the bundled requirements specification.
+- 一份 Markdown 需求文档，包含场景/流程、业务功能与规则、业务对象、岗位角色、术语表和待澄清清单。
+- 流程图与审批图使用 Mermaid 源码块。
+- 依据内置需求规范完成的完整性检查。

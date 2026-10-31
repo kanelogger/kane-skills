@@ -1,20 +1,20 @@
 # merge-drafts
 
-Merge multiple draft documents into one polished article by selecting the strongest base draft and integrating useful material from the rest.
+把多份稿件合并成一篇成稿：先选出最强的一份作为底稿，再吸收其余稿件中有用的材料。
 
-## Use When
+## 适用场景
 
-- The user asks to merge drafts, 合稿, 统稿, consolidate versions, or combine multiple article drafts.
-- Multiple source files or pasted drafts cover the same target piece.
-- The output should preserve the best structure while filling gaps, resolving duplication, and improving continuity.
+- 用户提出合并稿件、合稿、统稿、整合版本，或想把多篇文章草稿合成一篇。
+- 多份源文件或粘贴的稿件写的是同一个目标稿件。
+- 产物需要保留最佳结构，同时补齐缺口、消除重复、改善衔接。
 
-## Output
+## 输出
 
-- A merged final article.
-- A merge report that records the base draft, imported material, discarded duplication, and unresolved issues when relevant.
+- 一篇合并后的成型文章。
+- 一份合并报告，记录底稿、并入的材料、丢弃的重复内容，以及必要时的未决问题。
 
-## Public Notes
+## 公开说明
 
-This package contains only the workflow instructions. Bring your own drafts as task inputs.
+本包只包含流程说明，稿件由使用者作为任务输入提供。
 
-The Chinese typography rules are included directly in this skill so the package remains independently usable when copied or distributed. Preserve source-fidelity exceptions.
+中文文风规范直接写在本技能内，因此整个包被复制或分发后仍可独立使用。原文保真要求优先，例外情况需记录。

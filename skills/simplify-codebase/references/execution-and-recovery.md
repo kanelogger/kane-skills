@@ -1,64 +1,64 @@
-# Execution and Recovery
+# 执行与恢复
 
-Purpose: retire each proved obligation completely, validate the surviving system in widening rings, and leave a recovery path proportional to every side effect.
+目的：把每一项已证明的义务彻底退役，在逐层扩大的环里验证存活下来的系统，并为每个副作用留下相称的恢复路径。
 
-## Choose a reviewable cut
+## 选择可复核的删除
 
-Prefer one high-confidence ownership boundary over a mixed cleanup batch. The selected change should retire a complete obligation and have a decisive check. If investigation reveals a larger product choice or broader migration than the user authorized, present the ranked plan and obtain one scope confirmation before applying it.
+优先做一个高置信度的所有权边界，而不是混在一起的清理批次。选中的改动应当让一项完整的义务退役，并有决定性的检查。如果调查发现的产品选择或迁移范围超出用户授权，先提交排序后的方案，取得一次范围确认再动手。
 
-Pause application when dynamic or external consumers remain unknown, stored data lacks a migration story, baseline failures erase the intended signal, the cut crosses unrelated ownership boundaries, or rollback would be impractical. Convert the result into an evidence report with the exact missing decision or fact.
+出现下列情况时暂停实施：动态或外部消费者未知；存储数据没有迁移方案；基线失败掩盖了本应看到的信号；删除跨越无关的所有权边界；回滚不现实。此时把结果转成证据报告，写明缺失的确切决策或事实。
 
-## Remove the obligation vertically
+## 垂直移除义务
 
-Follow the contract from outside inward and back out. Account for:
+从外向内、再向外追一遍契约。要交代：
 
-- public declaration, schema, route, command, option, or manifest;
-- registration, dispatch, parsing, and compatibility paths;
-- implementations, adapters, state, caches, events, and cleanup;
-- imports, exports, packages, build and generated inventories;
-- migrations, fixtures, examples, documentation, and operational configuration;
-- tests dedicated to the retired behavior and tests protecting the surviving contract;
-- dependencies and scripts that become unnecessary.
+- 公开声明、Schema、路由、命令、选项或清单；
+- 注册、分发、解析与兼容路径；
+- 实现、适配器、状态、缓存、事件与清理；
+- import、export、包、构建与生成清单；
+- 迁移、fixture、示例、文档与运维配置；
+- 专门为退役行为写的测试，以及保护存活契约的测试；
+- 因此不再需要的依赖与脚本。
 
-Delete compatibility glue when no compatibility obligation exists. When one does exist, preserve it or provide an explicit migration with an end condition. Do not replace two representations with a new synchronization layer.
+没有兼容义务时，删掉兼容胶水。确实存在兼容义务时，保留它，或给出带结束条件的显式迁移。不要用一个新的同步层替换两种表示。
 
-Keep unrelated working-tree changes intact. Do not commit, push, publish, deploy, or alter protected environments unless the user separately authorizes that action.
+保持无关的工作区改动不变。除非用户另行授权，不要提交、推送、发布、部署或改动受保护环境。
 
-The cut is structurally complete when every affected declaration, consumer, artifact, owner, and compatibility obligation is either changed, deliberately retained with a reason, or explicitly excluded as outside scope.
+当每个受影响的声明、消费者、产物、所有者和兼容义务都被改动、被按理由有意保留，或被明确排除在范围之外时，这次删除在结构上才算完整。
 
-## Verify in widening rings
+## 在逐层扩大的环里验证
 
-1. **Residue check**: search removed names, strings, paths, formats, flags, and docs.
-2. **Decisive check**: run the smallest test or probe that would fail if the cut were incorrect.
-3. **Lead check**: re-run any analyzer or query that produced the original candidate.
-4. **Local gates**: run the affected package's type, lint, unit, integration, build, generation, or smoke commands.
-5. **Repository gates**: run the broader relevant suite when cost and scope justify it.
-6. **Boundary comparison**: compare public output, persisted representation, wire behavior, operational lifecycle, and user-visible behavior.
-7. **Diff audit**: inspect every changed file, whitespace integrity, generated artifacts, and dependency lock changes.
+1. **残留检查**：搜索被删除的名称、字符串、路径、格式、开关与文档。
+2. **决定性检查**：运行最小的、一旦删错就会失败的测试或探针。
+3. **线索复检**：重跑当初产出该候选的分析器或查询。
+4. **局部质量门**：运行受影响包的 type、lint、unit、integration、build、generation 或 smoke 命令。
+5. **仓库质量门**：成本与范围允许时，跑更广的相关测试集。
+6. **边界对比**：对比公开输出、持久化表示、协议行为、运维生命周期与用户可见行为。
+7. **diff 审计**：检查每个改动文件、空白完整性、生成产物与依赖锁文件的变化。
 
-When the simplification claims a latency, throughput, memory, startup, or other performance effect, add a controlled before-and-after measurement whose workload and environment make that claim meaningful.
+当简化声称带来了延迟、吞吐、内存、启动或其他性能收益时，补一组受控的前后对比测量，其负载与环境要能让这个结论成立。
 
-Report each gate separately. Passing a narrow unit test does not establish build, integration, runtime, deployment, or user acceptance.
+每道门分别报告。通过一个局部单测不等于构建、集成、运行时、部署或用户验收通过。
 
-If a post-change check fails, compare it with the baseline and decide whether the failure was pre-existing, the implementation is incomplete, or the candidate was load-bearing. Repair the current batch or undo it using the recorded recovery path. Preserve the meaningful check and revise the proof instead of weakening the gate to make the deletion pass.
+改动后检查失败时，与基线对比，判断是失败本来就存在、实现还不完整，还是该候选本来就在承重。修好本批改动，或按记录的恢复路径回滚。保留有意义的检查并修正证明，而不是把门槛降低好让删除过关。
 
-## Produce an operation receipt
+## 产出操作回执
 
-Record:
+记录：
 
 ```text
-Scope: ownership boundary changed
-Baseline: commands and pre-existing failures
-Retired obligation: contract, state, layer, or dependency removed
-Artifacts: files and generated outputs changed
-Realized net effect: concepts, artifacts, lines, and dependencies removed minus replacement or migration machinery added, where measurable
-Behavior: preserved and intentionally changed observations
-Verification: exact commands, probes, and results
-Residual risk: untested boundaries or external uncertainty
-Retained candidates: high-value items kept and why
-Undo: files or commit range to reverse and any data/config restoration required
+Scope: 改动的所有权边界
+Baseline: 命令与既有失败
+Retired obligation: 被移除的契约、状态、分层或依赖
+Artifacts: 改动的文件与生成产物
+Realized net effect: 可量化时，移除的概念、产物、代码行与依赖数，减去新增的替代或迁移机制
+Behavior: 被保留的观察结果与有意改变的观察结果
+Verification: 确切命令、探针与结果
+Residual risk: 未测试的边界或外部不确定性
+Retained candidates: 保留的高价值项及理由
+Undo: 要回退的文件或提交范围，以及所需的数据/配置恢复
 ```
 
-The undo path must match the side effects. Source-only changes may be reversible from the diff; migrations, published packages, deployments, and durable data require explicit restoration steps and separate authorization.
+回退路径必须与副作用匹配。只改源码的改动也许能从 diff 反推；迁移、已发布的包、部署和持久数据则需要明确的恢复步骤和单独授权。
 
-The batch is complete only when the structural cut criterion, every applicable verification ring, the complete diff audit, and the operation receipt are all satisfied or reported as unavailable with the resulting evidence limitation.
+只有结构删除标准、每一道适用的验证环、完整的 diff 审计和操作回执全部满足，或已被如实报告为不可用并说明由此造成的证据限制时，本批任务才算完成。

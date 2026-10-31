@@ -1,16 +1,16 @@
 # concept-fable
 
-Create high-density Chinese explanatory fables that hide an advanced concept inside a three-stage story, then reveal and map the theory.
+写高密度的中文概念寓言：把高阶概念藏进三段式故事，再揭示并建立理论映射。
 
-## Use When
+## 适用场景
 
-- The user asks for a concept fable, 三段式寓言, or story-based concept explanation.
-- The topic is a field or domain where a real advanced concept can be extracted and taught indirectly.
-- The final answer should include the story, concept reveal, theory mapping, misleading intuition, boundaries, controversy, confidence, and reading directions.
+- 用户要求概念寓言、三段式寓言，或基于故事的概念解释。
+- 话题是某个领域，且其中确实存在可以提取并间接教授的高阶概念。
+- 最终答案应包含故事、概念揭示、理论映射、误导性直觉、边界、争议、置信度与延伸阅读方向。
 
-## Output
+## 输出
 
-A Chinese Markdown response, defaulting to smart non-specialist readers and 1500–2500 Chinese characters in total. User-specified audience and length override these defaults. The response uses:
+一段中文 Markdown 回答，默认面向聪明的非专业读者，总篇幅 1500–2500 个汉字。用户指定的读者与篇幅优先于默认值。回答包含：
 
 ```text
 # 寓言正文
@@ -22,16 +22,16 @@ A Chinese Markdown response, defaulting to smart non-specialist readers and 1500
 # 延伸阅读方向
 ```
 
-The confidence section includes verification sources actually consulted, or an explicit `未进行外部检索` disclosure.
+置信度一节要写明实际查阅过的核验来源，或明确写出 `未进行外部检索`。
 
-## Usage
+## 用法
 
 ```text
 用 $concept-fable 写一篇分布式系统领域的三段式概念寓言，面向非专业读者，全文 2000 字。
 ```
 
-[`SKILL.md`](SKILL.md) is the authoritative, self-contained source for this workflow. Maintain its inputs, story requirements, verification rules, and output contract here; no prompt-library copy is required.
+[`SKILL.md`](SKILL.md) 是这套流程的权威且自足的来源。输入要求、故事要求、核验规则和输出契约都维护在这里，无需另存一份提示词库副本。
 
-## Public Notes
+## 公开说明
 
-This skill is self-contained and does not require bundled scripts or private examples.
+本技能自足，不需要内置脚本或私有示例。

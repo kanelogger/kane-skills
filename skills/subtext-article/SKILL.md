@@ -1,47 +1,47 @@
 ---
 name: subtext-article
-description: Convert Chinese video subtitles, ASR outputs, transcript dumps, Bilibili AIsubtitle JSON, YouTube transcripts, SRT/VTT/ASS/SSA/LRC files, Whisper-style JSON, podcast transcripts, spoken drafts, or copied caption text into a faithful long-form Chinese article. Use when the user asks to turn subtitles, subtext, transcript, video captions, B站字幕, YouTube字幕, ASR转写, 口语稿, 播客转写, or 视频文稿 into a publishable article with Title, Overview, and Markdown sections while preserving the original claims, order, data, examples, and key quotes.
+description: 把中文视频字幕、ASR 转写结果、逐字稿导出、B 站 AIsubtitle JSON、YouTube 字幕、SRT/VTT/ASS/SSA/LRC 文件、Whisper 风格 JSON、播客转写、口语稿或复制来的字幕文本，转写成忠实原文的长文。当用户要求把字幕、subtext、transcript、视频字幕、B站字幕、YouTube字幕、ASR转写、口语稿、播客转写或视频文稿整理成可发布文章，并要求保留原主张、顺序、数据、例子与关键引文时使用；输出包含标题、概述与 Markdown 正文分节。
 ---
 
-# Subtext Article
+# 字幕成文（Subtext Article）
 
-Convert video subtitles into a complete Chinese article with high fidelity, strong readability, traceable intermediate artifacts, and no invented content.
+把视频字幕转写成一篇完整的中文文章：高保真、可读性强、中间产物可追溯，且不编造内容。
 
-## Core Contract
+## 核心契约
 
-Preserve the source first. Keep the video's core claims, information, data, order, logic, examples, named entities, and key quotations. Do not add facts, outside context, interpretations, or "reasonable" completions that are not present in the transcript.
+原文优先。保留视频的核心主张、信息、数据、顺序、逻辑、例子、专有名词和关键引文。不要添加转写稿里没有的事实、外部背景、解读，或听起来「合理」的补全。
 
-Rewrite for written Chinese. Remove filler words, repeated fragments, broken oral phrasing, speaker hesitation, live-stream housekeeping, and redundant transitions unless they carry meaning.
+按书面中文重写。去掉口头填充词、重复片段、断裂的口语句式、说话人犹豫、直播间的杂务话术和多余的过渡，除非它们本身带信息。
 
-Rebuild article structure. Turn the transcript into a coherent article with an opening, detailed body sections, and a closing. Use thematic grouping and transitions, but keep the original argument chain traceable.
+重建文章结构。把转写稿变成一篇有开头、有分节正文、有收尾的连贯文章。用主题归组和过渡句，但原始的论证链条要能追得回来。
 
-Leave a trail at every successful step. For file inputs, every successful output must be written into one package folder named from the input file stem plus `_article`, for example `中国稀土.md` -> `中国稀土_article/`. Do not scatter intermediate files in the working directory.
+每一步成功都要留痕。对文件输入，每个成功的产物都必须写入一个以输入文件名主干加 `_article` 命名的包目录，例如 `中国稀土.md` → `中国稀土_article/`。不要把中间文件散落在工作目录里。
 
-## Workflow
+## 工作流
 
-1. Identify the source family, not just the exact platform:
-   - structured JSON: Bilibili AIsubtitle, Whisper/Faster-Whisper/WhisperX, ASR vendor exports, caption arrays, `segments`, `utterances`, `captions`, `subtitles`, `events`, `items`, `words`, or nested objects containing text fields;
-   - subtitle files: SRT, WebVTT/VTT, ASS/SSA, LRC, YouTube timedtext XML/TTML, or copied transcript dumps with timestamps;
-   - plain transcript text: raw ASR paragraphs, copied captions, podcast transcripts, interview notes, or spoken drafts.
-2. For file inputs, initialize the article package first. Prefer `scripts/prepare_article_package.py <input-file>` to create `{input-stem}_article/`, copy the original source, generate `01-normalized.txt`, and write `manifest.json`.
-3. Normalize the transcript before writing. Use `01-normalized.txt` as the default working text. If `scripts/normalize_subtitle.py` misses a new schema, inspect the file shape, extract the spoken text manually, and still save the successful normalized result as `01-normalized.txt` inside the package.
-4. Read the full normalized transcript before drafting. For long transcripts, process in chunks and write `02-evidence-map.md` in the package with:
-   - main thesis and conclusion;
-   - topic sequence;
-   - key numbers, dates, names, quoted phrases, causal links, and examples;
-   - sections that are promotions, chat acknowledgements, or live-stream housekeeping.
-5. Draft the article from the evidence map, not from memory. Preserve all important details while compressing oral repetition. Save the first complete draft as `03-draft.md`.
-6. Self-check against the transcript before final output and save the check as `04-self-check.md`:
-   - no fabricated facts;
-   - no important claim, data point, example, or turn in logic removed;
-   - no remaining timestamp noise or obvious oral filler;
-   - article length is about 70%-90% of the useful transcript length unless the user asks otherwise.
-   - check Chinese/Latin and Chinese/number spacing, full-width punctuation in Chinese sentences, punctuation spacing, half-width digits, repeated punctuation, and official spelling/capitalization of proper names. Keep code, URLs, Markdown syntax, fidelity-sensitive quotations, and technical notation intact. Follow explicit house style or source-fidelity requirements, and record material exceptions rather than silently normalizing them.
-7. Save the final article as `article.md` in the package. Final chat response should report the package path and key artifacts, not paste the full article unless the user asks for inline output.
+1. 先判断来源族系，而不只是判断具体平台：
+   - 结构化 JSON：B 站 AIsubtitle、Whisper/Faster-Whisper/WhisperX、各家 ASR 导出、caption 数组，以及含文本字段的 `segments`、`utterances`、`captions`、`subtitles`、`events`、`items`、`words` 或嵌套对象；
+   - 字幕文件：SRT、WebVTT/VTT、ASS/SSA、LRC、YouTube timedtext XML/TTML，或带时间戳的转写文本导出；
+   - 纯文本转写稿：原始 ASR 段落、复制来的字幕、播客转写、访谈笔记或口语稿。
+2. 对文件输入，先初始化文章包。优先用 `scripts/prepare_article_package.py <input-file>` 创建 `{input-stem}_article/`、复制原始文件、生成 `01-normalized.txt` 并写入 `manifest.json`。
+3. 写作之前先归一化转写稿。以 `01-normalized.txt` 作为默认工作文本。如果 `scripts/normalize_subtitle.py` 没覆盖新的 schema，先检查文件结构、手工提取口语文本，仍要把归一化结果成功写入包内的 `01-normalized.txt`。
+4. 起草前通读归一化后的全文。长稿分块处理，并在包内写出 `02-evidence-map.md`，包含：
+   - 主论点与结论；
+   - 话题顺序；
+   - 关键数字、日期、人名、被引用的说法、因果链与例子；
+   - 哪些段落属于推广、聊天互动致谢或直播间杂务。
+5. 依据证据地图起草，而不是凭记忆写。压缩口头重复的同时保留全部重要细节。第一版完整稿存为 `03-draft.md`。
+6. 交付前对照转写稿自检，并把检查结果存为 `04-self-check.md`：
+   - 没有编造的事实；
+   - 没有丢失重要主张、数据点、例子或逻辑转折；
+   - 没有残留的时间戳噪声或明显的口头填充；
+   - 文章篇幅约为有效转写内容的 70%–90%，用户另有要求时除外。
+   - 检查中文与拉丁字母、中文与数字之间的间隔，中文句子使用全角标点，标点前后间距、半角数字、重复标点，以及专有名词的官方写法与大小写。代码、URL、Markdown 语法、对保真敏感的引文和技术记号保持原样。若存在明确的体例规范或原文保真要求，按其执行；实质性例外要记录下来，不要悄悄统一掉。
+7. 最终文章存为包内的 `article.md`。聊天里的最终回复只报告包路径和关键产物，除非用户要求把文章贴在对话里。
 
-## Package Output
+## 包内产物
 
-Default package layout for `/path/to/source.md`:
+输入 `/path/to/source.md` 时的默认包结构：
 
 ```text
 /path/to/source_article/
@@ -54,39 +54,39 @@ Default package layout for `/path/to/source.md`:
 └── manifest.json
 ```
 
-All successfully produced files belong in this folder. If a later step fails, keep the earlier successful files and update `manifest.json` or state the failed step in the final response.
+所有成功生成的产物都放在这个目录里。后续步骤失败时，保留此前成功的文件，更新 `manifest.json`，或在最终回复中说明失败的步骤。
 
-The final article is Markdown:
+最终文章是 Markdown：
 
 ```markdown
-Title: [accurate, attractive title]
+Title: [准确且有吸引力的标题]
 
-Overview: [150-250 Chinese characters summarizing the core topic and main conclusion]
+Overview: [150–250 字，概述核心话题与主要结论]
 
-## [Section Title]
+## [章节标题]
 
-[Detailed prose paragraphs]
+[详细的正文段落]
 ```
 
-Use `##` for body sections. Keep the article continuous. Do not use bullets, numbered lists, tables, commentary, or process notes in the final article unless the user explicitly asks for them.
+正文分节用 `##`。文章要保持连贯。除非用户明确要求，最终文章中不要出现项目符号、编号列表、表格、点评或流程说明。
 
-## Handling Details
+## 处理细节
 
-Keep the original tone category, then raise it into polished written Chinese: professional, explanatory, conversational, analytical, or popular-science as appropriate.
+先保留原本的语气类别，再把它提升为书面中文：按情况写成专业、解释性、对话式、分析式或科普风格。
 
-When the video contains a method, framework, workflow, or mental model, rewrite it as clear prose or reusable step-style explanation inside paragraphs. Avoid list formatting unless the user requests a list.
+视频里出现方法、框架、流程或思维模型时，写成清楚的散文，或写成藏在段落里的可复用步骤说明。除非用户要求列表，否则不要用列表排版。
 
-When the transcript contains multiple speakers, merge their exchange into a single coherent article voice. Preserve disagreement, correction, or attribution when it affects the meaning.
+转写稿里有多个说话人时，把对话合并成单一的文章口吻。当分歧、纠正或归属会影响含义时，保留这些信息。
 
-When the source mixes Simplified and Traditional Chinese, output Simplified Chinese by default unless the user asks otherwise. Preserve official names, quotes, and region-specific terms when conversion would distort meaning.
+来源混用简体和繁体中文时，默认输出简体中文，用户另有要求时除外。官方名称、引文和地区特定说法若转换会扭曲含义，保持原样。
 
-When the transcript includes sponsorship, subscriptions, super chats, greetings, likes, or end-screen calls to action, remove them unless they contain substantive content requested by the user.
+转写稿里包含赞助、订阅、超级留言（super chat）、打招呼、点赞或片尾号召时，一律删除，除非其中含有用户需要的实质内容。
 
-If the transcript is incomplete, corrupted, or too ambiguous to preserve meaning, state the limitation briefly before writing or ask for the missing source if the gap blocks faithful conversion.
+转写稿不完整、损坏或歧义到无法保住原意时，写作前先简短说明限制；如果缺口会妨碍忠实转换，向用户索取缺失的源。
 
-## Bundled Resources
+## 内置资源
 
-- `scripts/normalize_subtitle.py`: extract spoken text from common JSON, XML, SRT, VTT, ASS/SSA, LRC, YouTube transcript dumps, ASR outputs, or plain subtitle files.
-- `scripts/prepare_article_package.py`: create the `{input-stem}_article/` package, copy the source, generate `01-normalized.txt`, and write `manifest.json`.
+- `scripts/normalize_subtitle.py`：从常见 JSON、XML、SRT、VTT、ASS/SSA、LRC、YouTube 转写导出、ASR 输出或普通字幕文件中提取口语文本。
+- `scripts/prepare_article_package.py`：创建 `{input-stem}_article/` 包、复制源文件、生成 `01-normalized.txt` 并写入 `manifest.json`。
 
-Public examples can be added under `examples/` after checking that the source content is shareable. Examples are calibration material, not coverage limits.
+公开示例可以在确认内容可分享后放到 `examples/` 下。示例只是校准材料，不是能力边界。

@@ -1,24 +1,24 @@
-# Integrating Findings
+# 整合发现
 
-Purpose: map every imported finding to retained, consolidated, rejected, superseded, or unresolved against the destination's current contracts.
+目的：把每一条引入的发现，对照目标分支当前的契约，归为「保留」「已整合」「已否决」「已被取代」或「未解决」。
 
-## Establish independent contribution
+## 确立独立贡献
 
-Compare each source with its own merge base or authoritative default branch, not only with the current working branch. Identify which code changes, proof records, design records, annotations, and validation results belong uniquely to that source. Treat stale findings as hypotheses against the current tree.
+把每个来源与它自己的合并基点或权威默认分支对比，而不是只和当前工作分支对比。确定哪些代码改动、证明记录、设计记录、注释和验证结果独属于该来源。把过期发现当作针对当前代码树的假设。
 
-For every imported candidate:
+对每个引入的候选项：
 
-- re-check symbols, consumers, dynamic entrypoints, history, and compatibility in the destination state;
-- retain non-overlapping evidence that meets the current confidence bar;
-- merge overlapping rationale into the record that owns the contract;
-- discard duplicates, weaker restatements, and findings invalidated by newer code;
-- preserve the strongest counterargument, tradeoff, verification boundary, and unresolved uncertainty;
-- distinguish a ported proposal from a change already implemented and validated.
+- 在目标状态下重新核对符号、消费者、动态入口、历史与兼容；
+- 保留达到当前置信度门槛且互不重叠的证据；
+- 把重叠的理由并入拥有该契约的那份记录；
+- 丢弃重复项、更弱的复述，以及已被新代码推翻的发现；
+- 保留最强的反论、权衡、验证边界与未解决的不确定性；
+- 区分「移植过来的提案」和「已经实施并验证过的改动」。
 
-The integrated result is complete when every source finding is mapped to retained, consolidated, rejected, superseded, or unresolved, with a reason. Raw candidate count is not a preservation requirement.
+每个来源的发现都被归为保留、已整合、已否决、已被取代或未解决，并给出理由时，整合结果才算完成。原始候选数量不是需要保留下来的东西。
 
-## Integrate changes safely
+## 安全整合改动
 
-Apply only the code or documentation the user authorized. Resolve overlaps according to current ownership and behavior rather than source order. Re-run residue searches and validation on the combined state; results from an isolated branch do not prove the integrated tree.
+只实施用户授权的代码或文档。按当前的所有权与行为解决重叠，而不是按来源顺序。在合并后的状态上重跑残留搜索与验证；孤立分支上的结果不能证明整合后的代码树。
 
-When updating a pull request, report the true retained scope, sources surveyed, consolidations and rejections, intentional exclusions, current-head validation, and remaining review gaps. Keep work draft or otherwise marked incomplete while the candidate set or verification is still changing. Close, supersede, comment on, or otherwise mutate external reviews only with the user's authority.
+更新 PR 时，报告真正保留的范围、调查过的来源、整合与否决情况、有意排除项、当前 HEAD 的验证结果，以及仍然存在的评审缺口。候选集合或验证仍在变动时，让工作保持草稿状态或以其他方式标记未完成。只有在用户授权下，才能关闭、取代、评论或以其他方式改动外部评审。

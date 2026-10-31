@@ -1,79 +1,79 @@
 ---
 name: requirement-explorer
-description: 引导业务专家完成软件需求探索、需求确认和需求文档生成。Use when the user wants to turn raw business needs into a structured software requirements document, asks for 需求探索、需求分析、需求访谈、需求确认、软件需求文档、业务对象/业务功能/流程/岗位角色梳理, or needs a requirements document suitable for later ontology/modeling work.
+description: 引导业务专家完成软件需求探索、需求确认和需求文档生成。当用户想把原始业务需求变成结构化的软件需求文档，要求做需求探索、需求分析、需求访谈、需求确认、软件需求文档、业务对象/业务功能/流程/岗位角色梳理，或需要一份可支撑后续本体/建模工作的需求文档时使用。
 ---
 
-# Requirement Exploration
+# 需求探索（Requirement Exploration）
 
-将一句话或一段原始业务需求，推进成一份可用于后续本体建模的软件需求文档。
+把一句话或一段原始业务需求，推进成一份可用于后续本体建模的软件需求文档。
 
-## Required Resources
+## 必需资源
 
-Load these files based on the task:
+按任务加载这些文件：
 
-- `prompt/system-fragment.md`: Read before running an interactive requirement-exploration session. It contains the operational role, A/B confirmation rules, staged interview flow, final-output logic, and hard constraints.
-- `knowledge/requirement-spec.md`: Read before drafting, reviewing, or finalizing a requirements document. It defines the six-part document structure, ID scheme, required fields, Mermaid requirements, and completeness checklist.
-- `knowledge/exploration-prompt.md`: Read when the user asks to inspect, reuse, or refine the original exploration methodology, or when `prompt/system-fragment.md` is insufficient.
-- `data/config.yaml`: Read when you need exact stage names, question limits, section list, completeness checklist, or Word-export defaults.
-- `capability/tools.yaml`: Read when an environment provides matching requirement-service tools, or when you need the intended tool contract.
-- `skill.manifest.yaml`: Treat as legacy/source-platform metadata. Do not use it as the Codex skill entry point.
+- `prompt/system-fragment.md`：运行交互式需求探索会话前必读。内含操作角色、A/B 确认规则、分阶段访谈流程、最终输出逻辑与硬性约束。
+- `knowledge/requirement-spec.md`：起草、评审或定稿需求文档前必读。定义了六段式文档结构、编号方案、必填字段、Mermaid 要求与完整性检查清单。
+- `knowledge/exploration-prompt.md`：用户要求查看、复用或改进原始探索方法论时读取，或当 `prompt/system-fragment.md` 不够用时读取。
+- `data/config.yaml`：需要确切的阶段名称、提问上限、章节清单、完整性检查清单或 Word 导出默认值时读取。
+- `capability/tools.yaml`：运行环境提供了匹配的需求服务工具时读取，或需要确认预期的工具契约时读取。
+- `skill.manifest.yaml`：视为旧版/原平台元数据。不要把它当作 Codex 的技能入口。
 
-## Core Workflow
+## 核心流程
 
-1. Receive the raw business need and restate the understood scope in business language.
-2. Identify high-level business domains, business objects, business functions, and end-to-end processes.
-3. Ask the user to confirm the scope before detailed drafting.
-4. Explore in this order:
-   - Business objects
-   - Business functions and rules
-   - Scenarios, end-to-end processes, and approval flows
-   - Roles, permissions, and data-scope rules
-5. For each stage, draft first with common industry assumptions, then ask only for enterprise-specific information that cannot be safely inferred.
-6. Persist the evolving draft in the conversation or available artifact/tooling after each confirmation.
-7. Run the completeness checklist before calling the document complete.
-8. Produce the final Markdown requirements document only when pending confirmations are resolved, or explicitly include unresolved items in Appendix B.
+1. 接收原始业务需求，用业务语言复述理解到的范围。
+2. 识别高层业务域、业务对象、业务功能与端到端流程。
+3. 在细化起草前，请用户确认范围。
+4. 按以下顺序探索：
+   - 业务对象
+   - 业务功能与规则
+   - 场景、端到端流程与审批流
+   - 岗位角色、权限与数据范围规则
+5. 每个阶段先用行业通用假设起草，然后只询问无法安全推断的企业特有信息。
+6. 每次确认后，把演进中的草稿保存到对话中或可用的产物/工具里。
+7. 判定文档完成之前，跑一遍完整性检查清单。
+8. 只有待确认项都已解决时，才产出最终 Markdown 需求文档；否则把未解决项明确列入附录 B。
 
-## Decision Rules
+## 判断规则
 
-Classify every requirement detail before drafting:
+起草前先给每项需求细节分类：
 
-- `A class`: Common domain knowledge or standard industry practice. Draft it directly, label it as `[AI自动补全]`, and ask the user to confirm or modify.
-- `B class`: Enterprise-specific facts that would create real business-logic errors if guessed. Ask explicitly, record unanswered items as `[待确认]`, and add them to Appendix B.
+- `A 类`：通用领域知识或行业标准做法。直接起草，标注为 `[AI自动补全]`，再请用户确认或修改。
+- `B 类`：企业特有的事实，猜错会造成真实业务逻辑错误。必须明确提问，未获答复的记为 `[待确认]` 并列入附录 B。
 
-Always treat these as B-class confirmations:
+以下内容一律按 B 类确认：
 
-- Whether each core business document needs manual approval.
-- Whether each automatic downstream step is synchronous waiting or asynchronous triggering.
-- What happens to child or referenced objects when a parent is deleted or voided.
-- Data visibility ranges for each role on each query/list function.
-- Actual job titles, organization levels, and role names.
-- Concrete business definitions for amount, ratio, deadline, tax, threshold, and special internal terms.
+- 每个核心业务单据是否需要人工审批。
+- 每个自动执行的后续步骤是同步等待还是异步触发。
+- 父对象被删除或作废时，子对象或被引用对象如何处理。
+- 每个岗位在每个查询/列表功能上的数据可见范围。
+- 实际的岗位名称、组织层级与角色名称。
+- 金额、比例、时限、税率、阈值和内部专有术语的具体业务定义。
 
-## Document Contract
+## 文档契约
 
-Generate Markdown using the six-part structure from `knowledge/requirement-spec.md`:
+按 `knowledge/requirement-spec.md` 的六段式结构生成 Markdown：
 
-1. Scenario and process descriptions
-2. Business function descriptions, including rules
-3. Business object descriptions
-4. Role descriptions
-5. Appendix A: glossary
-6. Appendix B: pending clarification list
+1. 场景与流程描述
+2. 业务功能描述（含规则）
+3. 业务对象描述
+4. 岗位角色描述
+5. 附录 A：术语表
+6. 附录 B：待澄清清单
 
-Use the required ID patterns:
+使用规定的编号模式：
 
-- Business objects: `OBJ-{DOMAIN}-{NNN}`
-- Business functions: `FUNC-{DOMAIN}-{NNN}`
-- Business rules: `RULE-{DOMAIN}-{NNN}`
-- End-to-end processes: `PROC-{DOMAIN}-{NNN}`
-- Approval flows: `APPR-{DOMAIN}-{NNN}`
-- Roles: `ROLE-{ROLE}`
+- 业务对象：`OBJ-{DOMAIN}-{NNN}`
+- 业务功能：`FUNC-{DOMAIN}-{NNN}`
+- 业务规则：`RULE-{DOMAIN}-{NNN}`
+- 端到端流程：`PROC-{DOMAIN}-{NNN}`
+- 审批流：`APPR-{DOMAIN}-{NNN}`
+- 岗位角色：`ROLE-{ROLE}`
 
-Use Mermaid source blocks for process and approval diagrams. Do not replace Mermaid with static images in Markdown.
+流程图与审批图使用 Mermaid 源码块。不要在 Markdown 里用静态图片替代 Mermaid。
 
-## Tool Handling
+## 工具处理
 
-`capability/tools.yaml` describes the original platform's intended tools:
+`capability/tools.yaml` 描述了原平台预期提供的工具：
 
 - `save_requirement_draft`
 - `check_completeness`
@@ -82,25 +82,25 @@ Use Mermaid source blocks for process and approval diagrams. Do not replace Merm
 - `export_to_word`
 - `query_requirement_documents`
 
-If tools with these exact capabilities are available, use them according to `capability/tools.yaml`.
+若环境中确实具备这些能力的工具，按 `capability/tools.yaml` 使用。
 
-If they are not available, do not pretend tool calls occurred. Maintain the draft as Markdown, perform the completeness check manually against `knowledge/requirement-spec.md` and `data/config.yaml`, and clearly state what remains pending.
+若不具备，不要假装调用过工具。用 Markdown 维护草稿，对照 `knowledge/requirement-spec.md` 与 `data/config.yaml` 手工完成完整性检查，并明确说明还有哪些事项待定。
 
-## Boundaries
+## 边界
 
-- Keep the discussion at the business-requirement level.
-- Exclude UI/UX layout, widget behavior, screen composition, database table design, API design, technical architecture, performance engineering, retry/compensation mechanics, and external integration contracts unless the user explicitly asks for a separate downstream artifact.
-- When users provide UI details, translate them into business actions and note that interface design belongs to a later phase.
-- Use business language with domain experts. Avoid internal modeling terms such as ontology, aggregate root, M1-M5, or event model unless the user asks about the modeling handoff.
+- 讨论保持在业务需求层面。
+- 不涉及 UI/UX 布局、控件行为、页面组成、数据库表设计、API 设计、技术架构、性能工程、重试/补偿机制和外部集成契约，除非用户明确要求另出一份下游产物。
+- 用户提供 UI 细节时，把它翻译成业务动作，并说明界面设计属于后续阶段。
+- 与业务专家沟通使用业务语言。除非用户问及建模衔接，避免使用本体（ontology）、聚合根、M1-M5、事件模型这类内部建模术语。
 
-## Completion Check
+## 完成检查
 
-Before calling a requirements document complete, verify:
+在判定需求文档完成之前，逐项核对：
 
-- Every process has ordered steps, function references, transition type, branch conditions, and Mermaid.
-- Every core document explicitly says whether it needs approval.
-- Every function has role, main object, referenced objects, preconditions, business steps, rules, post-state changes, and downstream triggers.
-- Every referenced rule has a standalone `RULE` definition.
-- Every object has category, attributes, constraints, relationships, and delete/void handling.
-- Every role has functional permissions and data-scope rules for query/list functions.
-- Appendix B has no unresolved B-class item, unless the output is explicitly a draft with pending clarifications.
+- 每个流程都有有序步骤、引用的功能、流转类型、分支条件与 Mermaid 图。
+- 每份核心单据都明确说明是否需要审批。
+- 每个功能都有角色、主对象、引用对象、前置条件、业务步骤、规则、状态变化与下游触发。
+- 每条被引用的规则都有独立的 `RULE` 定义。
+- 每个对象都有分类、属性、约束、关系与删除/作废处理。
+- 每个角色对查询/列表功能都有功能权限与数据范围规则。
+- 附录 B 中没有未解决的 B 类事项，除非产物本身就是带待澄清项的草稿。

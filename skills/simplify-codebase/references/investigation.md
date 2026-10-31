@@ -1,92 +1,92 @@
-# Investigation Playbook
+# 调查手册
 
-Purpose: produce a bounded coverage map in which every in-scope domain is inspected or explicitly excluded, then rank only candidates supported by contract evidence.
+目的：产出一份有边界的覆盖图，范围内每个域要么被检查过，要么被明确排除；然后只对契约证据支撑的候选项排序。
 
-## Build a coverage map
+## 建立覆盖图
 
-Start with the largest or most central production surfaces, then partition the relevant system by responsibility rather than file type. Typical domains are:
+从规模最大或最核心的生产表面开始，再按职责而不是文件类型给相关系统分区。常见的域包括：
 
-- entrypoints, orchestration, and runtime control;
-- public APIs, commands, configuration, and feature selection;
-- domain state, caches, events, and lifecycle transitions;
-- persistence, schemas, migrations, replay, and compatibility;
-- protocols, plugins, dependency injection, reflection, and code generation;
-- foreground and background execution, workers, processes, and resource ownership;
-- packages, adapters, examples, scripts, tests, snapshots, and documentation.
+- 入口、编排与运行时控制；
+- 公开 API、命令、配置与特性开关；
+- 领域状态、缓存、事件与生命周期流转；
+- 持久化、Schema、迁移、重放与兼容；
+- 协议、插件、依赖注入、反射与代码生成；
+- 前台与后台执行、worker、进程与资源归属；
+- 包、适配器、示例、脚本、测试、快照与文档。
 
-Adapt the domains to the repository. For each domain, name the entrypoints inspected, central production paths read, searches run, history or decision records consulted, and unresolved blind spots. The coverage pass is complete when every in-scope domain is inspected or explicitly excluded with a reason.
+按仓库实际情况调整这些域。对每个域，写明检查过的入口、读过的核心生产路径、执行过的搜索、查阅过的历史或决策记录，以及尚未解决的盲区。范围内每个域都被检查过、或被明确排除并给出理由时，覆盖这一遍才算完成。
 
-When breadth warrants parallel investigation and the user has authorized it, give each worker a non-overlapping domain and require the same proof record. Aggregate by confidence and ownership boundary rather than arrival order or raw finding count.
+当范围宽到值得并行调查且用户已授权时，给每个执行者一个互不重叠的域，并要求提交同样的证明记录。汇总时按置信度与所有权边界归并，而不是按到达顺序或发现条数。
 
-## Hunt for maintenance burdens
+## 找维护负担
 
-Use these lenses to generate leads:
+用这些视角生成线索：
 
-- **Dormant contract**: an export, hook, event, option, package, protocol field, or command has no current production consumer.
-- **Split truth**: multiple states, summaries, caches, formats, or event families encode one fact and must remain synchronized.
-- **Ownerless flexibility**: an abstraction, fallback, strategy, flag, or extension point promises possibilities no current product path owns.
-- **Relay layer**: a wrapper, package, service, or route forwards behavior without reducing coupling or establishing a boundary.
-- **Parallel state machine**: flags, promises, queues, sentinels, controllers, or callbacks describe the same transition.
-- **Boundary theater**: validation, copying, rollback, or hostile-object defense sits on a trusted handoff rather than a real trust or ownership boundary.
-- **Local infrastructure**: custom parsing, retry, framing, matching, diffing, scheduling, or collection code duplicates a suitable platform feature or dependency.
-- **Support drag**: tests, examples, snapshots, generated expectations, or documentation are the only reason an otherwise unused surface remains.
-- **Feature fossil**: implementation was abandoned or removed while schema, configuration, tests, compatibility logic, or design records still preserve its outline.
+- **休眠契约**：某个导出、hook、事件、选项、包、协议字段或命令，当前没有生产消费者。
+- **真相分裂**：多个状态、摘要、缓存、格式或事件族编码同一个事实，且必须保持同步。
+- **无主灵活性**：某个抽象、兜底、策略、开关或扩展点，承诺的是当前产品路径并不拥有的可能性。
+- **中继层**：某个包装、包、服务或路由只是把行为转发出去，既没降低耦合也没确立边界。
+- **平行状态机**：多个 flag、promise、队列、哨兵、控制器或回调描述同一个流转。
+- **边界表演**：校验、拷贝、回滚或敌对对象防御，落在受信任的交接处，而不是真实的信任或所有权边界上。
+- **自建基础设施**：自写的解析、重试、分帧、匹配、diff、调度或集合代码，重复了合适的平台能力或依赖。
+- **支撑拖累**：某个表面本来已无人使用，唯一让它留着的是测试、示例、快照、生成的期望值或文档。
+- **特性化石**：实现已废弃或删除，但 Schema、配置、测试、兼容逻辑或设计记录仍在保留它的轮廓。
 
-Do not equate visual similarity with duplication. Independent implementations may test an interface, isolate failure domains, protect different owners, or support distinct compatibility contracts.
+不要把外观相似等同于重复。独立实现可能在测一个接口、隔离故障域、保护不同的所有者，或支撑不同的兼容契约。
 
-## Climb the evidence ladder
+## 沿证据阶梯上爬
 
-Classify each lead by the strongest evidence reached:
+按已到达的最强证据给每个线索分级：
 
-1. **Smell**: complexity, duplication, or awkwardness is visible.
-2. **Static lead**: a search or analyzer reports no or limited use.
-3. **Consumer map**: every repository hit is classified and relevant callers and callees have been read.
-4. **Contract proof**: dynamic loading, external use, persistence, compatibility, ownership, and design history have been resolved.
-5. **Behavior proof**: a decisive check and recovery path demonstrate what would reveal a wrong change.
+1. **异味**：复杂度、重复或别扭之处肉眼可见。
+2. **静态线索**：搜索结果或分析器报告无使用或使用有限。
+3. **消费者地图**：仓库里每一处命中都已归类，相关调用方和被调用方都已读过。
+4. **契约证明**：动态加载、外部使用、持久化、兼容、所有权与设计历史都已查清。
+5. **行为证明**：一个决定性检查和一条恢复路径，能说明什么会暴露错误的改动。
 
-Smells and static leads are not deletion authority. High-confidence application normally requires contract proof and behavior proof.
+异味与静态线索不构成删除授权。高置信度的实施通常同时需要契约证明与行为证明。
 
-## Classify consumers
+## 给消费者归类
 
-Classify every hit instead of counting it:
+对每处命中要归类，而不是计数：
 
-- **Runtime**: shipped code, operational configuration, migrations, loaders, deployment scripts, and real entrypoints.
-- **Support**: tests, documentation, comments, snapshots, examples proved to be illustrative only, and generated expectations.
-- **Uncertain**: fixtures, public exports, examples that may double as smoke paths, plugin registrations, reflection, lazy imports, string dispatch, manifests, generated code, and external package consumers.
+- **运行时**：随产品发布的代码、运维配置、迁移、加载器、部署脚本和真实入口。
+- **支撑**：测试、文档、注释、快照、已证明仅作示意的示例，以及生成的期望值。
+- **不确定**：fixture、公开导出、可能兼作冒烟路径的示例、插件注册、反射、惰性导入、字符串分发、清单文件、生成代码，以及外部包的消费方。
 
-Search exact symbols and their alternate call forms, file and package names, configuration and environment keys, event and protocol strings, serialized field names, registry identifiers, and documentation examples. Read the surrounding control flow; search counts do not establish semantics.
+搜索确切符号及其替代调用形式、文件与包名、配置与环境键、事件与协议字符串、序列化字段名、注册标识符和文档示例。读周边的控制流；搜索计数不能确立语义。
 
-Resolve uncertain consumers by inspecting registration and loading code, package publication boundaries, downstream repositories when in scope, persisted data, compatibility policy, and release history. If external consumption cannot be bounded, state the uncertainty and lower confidence.
+解决不确定消费者时，检查注册与加载代码、包发布边界、范围内可及的下游仓库、持久化数据、兼容策略和发布历史。若外部消费无法界定，说明这份不确定并下调置信度。
 
-## Read history as design evidence
+## 把历史当设计证据读
 
-Use blame, log, pull requests, issues, ADRs, RFCs, and comments to answer:
+用 blame、log、PR、issue、ADR、RFC 和注释回答：
 
-- What failure, requirement, or future plan introduced this surface?
-- Does that condition still exist?
-- Which current artifact owns the decision?
-- What new evidence outweighs the original reason?
-- What capability would become expensive to restore?
+- 是什么故障、需求或未来计划引入了这个表面？
+- 那个条件今天还存在吗？
+- 当前哪个产物拥有这项决策？
+- 有什么新证据压过了原来的理由？
+- 哪些能力一旦删除，恢复起来会很贵？
 
-An old date or quiet file is only a discovery hint. A rejected historical alternative may still be valuable if it prevents a recurring mistake.
+日期久远或文件无人改动只是发现线索。一个当年被否决的备选方案，如果它能防止重复犯错，今天依然有价值。
 
-## Evaluate replacement dependencies
+## 评估替代依赖
 
-A standard-library feature or maintained dependency can reduce local responsibility, but only when it removes more obligation than it adds.
+标准库能力或仍在维护的依赖可以减少本地责任，但前提是它去掉的义务多于新增的。
 
-Compare exact semantics, unsupported residual behavior, maintenance and adoption, release cadence, security posture, transitive footprint, platform compatibility, migration cost, wrapper size, dedicated tests retired, and supply-chain exposure. Prefer platform facilities, then already-present dependencies, then a new dependency when the net ownership reduction is clear.
+比较确切语义、未被支持的剩余行为、维护与采用情况、发布节奏、安全状况、传递依赖足迹、平台兼容、迁移成本、包装层体积、可以退役的专用测试，以及供应链暴露面。优先用平台能力，其次用已有依赖，只有在净所有权减少明确时才引入新依赖。
 
-A wrapper that preserves most local policy while delegating a small primitive is not a simplification. Record the residual contract explicitly.
+如果一个包装层保留了大部分本地策略、只把一个小原语委托出去，那不算简化。把残余的契约明确记录下来。
 
-## Rank without gaming the result
+## 排序时不操纵结果
 
-Score independently:
+分别打分：
 
-- confidence in reachability and contract evidence;
-- blast radius and reversibility;
-- maintenance concepts retired;
-- observable behavior or optionality surrendered;
-- validation strength;
-- implementation and migration cost.
+- 对可达性与契约证据的置信度；
+- 影响半径与可逆性；
+- 退役的维护概念数；
+- 让渡出去的可观察行为或可选项；
+- 验证强度；
+- 实施与迁移成本。
 
-Do not reward raw deleted lines, candidate count, or dramatic scope. No safe candidate is a valid evidence-backed result.
+不要奖励原始删除行数、候选数量或戏剧性的范围。没有安全候选，也是一个有证据支撑的有效结论。

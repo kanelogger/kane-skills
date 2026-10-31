@@ -1,33 +1,33 @@
-# Decision Record Cleanup
+# 设计记录清理
 
-Purpose: keep the repository's current design owner accurate without erasing historical rationale that still prevents mistakes.
+目的：让仓库设计记录的当前所有者保持准确，同时不抹掉那些仍在防止犯错的历史理由。
 
-Follow the repository's native lifecycle, naming, pairing, and archival conventions. Historical records may be intentionally immutable; update their current owner and links instead of rewriting frozen history.
+遵循仓库原生的生命周期、命名、配对与归档约定。历史记录可能被有意设为不可变；这时更新当前所有者与链接，而不是改写冻结的历史。
 
-## Find the current owner
+## 找到当前所有者
 
-Trace shipped code, configuration, schemas, generated catalogs, package documentation, newer decisions, and inbound links. Titles and dates help discovery but do not prove ownership.
+追踪随产品发布的代码、配置、Schema、生成的目录、包文档、更新的决策记录和指向它的链接。标题和日期有助于发现，但不能证明所有权。
 
-Classify the older record:
+给较早的记录分类：
 
-- **Current** when it still owns a live contract, compatibility rule, durable representation, or independently useful rejected alternative.
-- **Partly displaced** when some of its behavior survives under a newer owner.
-- **Fully displaced** when no production, configuration, schema, persisted, wire, migration, compatibility, or documented capability remains and a current record can carry all durable rationale.
+- **仍然有效**：它仍拥有一项活着的契约、兼容规则、持久化表示，或一个独立有用的被否决方案。
+- **部分被取代**：其中部分行为在新所有者下继续存在。
+- **完全被取代**：不再有任何生产、配置、Schema、持久化、协议、迁移、兼容或文档化的能力存在，且当前记录可以承载全部持久理由。
 
-## Consolidate without erasing lessons
+## 整合但不抹掉教训
 
-Before retiring a fully displaced record, transfer unique rationale, alternatives, consequences, shipped evidence, known gaps, capability surrendered, conditions for reintroduction, and the reason the original motivation no longer wins. Implementation inventories and tests that described only deleted behavior need not survive as design rationale.
+退役一份完全被取代的记录之前，先把独有理由、备选方案、后果、上线证据、已知缺口、让渡出去的能力、重新引入的条件，以及原始动因为何不再成立，迁移过去。只描述已删除实现的清单与测试，不必作为设计理由保存。
 
-Repair inbound links, indexes, generated catalogs, paired translations, and consistency metadata as required by the repository. Search exact filenames, symbols, configuration keys, protocol strings, and record titles afterward.
+按仓库要求修好入链、索引、生成的目录、配对译文与一致性元数据。之后搜索确切的文件名、符号、配置键、协议字符串和记录标题。
 
-Keep records separate when the underlying feature survives through another delivery route or implementation, when stored or compatibility behavior remains, or when consolidation would hide a still-useful warning against reintroducing a failed design.
+底层特性经由另一条交付路径或另一套实现存活、存储或兼容行为仍在、或者整合会掩盖一条仍然有用的「别再引入失败设计」警告时，要让记录彼此独立保留。
 
-Report the old and current owners, evidence for the classification, rationale transferred, links repaired, validation performed, and any record deliberately retained.
+报告旧所有者与当前所有者、分类依据、被迁移的理由、修好的链接、做过的验证，以及任何有意保留的记录。
 
-## Match the artifact to the decision
+## 让产物匹配决策
 
-Use the repository's existing decision mechanism. A durable proposal should identify the present contract and consumer evidence, the exact removal or consolidation, the strongest reason to keep the design, the capability surrendered, acceptance criteria, risks, and verification boundary. Consolidate overlapping proposals under the record that already owns the decision instead of creating competing sources of truth.
+使用仓库已有的决策机制。需要长期留存的提案应写明当前契约与消费者证据、确切的删除或整合范围、保留该设计的最强理由、让渡出去的能力、验收标准、风险与验证边界。重叠的提案归并到已经拥有该决策的那份记录里，不要再造一个竞争性的真相源。
 
-Use a short local TODO, FIXME, issue, or equivalent only for a small actionable cleanup that does not need a durable architectural decision. Give it a stable searchable topic tag when repository conventions allow, then name the concrete burden and the condition that would make the change safe. Keep uncertain or product-level questions in the evidence report rather than depositing speculative annotations throughout the codebase.
+只有在不需要长期架构决策的小型可执行清理上，才用简短的本地 TODO、FIXME、issue 或等价物。仓库约定允许时给它一个稳定可搜索的话题标签，然后写明具体负担，以及使改动变得安全的条件。不确定的或产品层面的问题留在证据报告里，不要到处在代码库中埋推测性注释。
 
-Respect the selected authority mode: Survey mode reports the appropriate artifact without creating it unless the user requested repository edits.
+遵守选定的授权模式：审计模式只报告合适的产物，除非用户要求编辑仓库，否则不创建它。

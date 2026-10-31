@@ -1,24 +1,24 @@
 # blog-checker
 
-Review Chinese technical blog posts for argument quality, structure, technical accuracy, evidence, typography, and publish-readiness.
+审阅中文技术博客文章：看论证质量、结构、技术准确性、证据、排版与可发布程度。
 
-## Use When
+## 适用场景
 
-- The user asks to review, inspect, or evaluate a Chinese technical article or blog draft.
-- The goal is diagnostic feedback rather than rewriting the whole article.
-- The review should identify concrete problems, risk level, and revision priorities.
+- 用户要求审阅、检查或评估一篇中文技术文章或博客草稿。
+- 目标是拿到诊断性反馈，而不是把全文重写一遍。
+- 评审需要指出具体问题、风险等级与修改优先级。
 
-## Output
+## 输出
 
-A structured review using the bundled report template and review dimensions:
+一份结构化评审，使用内置的报告模板与评审维度：
 
 ```text
 assets/report-template.md
 references/review-dimensions.md
 ```
 
-## Public Notes
+## 公开说明
 
-The skill is intended for technical writing. It is not a general copywriting or fiction critique skill.
+本技能面向技术写作，不是通用文案批评或小说评论技能。
 
-The typography rules are included directly in this skill so the package remains independently usable when copied or distributed. Publisher conventions and fidelity-sensitive text take precedence.
+排版规则直接写在本技能内，因此整个包被复制或分发后仍可独立使用。发布方体例与对保真敏感的文本优先。

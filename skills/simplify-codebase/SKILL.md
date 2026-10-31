@@ -1,81 +1,81 @@
 ---
 name: simplify-codebase
-description: Simplification audit or authorized codebase simplification whose stated objective is to remove accidental complexity. Use for evidence-backed deletion or consolidation of dead code, duplicate state, redundant APIs or layers, ownerless abstractions, obsolete compatibility or design records, and over-engineering in any language; also use for 代码简化 or 熵回收. Do not use for general code review, onboarding, style-only refactoring, or performance tuning.
+description: 以消除偶发复杂度为明确目标的代码库简化审计，或经授权的代码库简化。用于对死代码、重复状态、冗余 API 与冗余分层、无主抽象、过期兼容逻辑与设计记录，以及任何语言里的过度设计，做有证据支撑的删除或合并；也用于「代码简化」或「熵回收」。不用于普通代码审查、项目上手、纯风格重构或性能调优。
 ---
 
-# Simplify Codebase
+# 代码库简化（Simplify Codebase）
 
-Reduce the number of concepts and obligations a codebase must keep coherent. Line-count reduction is supporting evidence, not the objective. A successful run may conclude that the inspected surface is already justified.
+减少代码库必须长期保持一致的概念与义务数量。代码行数下降只是佐证，不是目标。一次成功的执行，结论也可能是「检查过的这块本来就合理」。
 
-## Select mode and scope
+## 选择模式与范围
 
-First choose the authority mode:
+先确定授权模式：
 
-- **Survey** for simplification audit, investigation, or candidate-finding requests. Remain read-only and return ranked evidence.
-- **Change** for explicit simplify, remove, consolidate, refactor, or repository-documentation edit requests. Prove each cut, implement it within the authorized scope, and validate the surviving contract.
+- **审计（Survey）**：用于简化审计、调查或找候选的请求。保持只读，交付排序后的证据。
+- **变更（Change）**：用于明确的简化、删除、合并、重构或仓库文档编辑请求。逐项证明再动手，在授权范围内实施，并验证留下来的契约。
 
-Then choose the coverage scope:
+然后确定覆盖范围：
 
-- **Focused** when the user names a subsystem, symbol, state machine, dependency, or suspected duplication. Cover that boundary thoroughly before expanding outward.
-- **Broad** when the request spans the repository or asks for multiple candidates. Partition the system and account for every in-scope domain.
+- **聚焦（Focused）**：用户点明了某个子系统、符号、状态机、依赖或疑似重复项。先把这块边界查透，再向外扩。
+- **广泛（Broad）**：请求覆盖整个仓库，或要求给出多个候选。把系统分区，范围内每个域都要交代。
 
-Deleting a reachable capability, supported interface, stored representation, or compatibility path is a product decision. Describe the consequence and obtain direction unless the user has already chosen it.
+删除仍可达的能力、受支持的接口、持久化的数据表示或兼容路径，属于产品决策。除非用户已经选定，否则只说明后果并请求方向。
 
-## Establish the contract
+## 建立契约
 
-1. Read the repository's instructions, architecture and decision records, manifests, test guidance, and generated-file conventions.
-2. Inspect version-control state and preserve unrelated work. Identify vendored, generated, migration, fixture, and public-package surfaces before classifying them.
-3. Trace the runtime path from entrypoints through configuration, registration, dispatch, persistence, processes, and wire boundaries. Record public, dynamic, persisted, generated, and compatibility-sensitive contracts.
-4. In Change mode, discover the repository's real verification commands and capture a proportional baseline when feasible. A failing baseline narrows what the final checks can prove.
+1. 阅读仓库的说明文档、架构与决策记录、清单文件、测试指引，以及生成文件的约定。
+2. 检查版本控制状态，保护无关改动。在归类之前，先识别 vendored、生成、迁移、fixture 和公开包这几类表面。
+3. 从入口开始追踪运行时路径：配置、注册、分发、持久化、进程与协议边界。记录公开的、动态的、持久化的、生成的和兼容敏感的契约。
+4. 在变更模式下，找出仓库真实的验证命令，并在可行时采集一份与改动规模相称的基线。基线本身失败，会收窄最终检查能证明的范围。
 
-Preserve authorization, trust-boundary validation, security isolation, accessibility essentials, data-loss prevention, stored-format compatibility, and cleanup that establishes quiescence. Treat changes to these protections as their own explicitly authorized objective, not an incidental simplification.
+保护授权校验、信任边界验证、安全隔离、可访问性基本要求、数据防丢失、存储格式兼容，以及用于确立静止状态的清理逻辑。对这些保护机制的改动，必须作为一项单独明确授权的目标，不能当作顺手的简化。
 
-The contract map is complete when all in-scope entrypoints and authority boundaries are enumerated, each is traced far enough to name its owner and observable contract, and every uninspected or externally unknowable surface is recorded as a blind spot.
+当范围内所有入口与权限边界都已枚举、每条都被追到足以说清其所有者与可观察契约，且每个未检查或外部不可知的表面都已记为盲区时，契约地图才算完成。
 
-## Cover the relevant surface
+## 覆盖相关表面
 
-For every Broad engagement, and for Focused work involving dynamic architecture or dependency substitution, read [investigation.md](references/investigation.md). Build a coverage map before ranking findings; the first plausible deletion must not end the survey.
+凡属广泛模式的任务，以及涉及动态架构或依赖替换的聚焦任务，都要读 [investigation.md](references/investigation.md)。先建覆盖图再给候选排序；第一个看起来能删的东西不能成为调查的终点。
 
-For concurrency, cancellation, readiness, cleanup, defensive copies, validation, authorization, security isolation, accessibility, data-loss prevention, or cross-process data, also read [boundaries-and-lifecycle.md](references/boundaries-and-lifecycle.md).
+涉及并发、取消、就绪、清理、防御性拷贝、校验、授权、安全隔离、可访问性、数据防丢失或跨进程数据时，还要读 [boundaries-and-lifecycle.md](references/boundaries-and-lifecycle.md)。
 
-Use repository-native search, compiler and linter output, dependency metadata, and history as discovery instruments. Treat their findings as leads until runtime consumers and contracts have been examined.
+把仓库原生搜索、编译器与 linter 输出、依赖元数据和提交历史当作发现工具。在这些线索被运行时消费者和契约验证过之前，它们只是线索。
 
-## Build a proof record
+## 建立证明记录
 
-For every in-scope lead that reaches consumer-map evidence or could retire a meaningful contract, record:
+对每个范围内、已拿到消费者地图证据、或可能让某项重要契约退场的线索，记录：
 
 ```text
-Candidate: the exact contract, representation, or layer to remove or merge
-Burden: the concepts, synchronization, publication, or testing cost it creates
-Reachability: production, non-production, dynamic, external, and persisted consumers
-Rationale: why it exists and whether that reason remains current
-Cut: declarations, implementations, branches, artifacts, docs, and dependencies affected
-Consequence: observable capability or compatibility behavior surrendered
-Confidence / risk: evidence strength, uncertainty, blast radius, and reversibility
-Proof: the smallest check that would expose an incorrect cut
-Net effect: maintenance concepts removed minus replacement or migration machinery added
+Candidate: 要删除或合并的确切契约、数据表示或分层
+Burden: 它带来的概念、同步、发布或测试成本
+Reachability: 生产、非生产、动态、外部以及持久化消费者
+Rationale: 它当初为什么存在，那个理由今天是否仍成立
+Cut: 受影响的声明、实现、分支、产物、文档与依赖
+Consequence: 让渡出去的可观察能力或兼容行为
+Confidence / risk: 证据强度、不确定性、影响半径与可逆性
+Proof: 能暴露错误删除的最小检查
+Net effect: 移除的维护概念数，减去新增的替代或迁移机制
 ```
 
-Prove cut boundaries below file granularity when the candidate shares an artifact with surviving consumers. Account for candidate-exclusive selectors, members, fields, keys, registry entries, generated fragments, and fixtures without disturbing the surviving owners.
+当候选项与仍然存活的消费者共用同一份产物时，把删除边界证明到文件以下的粒度。处理候选项独占的选择器、成员、字段、键、注册项、生成片段和 fixture，同时不干扰仍存活的所有者。
 
-Keep or downgrade the candidate when a real consumer exists, dynamic reachability remains unresolved, a current decision still owns the design, the change merely relocates complexity, the result is outside scope or retires no meaningful obligation, or the available check cannot distinguish success from accidental breakage.
+出现下列情形时要保留候选项或下调其等级：仍有真实消费者；动态可达性未解决；当前决策仍拥有该设计；改动只是把复杂度挪了位置；结果超出范围或没让任何有意义的义务退场；或者可用的检查无法区分成功与意外破坏。
 
-Rank confidence separately from benefit. A high-value guess does not outrank a smaller proved cut.
+置信度与收益要分开排序。高价值的猜测不能排在证据充分的小型删除之前。
 
-Candidate proof is complete when every qualifying lead is classified as ranked, rejected, or unresolved, and every unresolved lead names the fact required to decide it.
+当每个合格线索都被归为「已排序」「已否决」或「未解决」，且每条未解决线索都写明判断它所需的事实时，候选证明才算完成。
 
-## Decide and act
+## 决策与动手
 
-In Survey mode, stop after reporting the ranked evidence. Include important rejected candidates when the rejection teaches something or identifies a concrete missing fact.
+审计模式下，报告排序后的证据即停止。若某些被否决的重要候选能说明问题，或能指出具体缺失的事实，也要写进报告。
 
-In Change mode, read [execution-and-recovery.md](references/execution-and-recovery.md) and select the strongest authorized cut. One ownership boundary is the default batch size, not a run limit: for an explicitly requested set of cuts, finish and validate each boundary before starting the next.
+变更模式下，读 [execution-and-recovery.md](references/execution-and-recovery.md)，并选择授权范围内最有力的删除。默认批大小是一个所有权边界，但它不是整次运行的限额：对用户明确要求的一组删除，逐个边界完成并验证后再开始下一个。
 
-If the user requests a simplification proposal, local cleanup annotation, or design-record consolidation, or if a selected change invalidates an ADR, RFC, design note, or architectural inventory, read [decision-records.md](references/decision-records.md). Do not turn an ordinary code audit into a repository-wide documentation purge.
+如果用户要求简化方案、局部清理标注或设计记录整合，或某个选中的改动会使 ADR、RFC、设计笔记或架构清单失效，读 [decision-records.md](references/decision-records.md)。不要把一次普通的代码审计做成全仓库文档清扫。
 
-If the user asks to combine findings from another branch, pull request, task, or agent run, read [integrating-findings.md](references/integrating-findings.md). Preserve evidence, not finding counts.
+如果用户要求合并来自其他分支、PR、任务或智能体运行的发现，读 [integrating-findings.md](references/integrating-findings.md)。保留的是证据，不是发现的条数。
 
-## Deliver the result
+## 交付结果
 
-For a survey, report coverage, ranked proof records, rejected or unresolved high-value leads, and the next fact needed for each uncertainty.
+审计任务交付：覆盖范围、排序后的证明记录、被否决或未解决的高价值线索，以及每个不确定点下一步需要的确切事实。
 
-For a change, complete the validation and operation receipt defined in [execution-and-recovery.md](references/execution-and-recovery.md). Report each validation layer separately; a narrow green check does not establish broader runtime, deployment, or user acceptance.
+变更任务交付：[execution-and-recovery.md](references/execution-and-recovery.md) 中定义的分层验证与操作回执。每层验证分别报告；单个局部检查变绿，不能证明更广的运行时、部署或用户验收通过。

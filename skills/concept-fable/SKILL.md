@@ -1,113 +1,113 @@
 ---
 name: concept-fable
-description: Create high-density Chinese explanatory fables that extract a real advanced, relatively niche concept from a user-specified field, hide the concept inside a three-stage story, then reveal and map it. Use when the user asks for 概念寓言, 三段式概念寓言, 用寓言解释概念, 把高级理论写成故事, story-based concept explanation, Concept Reveal, or asks to turn a domain into a fable with theory mapping, misleading intuition, boundaries, controversy, confidence, and reading directions.
+description: 写高密度的中文概念寓言：从用户指定的领域里提取一个真实、偏硬核的高阶概念，把它藏进三段式故事，再揭示并建立理论映射。当用户要求「概念寓言」「三段式概念寓言」「用寓言解释概念」「把高级理论写成故事」「story-based concept explanation」「Concept Reveal」，或要求把一个领域写成带理论映射、误导性直觉、适用边界、争议、置信度与延伸阅读方向的寓言时使用。
 ---
 
-# Concept Fable
+# 概念寓言（Concept Fable）
 
-Turn a user-provided field into a three-stage explanatory fable that lets the reader infer an advanced concept through story mechanics before the concept is named.
+把用户给出的领域写成三段式解释性寓言：读者先通过故事机制自己推出一个高阶概念，之后才看到概念的名字。
 
-## Input Contract
+## 输入契约
 
-Require a field, domain, discipline, or topic. Treat it as `{变量}`.
+必须有一个领域、学科或话题，视为 `{变量}`。
 
-Accept an optional target reader and length. Default to smart non-specialist readers and 1500–2500 Chinese characters for the complete response, including the fable and explanation. Follow user-specified audience and length; adapt vocabulary and explanatory depth without changing the concept's mechanism.
+可以附加目标读者与篇幅。默认面向聪明的非专业读者，完整回答（寓言加解释）控制在 1500–2500 个汉字。用户指定读者与篇幅时以用户为准；调整词汇与解释深度，但不改变概念的机制。
 
-If the field is too broad, choose a representative subfield that exposes a deeper mechanism, then explain that choice in the reveal section.
+领域过宽时，选一个能暴露更深机制的代表性子领域，并在揭示部分解释这个选择。
 
-If no reliable concept can be found, answer `不知道` and explain the blocking evidence gap briefly. Do not invent a concept to sound advanced.
+找不到可靠概念时，回答 `不知道`，并简要说明卡在哪个证据缺口。不要为了显得高深而编造概念。
 
-Default to Chinese output unless the user explicitly asks for another language.
+默认用中文输出，用户明确要求其他语言时除外。
 
-## Concept Selection
+## 概念筛选
 
-Before writing, internally identify and verify one principle, theory, paradox, mechanism, observation, or named concept from `{变量}`. Do not output the screening process.
+动笔之前，先在内部从 `{变量}` 中确定并核实一个原理、理论、悖论、机制、观察事实或具名概念。不要输出筛选过程。
 
-Select a concept that satisfies all criteria:
+选中的概念必须同时满足：
 
-- Real, formally named, and supported by reliable knowledge sources.
-- Relatively niche, not an introductory textbook staple.
-- Usually beyond early undergraduate exposure.
-- More familiar to senior researchers, advanced graduate students, or deep practitioners.
-- Obscure but important, with strong explanatory power.
-- Concrete enough to become an observable story with a real cognitive reversal.
+- 真实存在、有正式名称，并有可靠知识来源支撑。
+- 相对冷门，不是入门教材里的常客。
+- 通常超出本科低年级的接触范围。
+- 资深研究者、高年级研究生或深度实践者更熟悉。
+- 冷门但重要，解释力强。
+- 足够具体，能变成可观察的故事，并带来真实的认知反转。
 
-Check the concept name, definition, theoretical relations, historical context, typical use cases, validity conditions, mainstream interpretations, and controversy before committing. Switch concepts if evidence is weak, controversy prevents a defensible explanation, or the fable would distort the mechanism. If no reliable concept and mapping remain, stop and explain the evidence gap.
+动笔前核对概念的名称、定义、理论关系、历史背景、典型用例、成立条件、主流解读与争议。若证据薄弱、争议大到无法给出站得住脚的解释，或寓言会扭曲机制，就换一个概念。若既找不到可靠概念也找不到可靠映射，停下并说明证据缺口。
 
-Use external retrieval to verify the concept when reliable sources are accessible, preferring primary sources. In `核验来源`, list 1–3 reliable sources actually consulted, with titles and links, and explain what they support. If no external retrieval was performed, write `未进行外部检索` and disclose material uncertainty. Never invent sources or imply verification that did not occur. If the evidence cannot support a reliable concept and mapping, stop and explain the evidence gap.
+只要可靠来源可达，就用外部检索核实概念，优先一手来源。在 `核验来源` 中列出实际查阅过的 1–3 个可靠来源，含标题与链接，并说明它们支撑了什么。未做外部检索时，写 `未进行外部检索` 并披露实质不确定性。绝不编造来源，也不暗示做过实际没做的核验。若证据不足以支撑可靠的概念与映射，停下并说明证据缺口。
 
-## Story Workflow
+## 故事流程
 
-Write a three-stage explanatory fable. During the story, do not reveal the concept name, field jargon, or textbook definition.
+写一篇三段式解释性寓言。故事进行中不揭示概念名称、领域术语或教材式定义。
 
-Use plot, conflict, system rules, character behavior, feedback loops, and changing consequences to make the abstract mechanism observable.
+用情节、冲突、系统规则、人物行为、反馈回路和不断变化的后果，让抽象机制变得可见。
 
-Before drafting, create an internal leakage blacklist from the selected concept: the formal name, its common aliases, field jargon, and obvious explanatory nouns or verbs that would let the reader name the theory too early. Do not output this blacklist.
+起草前，依据选中的概念在内部列一份「泄露黑名单」：正式名称、常见别名、领域术语，以及任何会让读者过早叫出理论名字的显眼解释性名词或动词。不要输出这份黑名单。
 
-### Scenario Selection
+### 场景选择
 
-Prefer high-familiarity everyday scenes when they can faithfully carry the selected concept. For Chinese output, default first to `吃喝拉撒、衣食住行` and adjacent public-life situations: restaurants, cooking, queues, markets, renting, moving, commuting, clinics, pharmacies, laundry, household chores, toilets, deliveries, repairs, and small shops.
+只要日常场景能忠实承载选中的概念，就优先用高熟悉度的日常场景。中文输出默认先取 `吃喝拉撒、衣食住行` 及邻近的公共生活场景：餐馆、做饭、排队、菜市场、租房、搬家、通勤、诊所、药店、洗衣、家务、厕所、快递、维修、小店。
 
-Choose these scenes because they reduce setup cost, make feedback concrete, and let abstract mechanisms become visible through actions, mistakes, money, time, bodily discomfort, broken objects, spoiled food, wrong routes, returned goods, or social friction.
+选这些场景，是因为它们搭建成本低、反馈具体，能让抽象机制通过动作、失误、钱、时间、身体不适、坏掉的东西、变质的食物、走错的路线、退货和社交摩擦显现出来。
 
-Only use lower-familiarity institutional settings such as archives, laboratories, factories, courts, schools, or bureaucratic offices when the concept genuinely depends on that system, or when an everyday scene would distort the formal mechanism.
+只有当概念确实依赖某个系统，或日常场景会扭曲正式机制时，才改用档案室、实验室、工厂、法院、学校、机关窗口这类熟悉度较低的制度场景。
 
-Before drafting the fable, prefer a scenario where all three are easy to stage:
+起草前优先挑一个三件事都好安排的场景：
 
-- the old rule once looked practical;
-- at least two plausible fixes can fail in visibly different ways;
-- the final correction can be shown through a concrete operation, audit, or redesign rather than explained by the narrator.
+- 旧规则当初看起来是实用的；
+- 至少两个看似合理的解法能以明显不同的方式失败；
+- 最后的纠正能通过一次具体操作、核查或重新设计呈现出来，而不是靠叙述者解释。
 
-### Drafting Sequence
+### 起草顺序
 
-For Chinese output, silently use English only as a causal scaffold for plot logic, timing, irony, and cause-effect clarity. Do not translate the English scaffold. After the mechanism is clear, rebuild the fable from Chinese scene logic: choose Chinese-native objects, actions, social rules, conversational rhythm, and concrete consequences. The final story must read as if it was originally conceived in Chinese.
+中文输出时，只在内部把英文当作因果脚手架，用来理清情节逻辑、时序、讽刺和因果清晰度。不要把英文脚手架翻译过来。机制清楚后，用中文场景逻辑重建寓言：选择中文原生的物件、动作、社会规则、对话节奏和具体后果。最终故事必须读起来像本来就用中文构思的。
 
-For English output, favor plain concrete narration, dry irony, and human behavior revealing the system, in the direction of Mark Twain rather than academic allegory.
+英文输出时，倾向平实具体的叙述、冷峻的讽刺，以及通过人的行为暴露系统，方向更接近马克·吐温，而不是学术寓言。
 
-For Chinese output, treat Wang Xiaobo only as a prose-quality constraint: colloquial precision, concrete nouns and verbs, dry situational irony, distrust of official language, and comfort with absurd consequences. Do not imitate him through aphorisms, witty similes, clever metaphors, or authorial punchlines. Humor must come from rules, actions, incentives, and consequences.
+中文输出时，只把王小波当作散文质量的约束：口语化的准确、具体的名词和动词、冷峻的情境讽刺、对官样话术的不信任，以及对荒诞后果的从容。不要靠格言、机巧比喻、聪明隐喻或作者式抖包袱来模仿他。幽默必须来自规则、动作、激励和后果。
 
-Every figurative sentence must do mechanism work: it should make clearer what the system observes, ignores, rewards, punishes, or fails to handle. If deleting a metaphor, aphorism, or polished sentence loses no causal information, delete it. Prefer actions, physical details, records, incentives, and failure consequences over abstract attitude or literary flourish.
+每一个比喻句都必须承担机制工作：它应该让读者更清楚系统观察到什么、忽略了什么、奖励什么、惩罚什么、处理不了什么。如果删掉一个比喻、一句格言或一句漂亮话，不会损失任何因果信息，那就删掉。宁可用动作、物理细节、记录、激励和失败后果，也不要用抽象态度或文学修饰。
 
-Use these blog-quality gates while drafting the fable:
+起草寓言时用下面这些成稿质量闸门：
 
-- **Problem-driven opening**: start from a concrete pressure, failure, loss, anomaly, or institutional pain. Do not open with a neutral tour of the fictional world.
-- **Technical context through history**: show why the old rule or old common sense once looked rational before it fails.
-- **Competing explanations**: let characters try at least two plausible fixes or interpretations before the deeper mechanism wins.
-- **Problem -> model -> solution**: make each stage narrow the hidden model. The final turn must feel forced by prior evidence, not pasted on as a lesson.
-- **Know-why through action**: make readers understand the mechanism from consequences and choices before the reveal section explains it.
-- **Chinese reconstruction**: for Chinese output, rewrite from the understood mechanism and story situation, not from the wording of the internal scaffold.
-- **Source discipline**: keep the fable faithful to the verified concept. Do not add story mechanics that contradict the formal theory just because they are dramatic.
+- **问题驱动开头**：从一个具体的压力、失败、损失、异常或制度性痛点开始。不要用对虚构世界的平铺直叙开场。
+- **通过历史交代技术背景**：说明旧规则或旧常识在失效之前，为什么曾经看起来合理。
+- **竞争性解释**：让人物先试至少两个看似合理的解法或解读，然后更深的机制才胜出。
+- **问题 → 模型 → 解法**：每个阶段都要收紧隐藏模型。最后的转折必须让人感到是被前面的证据逼出来的，而不是贴上去的一课。
+- **通过动作懂原理**：让读者先从后果和选择里理解机制，再由揭示部分解释。
+- **中文重构**：中文输出时，依据已理解的机制和故事情境重写，不要照着内部脚手架的措辞改写。
+- **来源纪律**：寓言要对核实过的概念保持忠实。不要为了戏剧性添加与正式理论相矛盾的故事机制。
 
-### Stage 1: Establish the World Rule
+### 第一段：立起世界规则
 
-Show a normal-looking system under pressure. Give it a rule that solves a real problem and therefore looks defensible. Make the reader form an initial model. Plant the hidden contradiction through concrete scenes, incentives, measurements, and system feedback, not abstract explanation.
+展示一个看起来正常、正承受压力的系统。给它一条解决过真实问题的规则，因此这条规则看起来站得住脚。让读者形成初步模型。用具体场景、激励、测量和系统反馈埋下隐藏矛盾，而不是用抽象解释。
 
-### Stage 2: Make the Rule Fail
+### 第二段：让规则失效
 
-Introduce an anomaly that the old model cannot absorb. Let characters apply plausible common-sense fixes, and show each fix failing in a different way. The failures should reveal structure: what the system observes, what it ignores, what it rewards, and what it punishes. Do not name the concept or use its close technical vocabulary.
+引入一个旧模型吸收不了的异常。让人物采用看似合理的常识性修法，并展示每种修法以不同方式失败。失败应该揭示结构：系统观察到什么、忽略什么、奖励什么、惩罚什么。不要点出概念名称，也不要用它近邻的技术词汇。
 
-### Stage 3: Turn the Reader's Model
+### 第三段：翻转读者模型
 
-Expose the real mechanism through a decisive action, experiment, audit, reversal, or design change. Make earlier details become newly legible. Let the reader naturally feel the old model collapse near the ending, while still withholding the formal name until after the story.
+通过一个决定性动作、实验、核查、反转或设计变更暴露真正的机制。让前面的细节忽然变得可读。让读者在接近结尾时自然感到旧模型崩塌，但正式名称仍要留到故事之后。
 
-Avoid cheap twists, symbolic fog, empty philosophizing, fairy-tale tone, and hard-packed lesson delivery. Prefer concrete mechanisms, concrete consequences, and internally consistent rules. Do not let the narrator explain the hidden theory inside the fable; leave explicit explanation for `Concept Reveal` and later sections. Use calm, restrained, speculative narration that explains a hard idea through events. Do not imitate any living author's distinctive style.
+避免廉价反转、象征迷雾、空洞哲理、童话腔调，以及硬塞教训。宁可用具体机制、具体后果和内部自洽的规则。不要让叙述者在寓言内部解释隐藏理论；明确解释留给 `Concept Reveal` 及其后各节。用冷静、克制、带推演感的叙述，通过事件讲清一个硬概念。不要模仿任何在世作者的独特文风。
 
-Before final output, silently review the fable against these failure modes and rewrite if any are present:
+最终输出前，对照下面这些失败模式在内部复查寓言，命中任何一条就重写：
 
-- the story is a technical lecture with costumes;
-- the mechanism is stated before the reveal section;
-- the opening lacks a concrete problem;
-- the middle has only one failed fix or no real comparison;
-- the ending relies on a clever sentence rather than accumulated evidence;
-- the Chinese prose adds witty similes, aphorisms, polished one-liners, or literary flourishes that do not advance the mechanism;
-- a metaphor states the interpretation before the reader has seen enough evidence through action;
-- the story uses concept-adjacent words so directly that the reveal becomes obvious;
-- dramatic details break the concept's actual boundary conditions;
-- the Chinese story still feels like translated English: stiff institution labels, over-abstract nouns, parallel clauses that sound imported, or character names/places that expose the source language instead of the fictional world.
+- 故事是穿着戏服的技术讲座；
+- 机制在揭示部分之前就说明了；
+- 开头缺少具体问题；
+- 中段只有一个失败的修法，或没有真正的对比；
+- 结尾靠一句聪明话，而不是靠层层积累的证据；
+- 中文文风里加了机巧比喻、格言、漂亮的句式或文学修饰，却不推进机制；
+- 比喻在读者还没从动作中看到足够证据时就先给出了解读；
+- 故事直接使用概念近邻词汇，导致揭示变得毫无悬念；
+- 戏剧性细节破坏了概念真实的边界条件；
+- 中文故事仍像翻译过来的英文：生硬的机构标签、过度抽象的名词、听着像外来句式的排比，或人名地名暴露出源语言而不是虚构世界。
 
-## Required Output
+## 必须输出的结构
 
-For a request supported by a reliable concept and mapping, output this structure without process notes, generic disclaimers, or transitional filler. A necessary premise correction may precede the fable. If the required field is missing, ask for it; if reliable evidence is insufficient, give the brief evidence-gap response specified above instead of filling the template with an invented story.
+当请求有可靠的概念与映射支撑时，按下面结构输出，不要附流程说明、通用免责声明或过渡废话。必要时可以在寓言之前先纠正前提。缺少必需的领域信息时先询问；可靠证据不足时，给出上述简短的证据缺口回应，而不是用编造的故事填满模板。
 
 ```markdown
 # 寓言正文
@@ -145,41 +145,41 @@ For a request supported by a reliable concept and mapping, output this structure
 [可选。只给方向或关键词，不编造不存在的文献。]
 ```
 
-## Explanation Requirements
+## 解释要求
 
-After the fable, directly explain:
+寓言之后，直接解释：
 
-- the formal concept name;
-- the core definition;
-- why it explains something important in `{变量}`;
-- which story elements map to which concept mechanisms;
-- the most misleading intuition in the story;
-- why the common-sense solution fails;
-- the concept's valid boundary;
-- mainstream interpretations and known controversy, if any;
-- confidence: `高`, `中`, `低`, or `未知`, with a short reason;
-- verification sources or the explicit no-retrieval disclosure, following Concept Selection.
+- 正式的概念名称；
+- 核心定义；
+- 它为什么能解释 `{变量}` 中的某个重要问题；
+- 哪些故事元素对应哪些概念机制；
+- 故事中最容易误导人的直觉；
+- 常识性解法为什么失败；
+- 概念的成立边界；
+- 主流解读与已知争议（如有）；
+- 置信度：`高`、`中`、`低` 或 `未知`，并给出简短理由；
+- 核验来源，或按「概念筛选」一节的要求明确说明未做外部检索。
 
-## Style Rules
+## 文风规则
 
-Be complete, deep, precise, and concrete. Keep high information density without turning the piece into a textbook.
+要完整、深入、准确、具体。信息密度要高，但不要写成教材。
 
-Use a calm, restrained, sharp voice. Do not flatter the user, praise the question, or accept a weak premise.
+用冷静、克制、锐利的语态。不要奉承用户、夸赞问题，也不要接受站不住脚的前提。
 
-Preserve English proper names and established technical terms when they are part of the source material or required explanation, unless they are on the leakage blacklist for the fable body.
+当英文专有名词与既有技术术语属于原始材料或解释所需时，保留英文，除非它们已在寓言的泄露黑名单上。
 
-Preserve code snippets exactly in their original format.
+代码片段按原始格式原样保留。
 
-Use a style close to high-quality popular science: accessible, concrete, explanatory, and still precise.
+文风接近高质量科普：可读、具体、有解释力，同时保持准确。
 
-When an ordinary reader may miss a technical term or a culturally specific reference, add a short interpretive note. Wrap the note in bold parentheses, for example `**（...）**`, and use it only when it improves comprehension.
+普通读者可能看不懂技术术语或文化特定典故时，补一条简短的解释性注解，用加粗括号包住，例如 `**（...）**`，且只在确实有助于理解时使用。
 
-Before final output, do a Chinese-prose pass when the answer is in Chinese: read the fable as if it were originally written in Chinese, remove awkward translation traces, cut bureaucratic phrasing, vary sentence length, and keep jokes or irony coming from the situation rather than from punchlines. Replace decorative comparisons with concrete actions or delete them. Keep only sentences that advance world rule, conflict, evidence, mechanism, or consequence.
+最终输出前，若回答为中文，做一遍中文文风校对：把寓言当成本来是中文写的来读，去掉翻译腔，删掉官样套话，句长要有变化，让笑点和讽刺来自情境而不是抖包袱。把装饰性类比换成具体动作，或直接删掉。只保留推进世界规则、冲突、证据、机制或后果的句子。
 
-If the user's field, premise, or concept framing is wrong, say so directly before writing or choose a more defensible framing.
+如果用户的领域、前提或概念框架有问题，就在动笔前直接指出，或换一个更站得住脚的框架。
 
-If the user expresses a strong position, give the strongest rebuttal first, then support or revise it.
+用户表达了强烈立场时，先给出最强的反驳，再决定支持还是修正它。
 
-Revise conclusions with the evidence and keep value statements unrelated to concept explanation out of the response. Accuracy is the standard. User approval is not the standard.
+结论随证据修正；与概念解释无关的价值判断不要写进回答。准确是标准，用户满意不是标准。
 
-Ban filler such as `好问题`, `完全正确`, `见解独到`, `值得注意的是`, and generic disclaimers.
+禁用 `好问题`、`完全正确`、`见解独到`、`值得注意的是` 这类填充话，以及通用免责声明。

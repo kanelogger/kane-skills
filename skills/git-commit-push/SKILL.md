@@ -1,27 +1,27 @@
 ---
 name: git-commit-push
-description: Safely publish the current task's local Git changes by staging only related files, generating a Conventional Commits 1.0.0 message from the staged diff, committing, and pushing the current branch. Use when the user asks to commit, submit, publish, or push completed work, or explicitly requests git add, git commit, and git push as one workflow.
+description: 安全发布当前任务的本地 Git 改动：只暂存相关文件，基于暂存区 diff 生成符合 Conventional Commits 1.0.0 的提交信息，完成提交并推送当前分支。当用户要求提交、提交并推送、发布或上传已完成的工作，或明确要求把 git add、git commit、git push 作为一个流程执行时使用。
 ---
 
-# Git Commit Push
+# 提交并推送（Git Commit Push）
 
-Publish one coherent task as one auditable commit. Treat the staged diff as the exact commit boundary.
+把一次完整的任务发布成一次可审计的提交。把暂存区 diff 当作确切的提交边界。
 
-## Guardrails
+## 护栏
 
-- Preserve pre-existing and unrelated changes. Never discard, overwrite, restore, stash, or include them.
-- Stage explicit paths only. Never use `git add .`, `git add -A`, `git add --all`, or a broad glob.
-- Do not amend, rebase, force-push, bypass hooks, or change branches unless the user explicitly requests it.
-- Check for sensitive information before every commit. Suspected secrets, credentials, private keys, or environment files require explicit user approval for the reviewed content under the sensitive-information gate below.
-- Never commit build output or other likely generated artifacts.
-- Stop before committing if the intended file set is ambiguous or the staged diff contains unrelated changes.
-- Stop before pushing when the branch, remote, or upstream cannot be determined safely.
+- 保护已有的和无关的改动。绝不丢弃、覆盖、还原、暂存或连带提交它们。
+- 只用显式路径暂存。禁止使用 `git add .`、`git add -A`、`git add --all` 或宽泛通配符。
+- 未经用户明确要求，不做 amend、不 rebase、不 force push、不跳过 hooks、不切换分支。
+- 每次提交前检查敏感信息。发现疑似密钥、凭据、私钥或环境文件时，必须就复核过的内容获得用户明确同意，见下文「敏感信息闸门」。
+- 绝不提交构建产物或其他明显由工具生成的文件。
+- 如果待提交文件集合有歧义，或暂存区里混入了无关改动，在提交前停下。
+- 如果无法安全确定分支、远端或上游，在推送前停下。
 
-## Workflow
+## 工作流
 
-### 1. Establish Repository State
+### 1. 确认仓库状态
 
-Run:
+执行：
 
 ```sh
 git status --short --branch
@@ -31,19 +31,19 @@ git diff --cached --name-status
 git diff --cached
 ```
 
-Identify the files created or modified for the current task from the conversation and actual diff. Account for both tracked and untracked files. Because `git diff` omits untracked contents, inspect each candidate untracked file directly before staging it. If the repository already contains staged changes, include them only when they belong to the current task; otherwise stop rather than altering another commit boundary.
+结合对话内容和实际 diff，确认哪些文件是为当前任务新建或修改的。跟踪文件与未跟踪文件都要考虑。由于 `git diff` 不显示未跟踪文件的内容，暂存前要逐个直接查看候选项。如果仓库里已经有暂存改动，只有当它们属于当前任务时才一并纳入；否则停下，不要改动别人的提交边界。
 
-### 2. Stage the Task Boundary
+### 2. 划定任务边界
 
-Stage only the confirmed paths:
+只暂存已确认的路径：
 
 ```sh
 git add -- path/to/file path/to/other-file
 ```
 
-Use `git add -p -- path/to/file` when a file mixes related and unrelated hunks. Do not stage deletions unless the task requires them and the diff confirms their scope.
+如果同一个文件里既有相关 hunk 又有无关 hunk，使用 `git add -p -- path/to/file`。除非任务本身需要删除且 diff 已确认范围，否则不要暂存删除。
 
-Review the exact commit candidate:
+复核确切的提交候选：
 
 ```sh
 git diff --cached --name-status
@@ -51,35 +51,35 @@ git diff --cached --stat
 git diff --cached
 ```
 
-Require a non-empty staged diff. Confirm every staged path and hunk belongs to one coherent task.
+暂存区 diff 不得为空。确认每个暂存路径和 hunk 都属于同一件连贯的任务。
 
-#### Sensitive-Information Gate (Required Before Commit)
+#### 敏感信息闸门（提交前必做）
 
-`git status` lists paths and states, not file contents. Never treat a clean-looking status list or diff summary as a sensitive-information check.
+`git status` 只列出路径和状态，不显示文件内容。绝不要把看起来干净的 status 列表或 diff 摘要当成敏感信息检查。
 
-- Inspect the candidate tracked changes and untracked file contents before staging, then check the exact staged diff and full staged versions of added or modified files (for example, `git show :path/to/file`). The index may differ from the working tree. Include staged changes that existed before this workflow; exclude unrelated unstaged files from this commit's approval scope.
-- Look for API keys, access/refresh tokens, passwords, login/account credentials, private keys, connection strings with credentials, and sensitive personal account information. Check suspicious filenames such as `.env`, `.env.*`, credential files, and key files as well as values embedded in code, configuration, documentation, fixtures, and URLs. A variable name alone or an obvious placeholder is not evidence of a real secret; unresolved cases remain suspected findings.
-- Use an available local secret scanner with redacted output to supplement inspection. Do not install tools or upload contents to an external service just to scan. A missing scanner does not waive inspection; if any candidate content cannot be inspected, report that gap and require approval as an unresolved finding. Do not claim that a scan proves the absence of secrets.
-- When there are no findings or inspection gaps, continue without an extra confirmation. Otherwise, finish reviewing the candidate and present only file paths, line numbers when available, finding types, and the risk of storing the data in Git history and publishing it to the push destination. Never echo sensitive values in the question, commit message, or final report. Attribute the confirmation requirement to this section and link this `SKILL.md`.
-- Ask one direct question in the user's language, for example: “本次待提交内容中发现疑似敏感信息：<路径、行号和类型，不含原值>。提交会将其写入 Git 历史，并在推送时发布到远端。是否仍要提交这些内容并继续本次推送？” If the request is commit-only, omit the push wording and do not expand its scope.
-- An explicit yes authorizes the reviewed candidate and requested publication scope. A prior generic “commit/push everything” instruction is not approval of newly discovered findings; reuse prior approval only if it already covers the same findings, content, and destination. If the user declines, cancel the commit/push workflow. If no answer or an ambiguous answer is received, pause without committing or pushing. Preserve the working tree and index; do not silently remove findings, unstage files, or create a partial commit.
-- Immediately before `git commit`, verify that the staged content still matches the inspected candidate. If it changed, repeat the check; request approval again only for findings or publication scope not covered by existing approval.
+- 暂存前先检查候选的已跟踪改动和未跟踪文件内容，然后检查确切的暂存 diff，以及新增或修改文件在暂存区里的完整版本（例如 `git show :path/to/file`）。索引区可能与工作区不同。本流程开始前就已存在的暂存改动也要纳入检查范围；与本次提交无关的未暂存文件则不纳入本次审批范围。
+- 查找 API key、访问令牌与刷新令牌、密码、登录/账号凭据、私钥、带凭据的连接串，以及敏感的个人账户信息。既要检查可疑文件名（如 `.env`、`.env.*`、凭据文件、密钥文件），也要检查代码、配置、文档、fixture 和 URL 中内嵌的取值。仅有变量名或明显的占位符不构成真实密钥的证据；无法排除的情形仍算疑似发现。
+- 可用本地密钥扫描器辅助检查，输出需脱敏。不要为了扫描去安装工具或把内容上传到外部服务。没有扫描器不免除人工检查义务；如果候选内容无法检查，要报告这一缺口，并按未解决的发现要求用户确认。不要声称某次扫描证明了不存在密钥。
+- 没有发现、也没有检查缺口时，直接继续，无需额外确认。否则先完成候选复核，只呈现文件路径、可用时的行号、发现类型，以及把这些数据写入 Git 历史并推送到目标端所带来的风险。绝不在提问、提交信息或最终报告中回显敏感取值。确认要求要归因到本节，并链接本 `SKILL.md`。
+- 用用户的语言提一个直接的问题，例如：「本次待提交内容中发现疑似敏感信息：<路径、行号和类型，不含原值>。提交会将其写入 Git 历史，并在推送时发布到远端。是否仍要提交这些内容并继续本次推送？」如果只要求提交，就问提交，去掉推送措辞，也不要扩大范围。
+- 明确的「是」即授权复核过的候选内容和请求的发布范围。此前笼统的「把改动都提交/推送」不构成对新发现的同意；只有在既有同意已覆盖同一发现、同一内容和同一目标端时才可复用。用户拒绝时，取消提交/推送流程。没有回答或回答含糊时，暂停，不提交也不推送。保持工作区和索引区不变；不要悄悄移除发现、取消暂存或做成部分提交。
+- 在执行 `git commit` 之前立即确认暂存内容仍与复核过的候选一致。若已变化，重做检查；只有当出现既有同意未覆盖的发现或发布范围时，才需要重新请求同意。
 
-### 3. Determine the Commit Message Language
+### 3. 确定提交信息语言
 
-Choose the natural language for the commit description and body in this order:
+按以下顺序选择提交描述与正文的自然语言：
 
-1. An explicit language requested by the user for the current commit.
-2. A repository-specific commit convention documented in files such as `CONTRIBUTING.md`.
-3. The dominant natural language in the latest 20 non-merge commits, inspected with `git log -20 --no-merges --format='%s%n%b'`. Use it only when at least 60% of commits containing natural-language text use the same language; ignore Conventional Commit keywords, code identifiers, paths, hashes, and other language-neutral text.
-4. The language used by the user in the current request or conversation.
-5. English when none of the above provides a reliable signal.
+1. 用户为本次提交明确指定的语言。
+2. 仓库在 `CONTRIBUTING.md` 等文件中记录的提交规范。
+3. 最近 20 条非合并提交中的主导自然语言，用 `git log -20 --no-merges --format='%s%n%b'` 查看。只有包含自然语言文本的提交中至少 60% 使用同一语言时才采用；忽略 Conventional Commit 关键字、代码标识符、路径、哈希等语言中立的内容。
+4. 用户在当前请求或对话中使用的语言。
+5. 以上都得不出可靠信号时，用英文。
 
-Do not choose the output language from the language of this skill's prompt. Keep Conventional Commit `type` values, `scope`, and the `BREAKING CHANGE:` keyword in their standard form; write the human-readable description, body, and breaking-change explanation in the selected language. Preserve technical names in their established spelling.
+不要根据本技能提示词的语言来选择输出语言。`type`、`scope` 和 `BREAKING CHANGE:` 关键字保持标准形式；人类可读的描述、正文和破坏性变更说明用选定的语言书写。技术名称保留既有拼写。
 
-### 4. Generate the Commit Message
+### 4. 生成提交信息
 
-Generate the message strictly from `git diff --cached`, using this exact prompt. Replace the placeholder with the complete staged diff, masking any sensitive values in the prompt only; preserve the actual staged content. Never reproduce credentials in the generated message, even after the user approves their inclusion in the commit.
+严格依据 `git diff --cached` 生成，使用下面这段固定提示词。把占位符替换为完整的暂存 diff；提示词里对敏感取值做脱敏，但要保留真实的暂存内容。即使用户已同意把凭据纳入提交，也不得在生成的提交信息中复现凭据。
 
 ```text
 你是一位严格遵守 Conventional Commits 1.0.0 规范的提交信息写手。
@@ -104,32 +104,32 @@ Generate the message strictly from `git diff --cached`, using this exact prompt.
 </diff>
 ```
 
-Use only rationale inferable from the changed tests, documentation, behavior, or configuration. Do not invent issue numbers, user impact, performance claims, or intent. If the diff provides no evidence for why the change exists, stop before committing and report that the required body cannot be written without violating the no-invention rule.
+动机只能来自改动过的测试、文档、行为或配置中可推断的信息。不要编造 issue 编号、用户影响、性能收益或意图。如果 diff 中没有能说明「为什么要改」的证据，在提交前停下，并报告在遵守「不得虚构」的前提下无法写出所需正文。
 
-Validate the result before committing:
+提交前校验结果：
 
-- Header matches `^(feat|fix|docs|refactor|perf|test|chore)\([^)]+\): .+`.
-- Description uses the selected language, follows its stated phrasing rule, and is at most 50 characters.
-- Body follows one blank line, uses the selected language, and explains why without unsupported claims.
-- A breaking footer appears only when the staged diff demonstrates a breaking change.
+- 标题行匹配 `^(feat|fix|docs|refactor|perf|test|chore)\([^)]+\): .+`。
+- 描述使用所选语言，符合该语言的措辞规则，且不超过 50 个字符。
+- 正文前空一行，使用所选语言，说明原因且不含无据论断。
+- 只有当暂存 diff 确实体现出破坏性变更时，才加 `BREAKING CHANGE:` footer。
 
-### 5. Commit
+### 5. 提交
 
-Proceed only after the sensitive-information gate passes or the user explicitly approves its reviewed findings. A refusal cancels this workflow; a pending answer blocks this step and push.
+只有在敏感信息闸门通过，或用户明确同意复核过的发现之后，才继续。用户拒绝即取消本流程；等待答复期间不得进入本步，也不得推送。
 
-Pass the subject and body as separate message arguments so the shell does not open an editor:
+把标题和正文作为两个独立的消息参数传入，避免 shell 打开编辑器：
 
 ```sh
 git commit -m "type(scope): description" -m "Why this change is needed."
 ```
 
-Add a third `-m` argument for a `BREAKING CHANGE:` footer when required. Preserve repository hooks; never add `--no-verify` without explicit user authorization.
+需要 `BREAKING CHANGE:` footer 时再加第三个 `-m` 参数。保留仓库原有的 hooks；未经用户明确授权绝不加 `--no-verify`。
 
-If a hook fails, report the failure and leave the commit uncreated. Fix it only when the fix is within the user's task scope.
+hook 失败时报告失败原因，且不要产生提交。只有当修复落在用户的任务范围内时才去修。
 
-### 6. Verify and Push
+### 6. 验证并推送
 
-After committing, run:
+提交后执行：
 
 ```sh
 git status --short --branch
@@ -139,14 +139,14 @@ git branch --show-current
 git rev-parse --abbrev-ref --symbolic-full-name '@{upstream}'
 ```
 
-Confirm `HEAD` contains the intended staged diff. A dirty worktree is acceptable only when remaining changes are unrelated and preserved.
+确认 `HEAD` 包含预期的暂存 diff。工作区仍有改动只有在属于无关且被保留的改动时才可接受。
 
-Push the current branch to its configured upstream:
+把当前分支推送到已配置的上游：
 
 ```sh
 git push
 ```
 
-When no upstream exists, inspect `git remote -v`. Use `git push -u <remote> <branch>` only when one destination is clearly implied by repository state or the user; otherwise stop for direction. Never use `--force` or `--force-with-lease` unless explicitly requested.
+没有上游时，查看 `git remote -v`。只有当仓库状态或用户已明确指向唯一目标端时，才用 `git push -u <remote> <branch>`；否则停下等指示。未经明确要求，绝不使用 `--force` 或 `--force-with-lease`。
 
-Verify the push result with `git status --short --branch`. Report the commit hash, subject, pushed branch and remote, committed paths, verification result, and any preserved unrelated changes.
+用 `git status --short --branch` 验证推送结果。报告提交哈希、提交标题、推送的分支与远端、已提交的文件、验证结果，以及被保留的无关改动。
