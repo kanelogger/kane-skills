@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-16-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-17-green.svg)](skills/)
 
 > Languages: [English README](README.md) | [中文 README](README-CN.md)
 
@@ -20,7 +20,7 @@ This repository is a public, self-contained skill library. Each package is inspe
 
 ## Skills
 
-The 16 skills are organized by primary use under `skills/<category>/<skill-name>/`. To use a skill separately, copy or install its package directory containing `SKILL.md`.
+The 17 skills are organized by primary use under `skills/<category>/<skill-name>/`. To use a skill separately, copy or install its package directory containing `SKILL.md`.
 
 ### Content analysis and writing (10)
 
@@ -37,12 +37,13 @@ The 16 skills are organized by primary use under `skills/<category>/<skill-name>
 | [`merge-drafts`](skills/writing/merge-drafts/SKILL.md) | Merge several drafts into one polished article. | Final merged article plus merge report. | [SKILL](skills/writing/merge-drafts/SKILL.md) |
 | [`subtext-article`](skills/writing/subtext-article/SKILL.md) | Convert subtitles, ASR outputs, or transcripts into a faithful Chinese article. | A folder with the source copy, readable transcript, and same-named Markdown article. | [SKILL](skills/writing/subtext-article/SKILL.md) |
 
-### Product and engineering workflows (4)
+### Product and engineering workflows (5)
 
 | Skill | Use When | Output | Docs |
 | ----- | -------- | ------ | ---- |
 | [`github-reuse-scout`](skills/engineering/github-reuse-scout/SKILL.md) | Search GitHub for reusable open-source projects before building and decide whether to fork, reference, or build without reuse. | `.reuse/reuse-plan.md` reuse decision and migration ledger. | [SKILL](skills/engineering/github-reuse-scout/SKILL.md) |
 | [`it-system-skill-distiller`](skills/engineering/it-system-skill-distiller/SKILL.md) | Distill an IT business system into an AI-readable capability package. | Validated `distilled/` package structure. | [SKILL](skills/engineering/it-system-skill-distiller/SKILL.md) |
+| [`kane-compress-image`](skills/engineering/kane-compress-image/SKILL.md) | Compress local static images into WebP, PNG, or JPEG, individually or in batches. | New images with originals preserved, plus size-reduction and failure reports. | [SKILL](skills/engineering/kane-compress-image/SKILL.md) |
 | [`requirement-explorer`](skills/engineering/requirement-explorer/SKILL.md) | Turn raw business needs into a standard software requirements document. | Markdown requirements document with Mermaid flows and a completeness check. | [SKILL](skills/engineering/requirement-explorer/SKILL.md) |
 | [`simplify-codebase`](skills/engineering/simplify-codebase/SKILL.md) | Audit or simplify codebases by removing accidental complexity with reachability and contract evidence. | Ranked proof records, or a validated simplification with an operation receipt. | [SKILL](skills/engineering/simplify-codebase/SKILL.md) |
 

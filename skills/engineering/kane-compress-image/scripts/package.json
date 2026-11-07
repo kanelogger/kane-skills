@@ -1,0 +1,11 @@
+{
+  "name": "kane-compress-image",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "bun test ./tests"
+  },
+  "dependencies": {
+    "sharp": "0.35.5"
+  }
+}

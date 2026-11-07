@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-16-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-17-green.svg)](skills/)
 
 > 语言版本: [English README](README.md) | [中文 README](README-CN.md)
 
@@ -21,7 +21,7 @@ Kane 创建的可复用智能体技能库。
 
 ## 技能列表
 
-16 个技能按主要用途放在 `skills/<分类>/<技能名>/` 下。单独使用某个技能时，复制或安装包含 `SKILL.md` 的技能目录即可。
+17 个技能按主要用途放在 `skills/<分类>/<技能名>/` 下。单独使用某个技能时，复制或安装包含 `SKILL.md` 的技能目录即可。
 
 ### 内容分析与写作（10）
 
@@ -38,12 +38,13 @@ Kane 创建的可复用智能体技能库。
 | [`merge-drafts`](skills/writing/merge-drafts/SKILL.md) | 将多份草稿合并为一篇润色后的文章。 | 最终合并文章及合并报告。 | [SKILL](skills/writing/merge-drafts/SKILL.md) |
 | [`subtext-article`](skills/writing/subtext-article/SKILL.md) | 将字幕、自动语音识别输出或转录文本转换为忠实的中文文章。 | 包含源文副本、可读转写和同名 Markdown 终稿的文件夹。 | [SKILL](skills/writing/subtext-article/SKILL.md) |
 
-### 产品与工程工作流（4）
+### 产品与工程工作流（5）
 
 | 技能 | 使用场景 | 输出 | 文档 |
 | ---- | -------- | ---- | ---- |
 | [`github-reuse-scout`](skills/engineering/github-reuse-scout/SKILL.md) | 开发前搜索可复用的开源项目，并基于证据判断复用、参考或放弃复用。 | `.reuse/reuse-plan.md` 复用决策与迁移台账。 | [SKILL](skills/engineering/github-reuse-scout/SKILL.md) |
 | [`it-system-skill-distiller`](skills/engineering/it-system-skill-distiller/SKILL.md) | 将 IT 业务系统提炼为智能体可读的能力包。 | 经过校验的 `distilled/` 包结构。 | [SKILL](skills/engineering/it-system-skill-distiller/SKILL.md) |
+| [`kane-compress-image`](skills/engineering/kane-compress-image/SKILL.md) | 将本地静态图片压缩为 WebP、PNG 或 JPEG，支持单张与批量处理。 | 保留原图的新图片、真实体积变化和失败清单。 | [SKILL](skills/engineering/kane-compress-image/SKILL.md) |
 | [`requirement-explorer`](skills/engineering/requirement-explorer/SKILL.md) | 将原始业务需求推进成标准软件需求文档。 | 含 Mermaid 流程图和完整性自检的 Markdown 需求文档。 | [SKILL](skills/engineering/requirement-explorer/SKILL.md) |
 | [`simplify-codebase`](skills/engineering/simplify-codebase/SKILL.md) | 以可达性、契约和验证证据审计或简化代码库，移除意外复杂度。 | 排序后的证明记录，或带操作回执的已验证简化结果。 | [SKILL](skills/engineering/simplify-codebase/SKILL.md) |
 
