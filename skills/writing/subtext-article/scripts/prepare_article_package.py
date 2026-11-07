@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
-"""Create a traceable article package for a subtitle/transcript source."""
+"""Prepare a source copy and readable transcript for article writing."""
 
 from __future__ import annotations
 
 import argparse
-import json
 import shutil
 import sys
-from datetime import datetime, timezone
 from pathlib import Path
 
 from normalize_subtitle import normalize
@@ -15,55 +13,8 @@ from normalize_subtitle import normalize
 
 def source_artifact_name(source: Path) -> str:
     suffix = source.suffix or ".txt"
-    return f"00-source{suffix}"
-
-
-def build_manifest(source: Path, package_dir: Path, source_copy: Path, normalized: Path) -> dict:
-    now = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
-    return {
-        "source": str(source.resolve()),
-        "package": str(package_dir.resolve()),
-        "created_at": now,
-        "status": "prepared",
-        "artifacts": [
-            {
-                "step": "source_copy",
-                "path": source_copy.name,
-                "status": "success",
-                "description": "Original input copied into the article package.",
-            },
-            {
-                "step": "normalize",
-                "path": normalized.name,
-                "status": "success",
-                "description": "Code-normalized continuous spoken text.",
-            },
-            {
-                "step": "evidence_map",
-                "path": "02-evidence-map.md",
-                "status": "pending",
-                "description": "Agent-written map of claims, order, data, examples, and key quotes.",
-            },
-            {
-                "step": "draft",
-                "path": "03-draft.md",
-                "status": "pending",
-                "description": "First complete article draft.",
-            },
-            {
-                "step": "self_check",
-                "path": "04-self-check.md",
-                "status": "pending",
-                "description": "Fidelity check against the normalized transcript.",
-            },
-            {
-                "step": "final_article",
-                "path": "article.md",
-                "status": "pending",
-                "description": "Final publishable Markdown article.",
-            },
-        ],
-    }
+    name = f"00-source{suffix}"
+    return f"work-{name}" if name.casefold() == f"{source.stem}.md".casefold() else name
 
 
 def prepare_package(source: Path, package_dir: Path | None = None) -> Path:
@@ -78,22 +29,21 @@ def prepare_package(source: Path, package_dir: Path | None = None) -> Path:
     package_dir.mkdir(parents=True, exist_ok=True)
 
     source_copy = package_dir / source_artifact_name(source)
+    normalized = package_dir / "01-normalized.txt"
     shutil.copy2(source, source_copy)
 
-    normalized = package_dir / "01-normalized.txt"
-    normalized.write_text(normalize(source), encoding="utf-8")
+    try:
+        normalized.write_text(normalize(source_copy), encoding="utf-8")
+    except Exception:
+        normalized.unlink(missing_ok=True)
+        raise
 
-    manifest = build_manifest(source, package_dir, source_copy, normalized)
-    (package_dir / "manifest.json").write_text(
-        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
     return package_dir
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Create a traceable article package from a subtitle/transcript file."
+        description="Prepare a source copy and readable transcript for article writing."
     )
     parser.add_argument("input", type=Path, help="Input subtitle, transcript, or JSON file")
     parser.add_argument(

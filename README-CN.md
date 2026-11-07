@@ -34,7 +34,7 @@ Kane 创建的可复用智能体技能库。
 | [`douban-dice-review`](skills/writing/douban-dice-review/SKILL.md) | 用六枚理论骰子撰写简洁的豆瓣式影评。 | 骰子总结与六句影评。 | [SKILL](skills/writing/douban-dice-review/SKILL.md) |
 | [`kane-translate`](skills/writing/kane-translate/SKILL.md) | 先分析再翻译文章与文档，可追加审校与润色。 | 符合目标语言、受众、风格及可选术语表的译文。 | [SKILL](skills/writing/kane-translate/SKILL.md) |
 | [`merge-drafts`](skills/writing/merge-drafts/SKILL.md) | 将多份草稿合并为一篇润色后的文章。 | 最终合并文章及合并报告。 | [SKILL](skills/writing/merge-drafts/SKILL.md) |
-| [`subtext-article`](skills/writing/subtext-article/SKILL.md) | 将字幕、自动语音识别输出或转录文本转换为忠实的中文文章。 | 包含规范化转录、草稿、自检与终稿的完整文件夹。 | [SKILL](skills/writing/subtext-article/SKILL.md) |
+| [`subtext-article`](skills/writing/subtext-article/SKILL.md) | 将字幕、自动语音识别输出或转录文本转换为忠实的中文文章。 | 包含源文副本、可读转写和同名 Markdown 终稿的文件夹。 | [SKILL](skills/writing/subtext-article/SKILL.md) |
 
 ### 产品与工程工作流（4）
 

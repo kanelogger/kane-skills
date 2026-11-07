@@ -33,7 +33,7 @@ The 14 skills are organized by primary use under `skills/<category>/<skill-name>
 | [`douban-dice-review`](skills/writing/douban-dice-review/SKILL.md) | Write a compact Douban-style film review with six theory dice. | Dice summary plus six-sentence review. | [SKILL](skills/writing/douban-dice-review/SKILL.md) |
 | [`kane-translate`](skills/writing/kane-translate/SKILL.md) | Translate articles and documents with analysis first and optional review and polishing. | A translation tailored to the target language, audience, style, and optional glossary. | [SKILL](skills/writing/kane-translate/SKILL.md) |
 | [`merge-drafts`](skills/writing/merge-drafts/SKILL.md) | Merge several drafts into one polished article. | Final merged article plus merge report. | [SKILL](skills/writing/merge-drafts/SKILL.md) |
-| [`subtext-article`](skills/writing/subtext-article/SKILL.md) | Convert subtitles, ASR outputs, or transcripts into a faithful Chinese article. | A package folder with normalized transcript, draft, self-check, and final article. | [SKILL](skills/writing/subtext-article/SKILL.md) |
+| [`subtext-article`](skills/writing/subtext-article/SKILL.md) | Convert subtitles, ASR outputs, or transcripts into a faithful Chinese article. | A folder with the source copy, readable transcript, and same-named Markdown article. | [SKILL](skills/writing/subtext-article/SKILL.md) |
 
 ### Product and engineering workflows (4)
 

@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, expect, test } from "bun:test"
-import { cp, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises"
+import { cp, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 
@@ -169,13 +169,105 @@ test("subtitle packaging works independently and refuses to overwrite a prior pa
   const output = join(tmp, "subtitles_article")
   const normalized = await readFile(join(output, "01-normalized.txt"), "utf8")
   expect(normalized).toContain("这是第一句。")
+  expect(normalized).toContain("这是第二句。")
   expect(normalized).not.toContain("-->")
-  expect(JSON.parse(await readFile(join(output, "manifest.json"), "utf8")).status).toBe("prepared")
+  expect((await readdir(output)).sort()).toEqual(["00-source.srt", "01-normalized.txt"])
+  expect(await readFile(join(output, "00-source.srt"), "utf8")).toBe(raw)
   await writeFile(join(output, "01-normalized.txt"), "keep existing")
   expect((await run(["python3", script, source])).code).toBe(1)
   expect(await readFile(join(output, "01-normalized.txt"), "utf8")).toBe("keep existing")
   expect(await readFile(source, "utf8")).toBe(raw)
   expect((await run(["python3", script, source, "--output-dir", join(tmp, "subtitles_article-2")])).code).toBe(0)
+})
+
+test("subtitle packages keep source-named final articles separate from source copies", async () => {
+  const script = skill("writing/subtext-article/scripts/prepare_article_package.py")
+  for (const [name, copy] of [["访谈.zh.srt", "00-source.srt"], ["原稿.md", "00-source.md"], ["无扩展名", "00-source.txt"], ["00-source.md", "work-00-source.md"], ["00-source.MD", "work-00-source.MD"]]) {
+    const dir = await mkdtemp(join(tmp, "subtitle-package-names-"))
+    const source = join(dir, name)
+    const output = join(dir, "custom-package")
+    const text = "仅在两个试点团队使用，尚未推广。\n"
+    const raw = name.endsWith(".srt") ? `1\n00:00:00,000 --> 00:00:01,000\n${text}` : text
+    await writeFile(source, raw)
+    expect((await run(["python3", script, source, "--output-dir", output])).code).toBe(0)
+    const final = `${name.replace(/\.[^.]+$/, "")}.md`
+    await writeFile(join(output, final), "# 已核对的终稿\n", { flag: "wx" })
+    expect((await readdir(output)).sort()).toEqual([copy, "01-normalized.txt", final].sort())
+    expect(await readFile(source, "utf8")).toBe(raw)
+    expect(await readFile(join(output, copy), "utf8")).toBe(raw)
+    expect(await readFile(join(output, "01-normalized.txt"), "utf8")).toContain(text.trim())
+  }
+})
+
+test("subtitle packaging normalizes the saved source snapshot after the original changes", async () => {
+  const dir = await mkdtemp(join(tmp, "subtitle-package-snapshot-"))
+  const source = join(dir, "transcript.txt")
+  const output = join(dir, "article-package")
+  const original = "这是复制时保留的原始内容。\n"
+  const changed = "这是复制后修改的内容。\n"
+  await writeFile(source, original)
+  const res = await run(["python3", "-c", `
+import sys
+from pathlib import Path
+sys.path.insert(0, sys.argv[1])
+import prepare_article_package as package
+copy_source = package.shutil.copy2
+def copy_then_change(source, destination):
+    result = copy_source(source, destination)
+    source.write_text(sys.argv[4], encoding="utf-8")
+    return result
+package.shutil.copy2 = copy_then_change
+print(package.prepare_package(Path(sys.argv[2]), Path(sys.argv[3])))
+`, skill("writing/subtext-article/scripts"), source, output, changed])
+  expect(res.code).toBe(0)
+  expect(await readFile(source, "utf8")).toBe(changed)
+  expect(await readFile(join(output, "00-source.txt"), "utf8")).toBe(original)
+  const normalized = await readFile(join(output, "01-normalized.txt"), "utf8")
+  expect(normalized).toContain(original.trim())
+  expect(normalized).not.toContain(changed.trim())
+})
+
+test("subtitle packaging preserves failed normalization evidence and requires a new directory to retry", async () => {
+  const script = skill("writing/subtext-article/scripts/prepare_article_package.py")
+  const fixtures = [
+    { name: "invalid.txt", raw: Buffer.from([0xff]) },
+    { name: "empty.txt", raw: Buffer.alloc(0) },
+    { name: "no-speech.srt", raw: Buffer.from("1\n00:00:00,000 --> 00:00:01,000\n\n") },
+  ]
+  for (const { name, raw } of fixtures) {
+    const dir = await mkdtemp(join(tmp, "subtitle-package-failure-"))
+    const source = join(dir, name)
+    const stem = name.slice(0, name.lastIndexOf("."))
+    const output = join(dir, `${stem}_article`)
+    await writeFile(source, raw)
+    const failed = await run(["python3", script, source])
+    expect(failed.code).toBe(1)
+    expect(failed.out).toBe("")
+    expect(failed.err).toContain("Failed to prepare article package:")
+    expect(failed.err).not.toContain("Traceback")
+
+    const copied = join(output, `00-source${name.slice(name.lastIndexOf("."))}`)
+    expect(await readFile(copied)).toEqual(raw)
+    expect(await readFile(source)).toEqual(raw)
+    expect(await Bun.file(join(output, "01-normalized.txt")).exists()).toBe(false)
+    expect(await readdir(output)).toEqual([`00-source${name.slice(name.lastIndexOf("."))}`])
+
+    const speech = "这次补上可以归一化的正文。"
+    const repaired = name.endsWith(".srt") ? `1\n00:00:00,000 --> 00:00:01,000\n${speech}\n` : `${speech}\n`
+    await writeFile(source, repaired)
+    const refused = await run(["python3", script, source])
+    expect(refused.code).toBe(1)
+    expect(refused.err).toContain("choose a new --output-dir")
+    expect(await readFile(copied)).toEqual(raw)
+    expect(await Bun.file(join(output, "01-normalized.txt")).exists()).toBe(false)
+    expect(await readFile(source, "utf8")).toBe(repaired)
+
+    const retryOutput = join(dir, "retry-package")
+    expect((await run(["python3", script, source, "--output-dir", retryOutput])).code).toBe(0)
+    expect(await readFile(join(retryOutput, `00-source${name.slice(name.lastIndexOf("."))}`), "utf8")).toBe(repaired)
+    expect(await readFile(join(retryOutput, "01-normalized.txt"), "utf8")).toContain(speech)
+    expect(await readFile(source, "utf8")).toBe(repaired)
+  }
 })
 
 test("dice script produces exactly six valid faces plus a matching summary", async () => {
