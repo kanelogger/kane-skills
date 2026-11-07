@@ -1,11 +1,11 @@
 ---
 name: kane-translate
-description: 在语言之间翻译文章和文档，提供三种模式——quick（直接翻译）、normal（先分析再翻译）、refined（分析、翻译、审校、润色）。通过命令行参数指定目标语言、模式、受众、风格，并支持自定义术语表保证术语一致。当用户要求 "translate"、"翻译"、"精翻"、"translate article"、"translate to Chinese/English"、"改成中文"、"改成英文"、"convert to Chinese"、"localize"、"本地化"，或需要任何文档翻译时使用。也会在 "refined translation"、"精细翻译"、"proofread translation"、"快速翻译"、"快翻"、"这篇文章翻译一下"，或提供 URL／文件并带有翻译意图时触发。
+description: 翻译文章、文档或网页；遇到翻译、本地化或译文审校需求时主动调用。
 ---
 
 # 翻译器
 
-三模式翻译技能：**quick** 直接翻译，**normal** 先分析再翻译，**refined** 走完整的出版级流程，含审校与润色。
+默认使用 **normal**，先分析再翻译；**refined** 在此基础上增加审校、修订与润色。
 
 ## User Input Tools
 
@@ -40,7 +40,7 @@ description: 在语言之间翻译文章和文档，提供三种模式——quic
 | ------------ | -------------- | ------------ | -------------------------------- |
 | 源语言       | 自动识别       | `--from`     | 源语言，不确定时留空             |
 | 目标语言     | `zh-CN`        | `--to`       | 翻译的目标语言                   |
-| 模式         | `normal`       | `--mode`     | 翻译模式                         |
+| 模式         | `normal`       | `--mode`     | 仅支持 `normal`、`refined`       |
 | 受众         | `general`      | `--audience` | 目标读者画像                     |
 | 风格         | `storytelling` | `--style`    | 翻译风格偏好                     |
 | 分块阈值     | `4000`         | —            | 触发分块翻译的词数阈值           |
@@ -53,7 +53,6 @@ description: 在语言之间翻译文章和文档，提供三种模式——quic
 
 | 模式    | 参数                    | 步骤                      | 适用场景                   |
 | ------- | ----------------------- | ------------------------- | -------------------------- |
-| Quick   | `--mode quick`          | 翻译                      | 短文、非正式内容、快速任务 |
 | Normal  | `--mode normal`（默认） | 分析 → 翻译               | 文章、博客、一般内容       |
 | Refined | `--mode refined`        | 分析 → 翻译 → 审校 → 润色 | 出版级质量、重要文档       |
 
@@ -76,7 +75,6 @@ description: 在语言之间翻译文章和文档，提供三种模式——quic
 也接受自定义风格描述，例如 `--style "诗意而抒情"`。
 
 **自动识别**：
-- "快翻"、"quick"、"直接翻译" → quick 模式
 - "精翻"、"refined"、"publication quality"（出版级质量）、"proofread"（校对） → refined 模式
 - 其他情况 → 默认模式（normal）
 
@@ -107,45 +105,45 @@ description: 在语言之间翻译文章和文档，提供三种模式——quic
 
 ### 步骤 2：落地源文件并创建输出目录
 
-落地源文件（**把源文件就位**：文件原样使用；内联文本／URL → 保存到 `translate/{slug}.md`），然后创建输出目录：`{source-dir}/{source-basename}-{target-lang}/`（`{target-lang}` 取目标语言的主语言码，如 `zh-CN` → `zh`、`en-US` → `en`）。若未指定 `--from`，则自动识别源语言。
+落地源文件（**把源文件就位**：文件原样使用；内联文本／URL → 保存到 `translate/{slug}.md`），然后创建输出目录：`{source-dir}/{source-basename}-{target-lang}/`（`{target-lang}` 取目标语言的主语言码，如 `zh-CN` → `zh`、`en-US` → `en`）。`{source-basename}` 为不含扩展名的源文件名，`{source-filename}` 为包含扩展名的完整源文件名；最终译文保存到 `{output-dir}/{source-filename}`。若未指定 `--from`，则自动识别源语言。
 
 完整细节：[references/workflow-mechanics.md](references/workflow-mechanics.md)
 
 **输出目录内容**（所有中间文件与最终文件都放这里）：
 
-| 文件             | 模式            | 说明                         |
-| ---------------- | --------------- | ---------------------------- |
-| `translation.md` | 全部            | 最终译文（固定用这个名字）   |
-| `01-analysis.md` | Normal、Refined | 内容分析（领域、语气、术语） |
-| `02-prompt.md`   | Normal、Refined | 组装好的翻译提示词           |
-| `03-draft.md`    | Refined         | 审校前的初稿                 |
-| `04-critique.md` | Refined         | 批判性审校发现（仅诊断）     |
-| `05-revision.md` | Refined         | 依据审校意见修订后的译文     |
-| `chunks/`        | 分块            | 源文分块 + 译文分块          |
+| 文件                | 模式            | 说明                         |
+| ------------------- | --------------- | ---------------------------- |
+| `{source-filename}` | 全部            | 最终译文（与源文件同名）     |
+| `01-analysis.md`    | Normal、Refined | 内容分析（领域、语气、术语） |
+| `02-prompt.md`      | Normal、Refined | 组装好的翻译提示词           |
+| `03-draft.md`       | Refined         | 审校前的初稿                 |
+| `04-critique.md`    | Refined         | 批判性审校发现（仅诊断）     |
+| `05-revision.md`    | Refined         | 依据审校意见修订后的译文     |
+| `chunks/`           | 分块            | 源文分块 + 译文分块          |
+
+若源文件名与中间文件重名，给冲突的中间文件加 `work-` 前缀，并同步后续引用；最终译文始终保留源文件名。
 
 ### 步骤 3：评估内容长度
 
-quick 模式不分块——无论多长都直接翻译。翻译前先估算词数。若内容超过分块阈值（默认 4000 词），主动提醒："本文约 {N} 词。quick 模式一次性翻译、不分块——长内容用 `--mode normal` 术语更统一、效果更好。" 如果用户不切换模式，则继续执行。
-
-normal 与 refined 模式：
+翻译前先估算词数，两种模式均按下表处理：
 
 | 内容        | 动作                   |
 | ----------- | ---------------------- |
 | < 分块阈值  | 作为单一单元翻译       |
 | >= 分块阈值 | 分块翻译（见步骤 3.1） |
 
-**3.1 长内容准备**（仅 normal／refined 模式且 >= 分块阈值时）
+**3.1 长内容准备**（>= 分块阈值时）
 
 分块翻译前：
 
-1. **提取术语**：扫描整篇文档，找出专有名词、技术术语、反复出现的短语
+1. **分析整篇源文**：按步骤 4 的分析要求生成 `01-analysis.md`，记录领域、语气、术语和翻译难点；已完成则复用
 2. **构建会话术语表**：把提取出的术语与已加载的术语表合并，确定统一译法
 3. **切分块**：执行 `${BUN_X} {baseDir}/scripts/main.ts <file> [--max-words <单块最大词数，默认 5000>] [--output-dir <output-dir>]`
    - 解析 markdown 块（标题、段落、列表、代码块、表格等）
    - 在 markdown 块边界处切分，保持结构完整
    - 过长的普通多行块退化为按行切分；代码、HTML、单行长段落等不可安全切分的块保持完整，单块词数可能超出上限，交付时说明。该阈值不是严格硬上限
 4. **组装翻译提示词**：
-   - 主 agent 读取 `01-analysis.md`（若存在），并用 [references/subagent-prompt-template.md](references/subagent-prompt-template.md) 的第 1 部分组装共享上下文——内联：目标风格、内容背景、合并后的术语表、翻译难点
+   - 主 agent 读取 `01-analysis.md`，并用 [references/subagent-prompt-template.md](references/subagent-prompt-template.md) 的第 1 部分组装共享上下文——内联：目标风格、内容背景、合并后的术语表、翻译难点
    - 保存为输出目录中的 `02-prompt.md`（只含共享上下文，不含任务指令）
 5. **通过子 agent 生成初稿**（若 Agent 工具可用）：
    - **每个分块**启动一个全新上下文的子 agent，不继承父对话，不依赖运行时默认隔离；按可用并发上限执行（模板第 2 部分）
@@ -153,7 +151,7 @@ normal 与 refined 模式：
    - 一致性由共享的 `02-prompt.md` 保证（术语表、比喻映射、理解难点、原文语气，以及来自分析环节的翻译难点）
    - 若未分块（内容低于阈值）：为整个源文件启动一个子 agent
    - 若 Agent 工具不可用、不能保证全新上下文或无法读取显式材料，就由主 agent 按顺序用 `02-prompt.md` 翻译各分块
-6. **合并**：所有子 agent 完成后，按顺序拼接译文分块。若存在 `chunks/frontmatter.md`，则前置。保存为 `03-draft.md`（refined）或 `translation.md`（normal）
+6. **合并**：所有子 agent 完成后，按顺序拼接译文分块。若存在 `chunks/frontmatter.md`，则前置。保存为 `03-draft.md`（refined）或 `{source-filename}`（normal）
 7. 所有中间文件（源文分块 + 译文分块）都保留在 `chunks/` 中
 
 **分块初稿合并完成后**，控制权回到主 agent：normal 模式做准确性与跨块一致性验收后交付；refined 模式才继续批判性审校、修订与润色（步骤 4）。分析和共享提示词必须在生成初稿前完成，不重复生成已有初稿。
@@ -170,19 +168,15 @@ normal 与 refined 模式：
 - **主动解释**：对目标受众可能缺乏背景的行话或概念，在**粗体括号** `（**解释**）` 中补充简明解释。注释放置要克制——只在真正影响理解处加
 - **Frontmatter**：若原文有 YAML frontmatter，把源元数据字段重命名并加 `source` 前缀（驼峰式：`url`→`sourceUrl`、`title`→`sourceTitle` 等），把译文值作为新的顶层字段加入（若正文已有 H1 则跳过 `title`），其余字段保持不变
 
-#### Quick 模式
-
-直接翻译 → 保存到 `translation.md`。应用上述全部翻译原则。
-
 #### Normal 模式
 
 1. **分析** → `01-analysis.md`（领域、语气、术语、翻译难点）
 2. **组装提示词** → `02-prompt.md`（带上下文、术语表、难点的翻译指令）
-3. **翻译**（依照 `02-prompt.md`）→ `translation.md`
+3. **翻译**（依照 `02-prompt.md`）→ `{source-filename}`
 
 完成后提示用户："译文已保存。如需进一步审校与润色，请回复 **继续润色** 或 **refine**。"
 
-若用户确认继续，就执行批判性审校 → 修订 → 润色（同 refined 模式下文第 4–6 步），并保存 `03-draft.md`（把当前 `translation.md` 改名）、`04-critique.md`、`05-revision.md` 以及更新后的 `translation.md`。
+若用户确认继续，就执行批判性审校 → 修订 → 润色（同 refined 模式下文第 4–6 步），并保存 `03-draft.md`（复制当前 `{source-filename}` 作为初稿）、`04-critique.md`、`05-revision.md` 以及更新后的 `{source-filename}`。
 
 #### Refined 模式
 
@@ -196,13 +190,13 @@ normal 与 refined 模式：
 3. **初稿** → `03-draft.md`（带译注的初始译文；若分块则由子 agent 产出）
 4. **批判性审校** → `04-critique.md`（仅诊断：准确性、欧化语言、策略执行、表达问题）
 5. **修订** → `05-revision.md`（落实全部审校发现，产出修订稿）
-6. **润色** → `translation.md`（最终出版级译文）
+6. **润色** → `{source-filename}`（最终出版级译文）
 
 每一步都读取上一步的文件并在其基础上推进。
 
 ### 步骤 5：输出
 
-最终译文固定放在输出目录的 `translation.md`。
+最终译文放在输出目录中，文件名与源文件一致：`{output-dir}/{source-filename}`。
 
 最终译文写好后，做一次轻量的图片语言检查：
 
@@ -225,7 +219,7 @@ normal 与 refined 模式：
 源文件：{source-path}
 语言：{from} → {to}
 输出目录：{output-dir}/
-最终文件：{output-dir}/translation.md
+最终文件：{output-dir}/{source-filename}
 应用术语表条目数：{count}
 ```
 
@@ -233,5 +227,5 @@ normal 与 refined 模式：
 
 ## 完成标准
 
-最终 `translation.md` 与所选模式的中间文件齐全，源文未被覆盖，逐段核对无漏译或事实改变，术语、Markdown 结构和块间衔接一致。图片语言问题及未解决歧义已披露；仅脚本切块成功不等于翻译完成。
+与源文件同名的最终译文及所选模式的中间文件齐全，分析与提示词均在翻译前完成，源文未被覆盖，逐段核对无漏译或事实改变，术语、Markdown 结构和块间衔接一致。图片语言问题及未解决歧义已披露；仅脚本切块成功不等于翻译完成。
 

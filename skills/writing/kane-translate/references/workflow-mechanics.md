@@ -16,9 +16,9 @@
 
 在源文件旁边创建子目录：`{source-dir}/{source-basename}-{target-lang}/`（`{target-lang}` 为主语言码：`zh-CN` → `zh`、`en-US` → `en`）
 
-示例：
-- `posts/article.md` → `posts/article-zh/`
-- `translate/ai-future.md` → `translate/ai-future-zh/`
+最终译文保留源文件的完整文件名（含扩展名），放入输出目录。示例：
+- `posts/article.md` → `posts/article-zh/article.md`
+- `translate/ai-future.md` → `translate/ai-future-zh/ai-future.md`
 
 ## 冲突处理
 

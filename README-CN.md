@@ -32,7 +32,7 @@ Kane 创建的可复用智能体技能库。
 | [`concept-fable`](skills/writing/concept-fable/SKILL.md) | 通过三段式中文寓言解释高阶概念。 | 故事、概念揭示、理论映射、边界与阅读方向。 | [SKILL](skills/writing/concept-fable/SKILL.md) |
 | [`document-clarifier`](skills/writing/document-clarifier/SKILL.md) | 对已有成稿去黑话、补必要背景并统一既定领域术语。 | 清晰改写稿或保留原件的文件副本。 | [SKILL](skills/writing/document-clarifier/SKILL.md) |
 | [`douban-dice-review`](skills/writing/douban-dice-review/SKILL.md) | 用六枚理论骰子撰写简洁的豆瓣式影评。 | 骰子总结与六句影评。 | [SKILL](skills/writing/douban-dice-review/SKILL.md) |
-| [`kane-translate`](skills/writing/kane-translate/SKILL.md) | 以快速、普通或精细模式翻译文章与文档。 | 符合目标语言、受众、风格及可选术语表的译文。 | [SKILL](skills/writing/kane-translate/SKILL.md) |
+| [`kane-translate`](skills/writing/kane-translate/SKILL.md) | 先分析再翻译文章与文档，可追加审校与润色。 | 符合目标语言、受众、风格及可选术语表的译文。 | [SKILL](skills/writing/kane-translate/SKILL.md) |
 | [`merge-drafts`](skills/writing/merge-drafts/SKILL.md) | 将多份草稿合并为一篇润色后的文章。 | 最终合并文章及合并报告。 | [SKILL](skills/writing/merge-drafts/SKILL.md) |
 | [`subtext-article`](skills/writing/subtext-article/SKILL.md) | 将字幕、自动语音识别输出或转录文本转换为忠实的中文文章。 | 包含规范化转录、草稿、自检与终稿的完整文件夹。 | [SKILL](skills/writing/subtext-article/SKILL.md) |
 
