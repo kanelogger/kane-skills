@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-17-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-18-green.svg)](skills/)
 
 > Languages: [English README](README.md) | [中文 README](README-CN.md)
 
@@ -20,7 +20,7 @@ This repository is a public, self-contained skill library. Each package is inspe
 
 ## Skills
 
-The 17 skills are organized into 6 categories under `skills/<category>/<skill-name>/`. Each skill belongs to exactly one category based on the user's immediate primary task, not the input source. To use a skill separately, copy or install its package directory containing `SKILL.md`.
+The 18 skills are organized into 6 categories under `skills/<category>/<skill-name>/`. Each skill belongs to exactly one category based on the user's immediate primary task, not the input source. To use a skill separately, copy or install its package directory containing `SKILL.md`.
 
 ### reading — Reading and explanation (2)
 
@@ -46,13 +46,14 @@ The 17 skills are organized into 6 categories under `skills/<category>/<skill-na
 | [`merge-drafts`](skills/editing/merge-drafts/SKILL.md) | Merge several drafts into one polished article. | Final merged article plus merge report. | [SKILL](skills/editing/merge-drafts/SKILL.md) |
 | [`blog-checker`](skills/editing/blog-checker/SKILL.md) | Review Chinese technical blog posts. | Structured diagnostic review. | [SKILL](skills/editing/blog-checker/SKILL.md) |
 
-### assets — Asset acquisition and processing (3)
+### assets — Asset acquisition and processing (4)
 
 | Skill | Use When | Output | Docs |
 | ----- | -------- | ------ | ---- |
 | [`kane-bilibili-transcript`](skills/assets/kane-bilibili-transcript/SKILL.md) | Fetch existing Bilibili captions by video URL or ID, with part and track selection. | A new folder with metadata, raw subtitle JSON, and Markdown/SRT/VTT/text/JSON export. | [SKILL](skills/assets/kane-bilibili-transcript/SKILL.md) |
 | [`kane-youtube-transcript`](skills/assets/kane-youtube-transcript/SKILL.md) | Fetch existing YouTube captions by video URL or ID, with language and caption-type selection. | A new folder with metadata, raw JSON3, and Markdown/SRT/VTT/text/JSON export. | [SKILL](skills/assets/kane-youtube-transcript/SKILL.md) |
 | [`kane-compress-image`](skills/assets/kane-compress-image/SKILL.md) | Compress local static images into WebP, PNG, or JPEG, individually or in batches. | New images with originals preserved, plus size-reduction and failure reports. | [SKILL](skills/assets/kane-compress-image/SKILL.md) |
+| [`kane-url-to-markdown`](skills/assets/kane-url-to-markdown/SKILL.md) | Save webpage Markdown from existing reader tools or capture rendered content through browser tools. | A new Markdown file with source metadata, article structure and remote image links. | [SKILL](skills/assets/kane-url-to-markdown/SKILL.md) |
 
 ### planning — Requirements exploration and solution selection (2)
 

@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-17-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-18-green.svg)](skills/)
 
 > 语言版本: [English README](README.md) | [中文 README](README-CN.md)
 
@@ -21,7 +21,7 @@ Kane 创建的可复用智能体技能库。
 
 ## 技能列表
 
-17 个技能分为 6 个分类，放在 `skills/<分类>/<技能名>/` 下，每个技能按用户眼前的主要任务唯一归类，而非按输入来源分类。单独使用某个技能时，复制或安装包含 `SKILL.md` 的技能目录即可。
+18 个技能分为 6 个分类，放在 `skills/<分类>/<技能名>/` 下，每个技能按用户眼前的主要任务唯一归类，而非按输入来源分类。单独使用某个技能时，复制或安装包含 `SKILL.md` 的技能目录即可。
 
 ### reading · 阅读与解读（2）
 
@@ -47,13 +47,14 @@ Kane 创建的可复用智能体技能库。
 | [`merge-drafts`](skills/editing/merge-drafts/SKILL.md) | 将多份草稿合并为一篇润色后的文章。 | 最终合并文章及合并报告。 | [SKILL](skills/editing/merge-drafts/SKILL.md) |
 | [`blog-checker`](skills/editing/blog-checker/SKILL.md) | 审阅中文技术博客文章。 | 结构化诊断审阅。 | [SKILL](skills/editing/blog-checker/SKILL.md) |
 
-### assets · 素材获取与处理（3）
+### assets · 素材获取与处理（4）
 
 | 技能 | 使用场景 | 输出 | 文档 |
 | ---- | -------- | ---- | ---- |
 | [`kane-bilibili-transcript`](skills/assets/kane-bilibili-transcript/SKILL.md) | 按视频链接或 ID 获取 B 站已有字幕，选择分 P、语言和字幕类型。 | 包含元数据、原始字幕 JSON 和 Markdown/SRT/VTT/纯文本/JSON 导出的新目录。 | [SKILL](skills/assets/kane-bilibili-transcript/SKILL.md) |
 | [`kane-youtube-transcript`](skills/assets/kane-youtube-transcript/SKILL.md) | 按视频链接或 ID 获取 YouTube 已有字幕，选择语言与人工/自动类型。 | 包含元数据、原始 JSON3 和 Markdown/SRT/VTT/纯文本/JSON 导出的新目录。 | [SKILL](skills/assets/kane-youtube-transcript/SKILL.md) |
 | [`kane-compress-image`](skills/assets/kane-compress-image/SKILL.md) | 将本地静态图片压缩为 WebP、PNG 或 JPEG，支持单张与批量处理。 | 保留原图的新图片、真实体积变化和失败清单。 | [SKILL](skills/assets/kane-compress-image/SKILL.md) |
+| [`kane-url-to-markdown`](skills/assets/kane-url-to-markdown/SKILL.md) | 优先保存现成网页读取工具返回的 Markdown，动态或登录页复用浏览器工具获取正文。 | 带来源元数据、正文结构和远程图片链接的新 Markdown 文件。 | [SKILL](skills/assets/kane-url-to-markdown/SKILL.md) |
 
 ### planning · 需求探索与选型（2）
 
