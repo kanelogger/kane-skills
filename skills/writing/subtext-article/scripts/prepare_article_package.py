@@ -73,6 +73,8 @@ def prepare_package(source: Path, package_dir: Path | None = None) -> Path:
         raise ValueError(f"Input is not a file: {source}")
 
     package_dir = package_dir or source.with_name(f"{source.stem}_article")
+    if package_dir.exists() and (not package_dir.is_dir() or any(package_dir.iterdir())):
+        raise FileExistsError(f"Package directory is not empty; choose a new --output-dir: {package_dir}")
     package_dir.mkdir(parents=True, exist_ok=True)
 
     source_copy = package_dir / source_artifact_name(source)

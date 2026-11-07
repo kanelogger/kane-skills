@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import shutil
 import subprocess
 import sys
 import tempfile
@@ -442,7 +441,10 @@ def main() -> int:
     if args.output_dir:
         output_dir = Path(args.output_dir).expanduser().resolve()
         if output_dir.exists():
-            shutil.rmtree(output_dir)
+            print(f"ERROR: output already exists; choose a new directory: {output_dir}", file=sys.stderr)
+            return 2
+    elif args.keep:
+        output_dir = Path(tempfile.mkdtemp(prefix="it-system-distiller-smoke-")) / "distilled"
     else:
         temp_dir = tempfile.TemporaryDirectory(prefix="it-system-distiller-smoke-")
         output_dir = Path(temp_dir.name) / "distilled"

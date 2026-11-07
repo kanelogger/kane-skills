@@ -1,5 +1,19 @@
 # 蒸馏文档模板
 
+## 目录
+
+- README.md
+- 00-overview.md
+- 01-glossary.md
+- domain/_index.md
+- domain/<object>.md
+- api/_index.md
+- api/<domain>/<use-case>.md
+- reference/schema/<table>.md
+- reference/enums.md
+- reference/error-codes.md
+- reference/model-code-conflicts.md
+
 这些模板是起点，不是完成品。复制后必须用需求、Schema、源码、API 文档和实跑验证中的事实替换占位符。
 
 ## README.md
@@ -103,7 +117,7 @@
 
 ## domain/_index.md
 
-```markdown
+````markdown
 # 领域模型总览
 
 ## 对象关系图
@@ -121,7 +135,7 @@
 | 对象 | 角色 | 文档 |
 | --- | --- | --- |
 | <对象> | 聚合根/明细/主数据 | [[object-slug]] |
-```
+````
 
 ## domain/<object>.md
 
@@ -196,7 +210,7 @@
 
 ## api/<domain>/<use-case>.md
 
-```markdown
+````markdown
 # 接口：<业务动作> (<stable identifier>)
 
 `<METHOD> <path>`
@@ -251,7 +265,7 @@
 ## 写权限分级
 
 <只读 / 受控写 / dry-run 后确认 / 禁止 / 不可逆操作需二次确认>
-```
+````
 
 ## reference/schema/<table>.md
 

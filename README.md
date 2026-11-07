@@ -26,35 +26,35 @@ The 14 skills are organized by primary use under `skills/<category>/<skill-name>
 
 | Skill | Use When | Output | Docs |
 | ----- | -------- | ------ | ---- |
-| [`article-analyzer`](skills/writing/article-analyzer/) | Analyze articles, papers, reports, or long-form arguments. | A folder of Markdown analysis files plus `99-summary.md`. | [SKILL](skills/writing/article-analyzer/SKILL.md) |
-| [`blog-checker`](skills/writing/blog-checker/) | Review Chinese technical blog posts. | Structured diagnostic review. | [SKILL](skills/writing/blog-checker/SKILL.md) |
-| [`concept-fable`](skills/writing/concept-fable/) | Explain advanced concepts through a Chinese three-stage fable. | Story, reveal, theory mapping, boundaries, and reading directions. | [SKILL](skills/writing/concept-fable/SKILL.md) |
-| [`document-clarifier`](skills/writing/document-clarifier/) | Revise completed prose for clarity while preserving facts and established domain terms. | Clearer text or a file copy that preserves the original. | [SKILL](skills/writing/document-clarifier/SKILL.md) |
-| [`douban-dice-review`](skills/writing/douban-dice-review/) | Write a compact Douban-style film review with six theory dice. | Dice summary plus six-sentence review. | [SKILL](skills/writing/douban-dice-review/SKILL.md) |
-| [`kane-translate`](skills/writing/kane-translate/) | Translate articles and documents in quick, normal, or refined mode. | A translation tailored to the target language, audience, style, and optional glossary. | [SKILL](skills/writing/kane-translate/SKILL.md) |
-| [`merge-drafts`](skills/writing/merge-drafts/) | Merge several drafts into one polished article. | Final merged article plus merge report. | [SKILL](skills/writing/merge-drafts/SKILL.md) |
-| [`subtext-article`](skills/writing/subtext-article/) | Convert subtitles, ASR outputs, or transcripts into a faithful Chinese article. | A package folder with normalized transcript, draft, self-check, and final article. | [SKILL](skills/writing/subtext-article/SKILL.md) |
+| [`article-analyzer`](skills/writing/article-analyzer/SKILL.md) | Analyze articles, papers, reports, or long-form arguments. | A folder of Markdown analysis files plus `99-summary.md`. | [SKILL](skills/writing/article-analyzer/SKILL.md) |
+| [`blog-checker`](skills/writing/blog-checker/SKILL.md) | Review Chinese technical blog posts. | Structured diagnostic review. | [SKILL](skills/writing/blog-checker/SKILL.md) |
+| [`concept-fable`](skills/writing/concept-fable/SKILL.md) | Explain advanced concepts through a Chinese three-stage fable. | Story, reveal, theory mapping, boundaries, and reading directions. | [SKILL](skills/writing/concept-fable/SKILL.md) |
+| [`document-clarifier`](skills/writing/document-clarifier/SKILL.md) | Revise completed prose for clarity while preserving facts and established domain terms. | Clearer text or a file copy that preserves the original. | [SKILL](skills/writing/document-clarifier/SKILL.md) |
+| [`douban-dice-review`](skills/writing/douban-dice-review/SKILL.md) | Write a compact Douban-style film review with six theory dice. | Dice summary plus six-sentence review. | [SKILL](skills/writing/douban-dice-review/SKILL.md) |
+| [`kane-translate`](skills/writing/kane-translate/SKILL.md) | Translate articles and documents in quick, normal, or refined mode. | A translation tailored to the target language, audience, style, and optional glossary. | [SKILL](skills/writing/kane-translate/SKILL.md) |
+| [`merge-drafts`](skills/writing/merge-drafts/SKILL.md) | Merge several drafts into one polished article. | Final merged article plus merge report. | [SKILL](skills/writing/merge-drafts/SKILL.md) |
+| [`subtext-article`](skills/writing/subtext-article/SKILL.md) | Convert subtitles, ASR outputs, or transcripts into a faithful Chinese article. | A package folder with normalized transcript, draft, self-check, and final article. | [SKILL](skills/writing/subtext-article/SKILL.md) |
 
 ### Product and engineering workflows (4)
 
 | Skill | Use When | Output | Docs |
 | ----- | -------- | ------ | ---- |
-| [`github-reuse-scout`](skills/engineering/github-reuse-scout/) | Search GitHub for reusable open-source projects before building and decide whether to fork, reference, or build without reuse. | `.reuse/reuse-plan.md` reuse decision and migration ledger. | [SKILL](skills/engineering/github-reuse-scout/SKILL.md) |
-| [`it-system-skill-distiller`](skills/engineering/it-system-skill-distiller/) | Distill an IT business system into an AI-readable capability package. | Validated `distilled/` package structure. | [SKILL](skills/engineering/it-system-skill-distiller/SKILL.md) |
-| [`requirement-explorer`](skills/engineering/requirement-explorer/) | Turn raw business needs into a standard software requirements document. | Markdown requirements document with Mermaid flows and a completeness check. | [SKILL](skills/engineering/requirement-explorer/SKILL.md) |
-| [`simplify-codebase`](skills/engineering/simplify-codebase/) | Audit or simplify codebases by removing accidental complexity with reachability and contract evidence. | Ranked proof records, or a validated simplification with an operation receipt. | [SKILL](skills/engineering/simplify-codebase/SKILL.md) |
+| [`github-reuse-scout`](skills/engineering/github-reuse-scout/SKILL.md) | Search GitHub for reusable open-source projects before building and decide whether to fork, reference, or build without reuse. | `.reuse/reuse-plan.md` reuse decision and migration ledger. | [SKILL](skills/engineering/github-reuse-scout/SKILL.md) |
+| [`it-system-skill-distiller`](skills/engineering/it-system-skill-distiller/SKILL.md) | Distill an IT business system into an AI-readable capability package. | Validated `distilled/` package structure. | [SKILL](skills/engineering/it-system-skill-distiller/SKILL.md) |
+| [`requirement-explorer`](skills/engineering/requirement-explorer/SKILL.md) | Turn raw business needs into a standard software requirements document. | Markdown requirements document with Mermaid flows and a completeness check. | [SKILL](skills/engineering/requirement-explorer/SKILL.md) |
+| [`simplify-codebase`](skills/engineering/simplify-codebase/SKILL.md) | Audit or simplify codebases by removing accidental complexity with reachability and contract evidence. | Ranked proof records, or a validated simplification with an operation receipt. | [SKILL](skills/engineering/simplify-codebase/SKILL.md) |
 
 ### Technical explanation (1)
 
 | Skill | Use When | Output | Docs |
 | ----- | -------- | ------ | ---- |
-| [`kane-explainer`](skills/explanation/kane-explainer/) | Explain technical specifications, RFCs, design proposals, or workspace changes in plain language. | A self-contained Chinese technical explanation with behavior and schema changes. | [SKILL](skills/explanation/kane-explainer/SKILL.md) |
+| [`kane-explainer`](skills/explanation/kane-explainer/SKILL.md) | Explain technical specifications, RFCs, design proposals, or workspace changes in plain language. | A self-contained Chinese technical explanation with behavior and schema changes. | [SKILL](skills/explanation/kane-explainer/SKILL.md) |
 
 ### Publishing and delivery assurance (1)
 
 | Skill | Use When | Output | Docs |
 | ----- | -------- | ------ | ---- |
-| [`git-commit-push`](skills/delivery/git-commit-push/) | Stage only the current task's changes, create a Conventional Commit from the staged diff, and push safely. | Verified commit and push result with unrelated changes preserved. | [SKILL](skills/delivery/git-commit-push/SKILL.md) |
+| [`git-commit-push`](skills/delivery/git-commit-push/SKILL.md) | Stage only the current task's changes, create a Conventional Commit, and push only when requested. | Verified commit and optional push result with unrelated changes preserved. | [SKILL](skills/delivery/git-commit-push/SKILL.md) |
 
 ## License
 

@@ -95,8 +95,8 @@ tools:
         description: 需求文档最终标题
       include_appendix_b:
         type: boolean
-        default: false
-        description: 是否包含附录B（仅当无待确认项时设为false，否则必须包含）
+        default: true
+        description: 必须保留附录B，无待确认项时写“无”，不省略六部分结构
     returns:
       document_id: string
       title: string
@@ -161,6 +161,9 @@ tools:
       mermaid_count: integer        # 已转换的Mermaid图数量
       conversion_status: enum       # "success" 或 "partial" (部分图转换失败)
     constraints:
+      - "仅在工具实际可用时执行，保留原Markdown，只处理导出副本"
+      - "优先本地处理；发送文档或图表到外部服务前，说明内容与目标端并单独征得用户同意"
+      - "远程下载仅HTTPS，最多5次重定向，30秒超时，PNG只接受image/png；SVG展示前净化"
       - "Mermaid图渲染失败时不阻塞整体导出，在对应位置保留Mermaid源代码作为备用"
       - "导出前必须确认文档已完成完整性自检"
 

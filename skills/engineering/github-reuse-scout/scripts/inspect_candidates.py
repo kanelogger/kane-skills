@@ -5,7 +5,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
+import sys
 from pathlib import Path
 
 MANIFEST_NAMES = [
@@ -22,19 +24,29 @@ LICENSE_HEAD_LINES = 3
 
 def clone(repo_dir: Path, html_url: str) -> str | None:
     """浅克隆到 repo_dir；已存在则直接复用，失败返回错误信息。"""
+    if not re.fullmatch(r"https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", html_url or ""):
+        return "只接受 HTTPS GitHub 仓库地址"
+    if repo_dir.is_symlink():
+        return "缓存目录不能是符号链接"
     if repo_dir.exists():
         return None
-    proc = subprocess.run(
-        ["git", "clone", "--depth", "1", "--quiet", html_url, str(repo_dir)],
-        capture_output=True,
-        text=True,
-    )
+    try:
+        proc = subprocess.run(
+            ["git", "-c", "protocol.allow=never", "-c", "protocol.https.allow=always",
+             "-c", "http.followRedirects=false", "clone", "--depth", "1", "--quiet",
+             "--", html_url, str(repo_dir)],
+            capture_output=True, text=True, timeout=30,
+        )
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        return "git 不可用或克隆超过 30 秒"
     if proc.returncode != 0:
         return proc.stderr.strip() or "git clone failed"
     return None
 
 
 def head_lines(path: Path, limit: int) -> str:
+    if path.is_symlink():
+        return ""
     try:
         lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
     except OSError:
@@ -77,7 +89,10 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="浅克隆评分前列的候选仓库并抽取架构证据。")
     parser.add_argument("--top", type=int, default=3, help="检查的仓库数量（默认 3）")
     parser.add_argument("--workdir", default=".", help="项目根目录（默认当前目录）")
+    parser.add_argument("--repo", action="append", help="指定已评分的 owner/repo，可重复传入")
     args = parser.parse_args()
+    if args.top < 1:
+        parser.error("--top 必须大于 0")
 
     reuse_dir = Path(args.workdir) / ".reuse"
     scored_path = reuse_dir / "scored.json"
@@ -91,12 +106,22 @@ def main() -> int:
     cache_dir.mkdir(parents=True, exist_ok=True)
     evidence_dir.mkdir(parents=True, exist_ok=True)
 
-    repos = data.get("scored", [])[: args.top]
+    scored = data.get("scored", [])
+    if args.repo:
+        by_name = {item["full_name"]: item for item in scored}
+        if any(name not in by_name for name in args.repo):
+            parser.error("--repo 必须来自 scored.json")
+        repos = [by_name[name] for name in dict.fromkeys(args.repo)]
+    else:
+        repos = scored[: args.top]
     if not repos:
         print("没有可检查的候选（scored.json 为空）")
         return 0
 
     for item in repos:
+        if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*/[A-Za-z0-9][A-Za-z0-9_.-]*", item.get("full_name", "")):
+            print("无效的 GitHub 仓库名", file=sys.stderr)
+            return 1
         owner_repo = item["full_name"].replace("/", "-")
         repo_dir = cache_dir / owner_repo
         err = clone(repo_dir, item["html_url"])

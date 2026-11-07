@@ -73,7 +73,6 @@ def main() -> int:
 
     root = Path(args.distilled_dir).expanduser().resolve()
     errors: list[str] = []
-    warnings: list[str] = []
 
     if not root.exists():
         print(f"ERROR: distilled directory does not exist: {root}")
@@ -139,7 +138,7 @@ def main() -> int:
     for path in markdown_files(root):
         for ref in collect_refs(read_text(path)):
             if ref not in slugs:
-                warnings.append(f"{rel(path, root)} references unknown slug: [[{ref}]]")
+                errors.append(f"{rel(path, root)} references unknown slug: [[{ref}]]")
 
     results = root / "validation" / "results.md"
     if results.exists():
@@ -149,10 +148,6 @@ def main() -> int:
         if "仅通过静态验证" not in result_text and "动态验证通过" not in result_text:
             errors.append("validation/results.md must state 仅通过静态验证 or 动态验证通过")
 
-    if warnings:
-        print("WARNINGS:")
-        for warning in warnings:
-            print(f"  - {warning}")
     if errors:
         print("FAILED:")
         for error in errors:
