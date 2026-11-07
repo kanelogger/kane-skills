@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-14-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-15-green.svg)](skills/)
 
 > Languages: [English README](README.md) | [中文 README](README-CN.md)
 
@@ -20,9 +20,9 @@ This repository is a public, self-contained skill library. Each package is inspe
 
 ## Skills
 
-The 14 skills are organized by primary use under `skills/<category>/<skill-name>/`. To use a skill separately, copy or install its package directory containing `SKILL.md`.
+The 15 skills are organized by primary use under `skills/<category>/<skill-name>/`. To use a skill separately, copy or install its package directory containing `SKILL.md`.
 
-### Content analysis and writing (8)
+### Content analysis and writing (9)
 
 | Skill | Use When | Output | Docs |
 | ----- | -------- | ------ | ---- |
@@ -32,6 +32,7 @@ The 14 skills are organized by primary use under `skills/<category>/<skill-name>
 | [`document-clarifier`](skills/writing/document-clarifier/SKILL.md) | Revise completed prose for clarity while preserving facts and established domain terms. | Clearer text or a file copy that preserves the original. | [SKILL](skills/writing/document-clarifier/SKILL.md) |
 | [`douban-dice-review`](skills/writing/douban-dice-review/SKILL.md) | Write a compact Douban-style film review with six theory dice. | Dice summary plus six-sentence review. | [SKILL](skills/writing/douban-dice-review/SKILL.md) |
 | [`kane-translate`](skills/writing/kane-translate/SKILL.md) | Translate articles and documents with analysis first and optional review and polishing. | A translation tailored to the target language, audience, style, and optional glossary. | [SKILL](skills/writing/kane-translate/SKILL.md) |
+| [`kane-youtube-transcript`](skills/writing/kane-youtube-transcript/SKILL.md) | Fetch existing YouTube captions by video URL or ID, with language and caption-type selection. | A new folder with metadata, raw JSON3, and Markdown/SRT/VTT/text/JSON export. | [SKILL](skills/writing/kane-youtube-transcript/SKILL.md) |
 | [`merge-drafts`](skills/writing/merge-drafts/SKILL.md) | Merge several drafts into one polished article. | Final merged article plus merge report. | [SKILL](skills/writing/merge-drafts/SKILL.md) |
 | [`subtext-article`](skills/writing/subtext-article/SKILL.md) | Convert subtitles, ASR outputs, or transcripts into a faithful Chinese article. | A folder with the source copy, readable transcript, and same-named Markdown article. | [SKILL](skills/writing/subtext-article/SKILL.md) |
 

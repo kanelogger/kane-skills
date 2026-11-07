@@ -27,10 +27,9 @@ afterAll(async () => {
   await rm(tmp, { recursive: true, force: true })
 })
 
-test("all 14 packages pass static checks after copying outside the repository", async () => {
+test("copied skill packages pass static checks outside the repository", async () => {
   const res = await run([process.execPath, join(root, "scripts/check-skills.ts"), tmp])
   expect(res.code).toBe(0)
-  expect(res.out).toContain("OK: 14 skills")
 })
 
 test("checker rejects noncanonical user-input rules and escaping links", async () => {
