@@ -51,6 +51,4 @@ bun test '<skill-dir>/scripts/tests'
 
 测试使用本地生成的图片，覆盖原图与旧产物保护、透明度、EXIF 方向、递归边界、输出冲突、动图和多页拒绝、部分失败清理以及真实体积统计。
 
-## 参考
-
-压缩格式、质量选项与批处理流程参考 [baoyu-compress-image](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-compress-image)。本技能采用统一的 [Sharp](https://sharp.pixelplumbing.com/) 后端，不依赖系统上的 `sips`、`cwebp` 或 ImageMagick，并改为始终保留原图、拒绝覆盖旧产物。
+本技能采用统一的 [Sharp](https://sharp.pixelplumbing.com/) 后端，不依赖系统上的 `sips`、`cwebp` 或 ImageMagick，并改为始终保留原图、拒绝覆盖旧产物。

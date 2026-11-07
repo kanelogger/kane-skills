@@ -2,8 +2,8 @@ import { afterAll, beforeAll, expect, test } from "bun:test"
 import { chmod, cp, mkdtemp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
-import { parseJson3, renderTranscript, selectTrack } from "../skills/writing/kane-youtube-transcript/scripts/transcript.ts"
-import type { Track, Video } from "../skills/writing/kane-youtube-transcript/scripts/types.ts"
+import { parseJson3, renderTranscript, selectTrack } from "../skills/assets/kane-youtube-transcript/scripts/transcript.ts"
+import type { Track, Video } from "../skills/assets/kane-youtube-transcript/scripts/types.ts"
 
 const video: Video = {
   id: "abcdefghijk", title: "A [link](javascript:bad) <script>", channel: "Example",
@@ -29,7 +29,7 @@ beforeAll(async () => {
   tmp = await mkdtemp(join(tmpdir(), "kane youtube test-"))
   base = join(tmp, "standalone skill")
   bin = join(tmp, "bin")
-  await cp(join(import.meta.dir, "../skills/writing/kane-youtube-transcript"), base, { recursive: true })
+  await cp(join(import.meta.dir, "../skills/assets/kane-youtube-transcript"), base, { recursive: true })
   await mkdir(bin)
   for (const [name, code] of [
     ["yt-dlp", "process.stdout.write(process.env.CAPTION_META ?? '')"],

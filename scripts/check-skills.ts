@@ -2,7 +2,7 @@ import { readdir, readFile, realpath, stat } from "node:fs/promises"
 import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path"
 
 const root = await realpath(resolve(process.argv[2] ?? join(import.meta.dir, "..")))
-const cats = ["writing", "engineering", "explanation", "delivery"]
+const cats = ["reading", "creation", "editing", "assets", "planning", "engineering"]
 const legacy = new Set([
   "article-analyzer", "blog-checker", "concept-fable", "document-clarifier",
   "douban-dice-review", "merge-drafts", "subtext-article", "github-reuse-scout",
@@ -119,7 +119,7 @@ for (const cat of await readdir(join(root, "skills"), { withFileTypes: true })) 
       if (!file.endsWith(".md")) continue
       const text = prose(raw, file)
       await links(file, text, base, true)
-      if (/\/(references|knowledge|prompt)\//.test(file) && raw.trim().split("\n").length > 100) {
+      if (/(?:^|\/)(references|knowledge|prompt)\//.test(relative(base, file)) && raw.trim().split("\n").length > 100) {
         check(/^## (?:目录|Contents)$/m.test(text), file, "long reference needs a table of contents")
       }
       if (file === path || file.includes(`${sep}references${sep}`)) {

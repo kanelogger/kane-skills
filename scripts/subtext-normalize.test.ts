@@ -35,7 +35,7 @@ async function normalize(name: string, source: string, output?: string) {
 beforeAll(async () => {
   tmp = await mkdtemp(join(tmpdir(), "subtext normalize test-"))
   const copiedSkill = join(tmp, "copied skill")
-  await cp(join(root, "skills/writing/subtext-article"), copiedSkill, { recursive: true })
+  await cp(join(root, "skills/creation/subtext-article"), copiedSkill, { recursive: true })
   script = join(copiedSkill, "scripts/normalize_subtitle.py")
 })
 

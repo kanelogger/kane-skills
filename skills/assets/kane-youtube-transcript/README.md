@@ -25,5 +25,3 @@ bun '<skill-dir>/scripts/main.ts' '<youtube-url-or-id>' --format srt
 仅处理 YouTube 提供 JSON3 的字幕，仍受权限、地区、反机器人与限流限制。自动字幕可能识别错误，机器翻译不等于人工翻译。
 
 默认不读取浏览器 Cookie；仅明确授权后使用 `--cookies-from-browser`，临时凭据结束时删除、不进入产物。字幕下载仅 HTTPS，最多 5 次重定向，30 秒超时，拒绝非 JSON 响应。
-
-设计参考：[baoyu-youtube-transcript](https://github.com/JimLiu/baoyu-skills/tree/main/skills/baoyu-youtube-transcript)。

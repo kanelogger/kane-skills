@@ -5,6 +5,7 @@ import { join } from "node:path"
 
 const root = join(import.meta.dir, "..")
 let tmp = ""
+let fixtureRoot = ""
 
 async function run(args: string[], cwd = tmp, env: Record<string, string> = {}) {
   const proc = Bun.spawn(args, { cwd, stdout: "pipe", stderr: "pipe", env: { ...process.env, ...env, PYTHONDONTWRITEBYTECODE: "1" } })
@@ -17,14 +18,16 @@ function skill(path: string) {
 }
 
 beforeAll(async () => {
-  tmp = await mkdtemp(join(tmpdir(), "kane skills test-"))
+  fixtureRoot = await mkdtemp(join(tmpdir(), "kane skills test-"))
+  tmp = join(fixtureRoot, "knowledge", "copied repository")
+  await mkdir(tmp, { recursive: true })
   for (const file of ["skills", "docs", "README.md", "README-CN.md", "LICENSE"]) {
     await cp(join(root, file), join(tmp, file), { recursive: true, filter: path => !path.endsWith("node_modules") && !path.endsWith(".DS_Store") })
   }
 })
 
 afterAll(async () => {
-  await rm(tmp, { recursive: true, force: true })
+  await rm(fixtureRoot, { recursive: true, force: true })
 })
 
 test("copied skill packages pass static checks outside the repository", async () => {
@@ -32,8 +35,56 @@ test("copied skill packages pass static checks outside the repository", async ()
   expect(res.code).toBe(0)
 })
 
+test("checker rejects retired categories even when they contain no skills", async () => {
+  const retired = ["knowledge", "writing", "media", "explanation", "delivery", "other"]
+  try {
+    for (const cat of retired) await mkdir(skill(cat))
+    const res = await run([process.execPath, join(root, "scripts/check-skills.ts"), tmp])
+    expect(res.code).toBe(1)
+    for (const cat of retired) expect(res.err).toContain(`skills/${cat}: unknown category`)
+  } finally {
+    for (const cat of retired) await rm(skill(cat), { recursive: true, force: true })
+  }
+})
+
+test("skill entry documents do not inherit reference-only table-of-contents requirements from a knowledge ancestor", async () => {
+  for (const file of ["SKILL.md", "README.md"]) {
+    const path = skill(`reading/kane-explainer/${file}`)
+    const old = await readFile(path, "utf8")
+    try {
+      const text = old.replace(/^## (?:目录|Contents)$/gm, "## Overview")
+      const padding = Array(Math.max(0, 110 - text.trim().split("\n").length)).fill("Plain usage documentation.").join("\n")
+      await writeFile(path, `${text}\n${padding}`)
+      const res = await run([process.execPath, join(root, "scripts/check-skills.ts"), tmp])
+      expect(res.code).toBe(0)
+    } finally {
+      await writeFile(path, old)
+    }
+  }
+})
+
+test("long references inside skills still require a table of contents", async () => {
+  const dir = await mkdtemp(join(skill("reading/kane-explainer"), "reference-boundary-"))
+  try {
+    for (const folder of ["references", "knowledge"]) {
+      await mkdir(join(dir, folder))
+      const path = join(dir, folder, "long.md")
+      const text = Array(110).fill("Reference documentation.").join("\n")
+      await writeFile(path, text)
+      const rejected = await run([process.execPath, join(root, "scripts/check-skills.ts"), tmp])
+      expect(rejected.code).toBe(1)
+      expect(rejected.err).toContain("long reference needs a table of contents")
+      await writeFile(path, `## Contents\n${text}`)
+      const accepted = await run([process.execPath, join(root, "scripts/check-skills.ts"), tmp])
+      expect(accepted.code).toBe(0)
+    }
+  } finally {
+    await rm(dir, { recursive: true, force: true })
+  }
+})
+
 test("checker rejects noncanonical user-input rules and escaping links", async () => {
-  const path = skill("writing/document-clarifier/SKILL.md")
+  const path = skill("editing/document-clarifier/SKILL.md")
   const old = await readFile(path, "utf8")
   try {
     await writeFile(path, old.replace("## User Input Tools", "## 用户输入工具") + "\n[bad](../../../README.md)\n")
@@ -51,7 +102,7 @@ test("GitHub downloads enforce HTTPS, redirect limits, timeout and JSON content 
 import importlib.util, subprocess
 from types import SimpleNamespace
 from unittest.mock import patch
-spec = importlib.util.spec_from_file_location("search", "${skill("engineering/github-reuse-scout/scripts/search_candidates.py")}")
+spec = importlib.util.spec_from_file_location("search", "${skill("planning/github-reuse-scout/scripts/search_candidates.py")}")
 m = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(m)
 with patch.dict(m.os.environ, {"GITHUB_TOKEN": "fixture-only"}):
@@ -78,7 +129,7 @@ test("GitHub cache merges, scoring and explicit filtered inspections work offlin
   await mkdir(reuse, { recursive: true })
   const repo = (name: string, archived = false) => ({ full_name: name, html_url: `https://github.com/${name}`, license: "MIT", stargazers_count: 100, pushed_at: new Date().toISOString(), language: "TypeScript", archived, size: 100 })
   await writeFile(join(reuse, "search-cache.json"), JSON.stringify({ fixture: { items: [repo("owner/first"), repo("owner/selected"), repo("owner/archived", true)] } }))
-  const base = skill("engineering/github-reuse-scout/scripts")
+  const base = skill("planning/github-reuse-scout/scripts")
   expect((await run(["python3", join(base, "search_candidates.py"), "--query", "fixture", "--workdir", dir, "--sleep", "0"])).code).toBe(0)
   expect((await run(["python3", join(base, "score_candidates.py"), "--workdir", dir, "--language", "TypeScript"])).code).toBe(0)
   const scored = JSON.parse(await readFile(join(reuse, "scored.json"), "utf8"))
@@ -99,7 +150,7 @@ test("GitHub inspection rejects unsafe transports, traversal and symlink evidenc
 import importlib.util, subprocess, tempfile
 from pathlib import Path
 from unittest.mock import patch
-spec = importlib.util.spec_from_file_location("inspect", "${skill("engineering/github-reuse-scout/scripts/inspect_candidates.py")}")
+spec = importlib.util.spec_from_file_location("inspect", "${skill("planning/github-reuse-scout/scripts/inspect_candidates.py")}")
 m = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(m)
 with tempfile.TemporaryDirectory() as tmp:
@@ -122,12 +173,12 @@ with tempfile.TemporaryDirectory() as tmp:
   const dir = join(tmp, "unsafe-repo")
   await mkdir(join(dir, ".reuse"), { recursive: true })
   await writeFile(join(dir, ".reuse/scored.json"), JSON.stringify({ scored: [{ full_name: "../../escape", html_url: "https://github.com/o/r" }] }))
-  expect((await run(["python3", skill("engineering/github-reuse-scout/scripts/inspect_candidates.py"), "--workdir", dir])).code).toBe(1)
+  expect((await run(["python3", skill("planning/github-reuse-scout/scripts/inspect_candidates.py"), "--workdir", dir])).code).toBe(1)
 })
 
 test("GitHub missing-input paths fail cleanly rather than raising NameError", async () => {
   for (const name of ["score_candidates.py", "inspect_candidates.py"]) {
-    const res = await run(["python3", skill(`engineering/github-reuse-scout/scripts/${name}`), "--workdir", join(tmp, "missing")])
+    const res = await run(["python3", skill(`planning/github-reuse-scout/scripts/${name}`), "--workdir", join(tmp, "missing")])
     expect(res.code).toBe(1)
     expect(res.err).not.toContain("Traceback")
     expect(res.err).toContain("未找到")
@@ -163,7 +214,7 @@ test("subtitle packaging works independently and refuses to overwrite a prior pa
   const source = join(tmp, "subtitles.srt")
   const raw = "1\n00:00:00,000 --> 00:00:01,000\n这是第一句。\n\n2\n00:00:01,000 --> 00:00:02,000\n这是第二句。\n"
   await writeFile(source, raw)
-  const script = skill("writing/subtext-article/scripts/prepare_article_package.py")
+  const script = skill("creation/subtext-article/scripts/prepare_article_package.py")
   expect((await run(["python3", script, source])).code).toBe(0)
   const output = join(tmp, "subtitles_article")
   const normalized = await readFile(join(output, "01-normalized.txt"), "utf8")
@@ -180,7 +231,7 @@ test("subtitle packaging works independently and refuses to overwrite a prior pa
 })
 
 test("subtitle packages keep source-named final articles separate from source copies", async () => {
-  const script = skill("writing/subtext-article/scripts/prepare_article_package.py")
+  const script = skill("creation/subtext-article/scripts/prepare_article_package.py")
   for (const [name, copy] of [["访谈.zh.srt", "00-source.srt"], ["原稿.md", "00-source.md"], ["无扩展名", "00-source.txt"], ["00-source.md", "work-00-source.md"], ["00-source.MD", "work-00-source.MD"]]) {
     const dir = await mkdtemp(join(tmp, "subtitle-package-names-"))
     const source = join(dir, name)
@@ -217,7 +268,7 @@ def copy_then_change(source, destination):
     return result
 package.shutil.copy2 = copy_then_change
 print(package.prepare_package(Path(sys.argv[2]), Path(sys.argv[3])))
-`, skill("writing/subtext-article/scripts"), source, output, changed])
+`, skill("creation/subtext-article/scripts"), source, output, changed])
   expect(res.code).toBe(0)
   expect(await readFile(source, "utf8")).toBe(changed)
   expect(await readFile(join(output, "00-source.txt"), "utf8")).toBe(original)
@@ -227,7 +278,7 @@ print(package.prepare_package(Path(sys.argv[2]), Path(sys.argv[3])))
 })
 
 test("subtitle packaging preserves failed normalization evidence and requires a new directory to retry", async () => {
-  const script = skill("writing/subtext-article/scripts/prepare_article_package.py")
+  const script = skill("creation/subtext-article/scripts/prepare_article_package.py")
   const fixtures = [
     { name: "invalid.txt", raw: Buffer.from([0xff]) },
     { name: "empty.txt", raw: Buffer.alloc(0) },
@@ -270,7 +321,7 @@ test("subtitle packaging preserves failed normalization evidence and requires a 
 })
 
 test("dice script produces exactly six valid faces plus a matching summary", async () => {
-  const res = await run([process.execPath, skill("writing/douban-dice-review/scripts/roll_dice.js")])
+  const res = await run([process.execPath, skill("creation/douban-dice-review/scripts/roll_dice.js")])
   expect(res.code).toBe(0)
   const lines = res.out.trim().split("\n")
   expect(lines).toHaveLength(7)
