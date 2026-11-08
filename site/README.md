@@ -9,3 +9,5 @@ GitHub Pages 使用 GitHub Actions 作为发布来源。合并到 `main` 后，�
 这是 GitHub 开源项目的落地页。访客应能从首页找到合适的技能，从详情了解用途与交付物，查看 GitHub 源码，并复制对应的单技能安装命令。安装命令按技能名生成，使用 Skills CLI 安装整个技能目录。
 
 发布前以 [Awwwards](https://www.awwwards.com/mobile-excellence-guidelines.pdf)、[The Webby Awards](https://www.webbyawards.com/judging-criteria/) 和 [The FWA](https://thefwa.com/submit) 的获奖作品与公开标准为品质目标。反复用桌面和手机检查视觉设计、导航、内容、性能和交互，实际验证从查找到复制、安装的流程。
+
+标题使用自托管的 Source Serif 4 拉丁子集和 Noto Serif SC 中文标题子集，均按 SIL OFL 1.1 分发。字体和许可证位于 `site/fonts/`。新标题包含子集之外的汉字时会使用系统衬线字体，可按需从上游更新子集。
