@@ -76,7 +76,7 @@ The 21 skills are organized into 7 categories under `skills/<category>/<skill-na
 | [`simplify-codebase`](skills/engineering/simplify-codebase/SKILL.md) | Audit or simplify codebases by removing accidental complexity with reachability and contract evidence. | Ranked proof records, or a validated simplification with an operation receipt. | [SKILL](skills/engineering/simplify-codebase/SKILL.md) |
 | [`git-commit-push`](skills/engineering/git-commit-push/SKILL.md) | Stage only the current task's changes, create a Conventional Commit, and push only when requested. | Verified commit and optional push result with unrelated changes preserved. | [SKILL](skills/engineering/git-commit-push/SKILL.md) |
 | [`kane-task-retro`](skills/engineering/kane-task-retro/SKILL.md) | Retrospect on a single task or Agent collaboration using delivery evidence. | A short retrospective with up to one next action and a way to verify it. | [SKILL](skills/engineering/kane-task-retro/SKILL.md) |
-| [`kane-task-cleanup`](skills/engineering/kane-task-cleanup/SKILL.md) | Invoke explicitly at task or session closeout to choose a scope, confirm file cleanup, and separately confirm which background tasks to stop. | Cleanup summary with retained deliverables, skipped items, and verified background task shutdowns. | [SKILL](skills/engineering/kane-task-cleanup/SKILL.md) |
+| [`kane-task-cleanup`](skills/engineering/kane-task-cleanup/SKILL.md) | Invoke explicitly at closeout to delete verified temporary files and obsolete artifacts within the selected scope. | Verified deletions, retained deliverables, skipped items, and any authorized background task shutdowns. | [SKILL](skills/engineering/kane-task-cleanup/SKILL.md) |
 
 ## License
 
