@@ -1,9 +1,10 @@
-const search = document.querySelector<HTMLElement>("[data-search]")
+const search = document.querySelector<HTMLFormElement>("[data-search]")
 const input = document.querySelector<HTMLInputElement>("#query")
 const count = document.querySelector<HTMLElement>("[data-count]")
 const empty = document.querySelector<HTMLElement>("[data-empty]")
+const catalog = document.getElementById("catalog")
 
-if (search && input && count && empty) {
+if (search && input && count && empty && catalog) {
   const groups = [...document.querySelectorAll<HTMLElement>("[data-group]")].map(group => ({
     group,
     link: document.querySelector<HTMLAnchorElement>('[data-category-link] a[href="#' + group.id + '"]'),
@@ -36,22 +37,56 @@ if (search && input && count && empty) {
     empty.hidden = total !== 0
   }
 
+  const query = new URL(location.href).searchParams.get("q")
+  if (query !== null) input.value = query
+  const saveSearch = () => {
+    const url = new URL(location.href)
+    const value = input.value.trim()
+    if (value) url.searchParams.set("q", value)
+    else url.searchParams.delete("q")
+    url.hash = catalog.id
+    history.replaceState(null, "", url)
+  }
   input.addEventListener("input", filter)
+  search.addEventListener("submit", event => {
+    event.preventDefault()
+    saveSearch()
+    filter()
+    catalog.scrollIntoView()
+    catalog.focus({ preventScroll: true })
+  })
   window.addEventListener("pageshow", filter)
   empty.querySelector("button")?.addEventListener("click", () => {
     input.value = ""
+    saveSearch()
     filter()
     input.focus()
   })
-  for (const link of document.querySelectorAll("[data-shelf-link]")) {
-    link.addEventListener("click", () => {
-      if (!input.value) return
-      input.value = ""
-      filter()
+  const editSearch = document.querySelector<HTMLAnchorElement>("[data-edit-search]")
+  if (editSearch) {
+    editSearch.hidden = false
+    editSearch.addEventListener("click", event => {
+      event.preventDefault()
+      input.focus()
     })
   }
+  const fallback = document.querySelector<HTMLElement>("[data-search-fallback]")
+  if (fallback) fallback.hidden = true
   search.hidden = false
   filter()
+}
+
+const picker = document.querySelector<HTMLFieldSetElement>("[data-specimen-picker]")
+if (picker) {
+  const panels = [...document.querySelectorAll<HTMLElement>("[data-specimen]")]
+  const select = () => {
+    const value = picker.querySelector<HTMLInputElement>("input:checked")?.value
+    for (const panel of panels) panel.hidden = panel.dataset.specimen !== value
+  }
+  picker.addEventListener("change", select)
+  window.addEventListener("pageshow", select)
+  picker.hidden = false
+  select()
 }
 
 if (navigator.clipboard?.writeText) {

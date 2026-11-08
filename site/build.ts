@@ -1,6 +1,8 @@
 import { copyFile, mkdir, rm } from "node:fs/promises"
 import { join, posix } from "node:path"
 import { examples } from "./examples"
+import { preparation } from "./preparation"
+import { specimens } from "./specimens"
 
 const root = join(import.meta.dir, "..")
 const out = join(import.meta.dir, "dist")
@@ -9,15 +11,6 @@ const repo = "https://github.com/" + repoSlug
 const installer = "https://github.com/vercel-labs/skills#install-a-skill"
 const langs = ["zh", "en"] as const
 type Lang = typeof langs[number]
-const shortCategoryNames: Record<string, string> = {
-  reading: "Read",
-  creation: "Write",
-  editing: "Edit",
-  assets: "Get assets",
-  publishing: "Publish",
-  planning: "Plan",
-  engineering: "Build & ship",
-}
 type Skill = {
   id: string
   cat: string
@@ -25,6 +18,7 @@ type Skill = {
   use: string
   output: string
   prompt: string
+  preparation: string
   path: string
   number: string
 }
@@ -32,40 +26,42 @@ type Skill = {
 const ui = {
   zh: {
     locale: "zh-CN", switch: "English", skip: "跳到正文", index: "技能目录", start: "如何使用",
-    tagline: "给 Agent 一套趁手的工具。",
-    intro: "Kane 的开源 Agent 技能库。从解读长文到交付代码，按任务选一个技能，装到你的 Agent 里。",
-    cta: "浏览技能", source: "GitHub 仓库", readme: "项目说明", license: "MIT 许可",
+    tagline: "装一个技能，交付一件事。",
+    intro: "Kane 的开源 Agent 技能库。按任务选一份可独立安装的工作流程，从原始材料做到可核对的交付物。",
+    cta: "查找技能", source: "GitHub 仓库", readme: "项目说明", license: "MIT 许可",
     count: (n: number, c: number) => n + " 项技能 · " + c + " 个分类",
     catalogText: "按任务找技能，也可以直接搜索名称、用途或交付物。",
-    category: "技能分类", quickIndex: "按分类跳转", search: "搜索技能", placeholder: "试试「字幕」或「Markdown」", clear: "清空搜索",
+    category: "技能分类", search: "搜索技能", editSearch: "修改搜索", placeholder: "字幕、Markdown…", clear: "清空搜索",
     total: (n: number | string) => "共 " + n + " 项技能", empty: "没有匹配的技能。换个关键词，或清空搜索查看全部技能。",
     steps: [
-      ["找到合适的技能", "先看技能页的适用场景和交付物，再到 GitHub 确认所需工具与使用限制。"],
+      ["找到合适的技能", "先看适用场景、交付物和运行前准备，再按需打开 GitHub 核对文档。"],
       ["安装到你的 Agent", "在项目目录运行技能页上的命令，选择要使用的 Agent。也可从 GitHub 复制整个技能目录。"],
       ["在对话中调用", "告诉 Agent 要用哪个技能，给出这次任务的材料、目标和交付要求。"],
     ],
     install: "安装技能", copyCommand: "复制命令", requirements: "安装器说明",
     installHelp: "在项目目录运行命令。若安装器询问目标，选择你使用的 Agent。需要 Node.js 22.20 或更新版本。",
+    specimens: "看看技能会交付什么", input: "输入", sample: "产物节选", demo: "示例材料", inspect: "查看技能", prepare: "运行前准备",
     use: "适用场景", output: "交付物", example: "试着这样问", copy: "复制示例", copied: "已复制",
     copyFail: "请选中文本手动复制。", package: "技能文件", guide: "使用说明", spec: "执行指令",
     path: "仓库路径", related: "同类技能", back: "返回技能目录",
   },
   en: {
     locale: "en", switch: "简体中文", skip: "Skip to content", index: "Skill catalog", start: "How to use",
-    tagline: "A toolbox for your Agent.",
-    intro: "Kane’s open-source skill library, from reading long-form work to shipping code. Pick a skill for the task and install it in your Agent.",
-    cta: "Browse skills", source: "GitHub repository", readme: "Project README", license: "MIT license",
+    tagline: "Pick a skill for the job.",
+    intro: "Kane’s open-source workflows for your agent. Install one at a time and turn a source into something you can inspect and use.",
+    cta: "Find a skill", source: "GitHub repository", readme: "Project README", license: "MIT license",
     count: (n: number, c: number) => n + " skills · " + c + " categories",
     catalogText: "Browse by task or search by name, use case, or deliverable.",
-    category: "Skill categories", quickIndex: "Jump to a category", search: "Search skills", placeholder: "Try “captions” or “Markdown”", clear: "Clear search",
+    category: "Skill categories", search: "Search skills", editSearch: "Edit search", placeholder: "Captions, Markdown…", clear: "Clear search",
     total: (n: number | string) => n + (n === 1 ? " skill" : " skills"), empty: "No skills match. Try another keyword or clear the search to see all skills.",
     steps: [
-      ["Find a skill for the task", "Check the use case and deliverable on the skill page. See GitHub for requirements and limitations."],
+      ["Find a skill for the task", "Check the use case, deliverable, and prerequisites on the skill page. GitHub has the full documentation."],
       ["Install it in your Agent", "Run the command from the skill page in your project directory and choose your Agent. You can also copy the whole skill directory from GitHub."],
       ["Invoke it in your conversation", "Name the skill and give your Agent the input, goal, and deliverable you need."],
     ],
     install: "Install skill", copyCommand: "Copy command", requirements: "Installer documentation",
     installHelp: "Run this in your project directory. Choose your Agent if prompted. Requires Node.js 22.20 or later.",
+    specimens: "From input to deliverable", input: "Input", sample: "Output excerpt", demo: "Sample material", inspect: "View skill", prepare: "What you’ll need",
     use: "When to use it", output: "What you get", example: "Try this prompt", copy: "Copy prompt", copied: "Copied",
     copyFail: "Select the text to copy it manually.", package: "Skill files", guide: "User guide", spec: "Agent instructions",
     path: "Repository path", related: "More in this category", back: "Back to the catalog",
@@ -86,13 +82,15 @@ async function readCatalog(lang: Lang) {
     if (!row) continue
     const [, id, path, cat, use, output] = row
     const example = examples[id]
-    if (!example || !groups.has(cat) || path !== "skills/" + cat + "/" + id + "/SKILL.md") {
+    const prep = preparation[id]
+    if (!example || !prep || !groups.has(cat) || path !== "skills/" + cat + "/" + id + "/SKILL.md") {
       throw new Error(file + ": invalid catalog entry for " + id)
     }
     skills.push({
       id, cat, path, use, output,
       title: example[lang === "zh" ? 0 : 1],
       prompt: example[lang === "zh" ? 2 : 3],
+      preparation: prep[lang === "zh" ? 0 : 1],
       number: String(skills.length + 1).padStart(2, "0"),
     })
   }
@@ -178,6 +176,34 @@ function row(from: string, lang: Lang, skill: Skill) {
     '<span class="entry-desc">' + inline(skill.use) + '</span><span class="entry-arrow">' + arrow + '</span></a></li>'
 }
 
+function specimen(lang: Lang, item: typeof specimens[number]) {
+  const t = ui[lang]
+  const file = (label: string, name: string, body: string, role: string) =>
+    '<figure class="sample-file ' + role + '"><figcaption><span>' + label + '</span><code>' + escape(name) +
+    '</code></figcaption><pre><code>' + escape(body) + '</code></pre></figure>'
+  return '<div class="sample-pair">' + file(t.input, item.inputName, item.input, "sample-input") +
+    file(t.sample, item.outputName, item.output, "sample-output") + '</div><p class="sample-caption">' +
+    escape(item.captions[lang === "zh" ? 0 : 1]) + '</p>'
+}
+
+function workbench(lang: Lang, from: string) {
+  const t = ui[lang]
+  const controls = specimens.map((item, i) =>
+    '<label class="sample-option"><input type="radio" name="specimen" value="' + item.id + '"' +
+    (i === 0 ? ' checked' : '') + '><span>' + escape(item.labels[lang === "zh" ? 0 : 1]) + '</span></label>'
+  ).join("")
+  const panels = specimens.map((item, i) => {
+    const skill = catalog[lang].skills.find(skill => skill.id === item.id)
+    if (!skill) throw new Error("Missing specimen skill " + item.id)
+    return '<div data-specimen="' + item.id + '"' + (i ? ' hidden' : '') + '>' + specimen(lang, item) +
+      '<a class="sample-link" href="' + local(from, route(lang, item.id)) + '">' + t.inspect + '<span class="sr-only"> ' +
+      escape(skill.title) + '</span> ' + arrow + '</a></div>'
+  }).join("")
+  return '<section class="workbench" aria-labelledby="specimen-heading"><div class="workbench-heading"><h2 id="specimen-heading">' +
+    t.specimens + '</h2><span>' + t.demo + '</span></div><fieldset class="sample-picker" data-specimen-picker hidden>' +
+    '<legend class="sr-only">' + t.specimens + '</legend>' + controls + '</fieldset>' + panels + '</section>'
+}
+
 function homePage(lang: Lang) {
   const t = ui[lang]
   const { groups, skills } = catalog[lang]
@@ -192,18 +218,6 @@ function homePage(lang: Lang) {
     size + '</span></a></li>'
   ).join("\n")
 
-  const shelf = '<nav class="shelf" aria-label="' + t.quickIndex + '">' +
-    '<svg class="shelf-etching" aria-hidden="true" viewBox="0 0 380 400" fill="none"><defs><pattern id="shelf-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(32)"><path d="M0 0v6" stroke="currentColor" stroke-width=".8"/></pattern></defs>' +
-    '<path d="M31 374V211Q31 84 190 21q159 63 159 190v163Z M58 349V212q0-109 132-162 132 53 132 162v137Z" fill="url(#shelf-hatch)" fill-rule="evenodd" stroke="currentColor"/>' +
-    '<path d="M14 374h352v13H14z M190 3v396 M2 213h376 M83 348V218q0-97 107-141 107 44 107 141v130 M59 314h262 M59 278h262" stroke="currentColor"/>' +
-    '<circle cx="190" cy="213" r="122" stroke="currentColor" stroke-dasharray="1 6"/></svg>' +
-    '<div class="shelf-heading"><img src="' + local(from, "") + 'armory.svg" width="49" height="49" alt="">' +
-    '<span>' + t.category + '</span><span class="shelf-edition" aria-hidden="true">01–' + String(groups.size).padStart(2, "0") + '</span></div><ol>' +
-    groupsWithCount.map(({ id, title, index, size }) => '<li><a href="#' + id + '" data-shelf-link><span class="shelf-no" aria-hidden="true">' +
-      index + '</span><span>' + escape(lang === "en" ? shortCategoryNames[id] ?? title : title) +
-      '</span><span class="shelf-size" aria-hidden="true">' + size + '</span>' + arrow + '</a></li>').join("") +
-    '</ol></nav>'
-
   const sections = groupsWithCount.map(({ id, title, index }) =>
     '<section class="group" data-group id="' + id + '" tabindex="-1"><div class="group-heading">' +
     '<h3><span aria-hidden="true">' + index + '</span>' + escape(title) + '</h3><span class="group-id" aria-hidden="true">' + id + '</span></div><ul>' +
@@ -213,14 +227,16 @@ function homePage(lang: Lang) {
   return frame(lang,
     '<main id="main" tabindex="-1">\n' +
     '<section class="hero"><div class="shell hero-inner"><div class="hero-copy">' +
-    '<h1>Kane Skills<span>.</span></h1><p class="tagline">' + t.tagline + '</p><p class="intro">' + t.intro + '</p><div class="hero-actions">' +
-    '<a class="button primary" href="#catalog">' + t.cta + ' ' + arrow + '</a>' +
+    '<h1>Kane Skills<span>.</span></h1><p class="tagline">' + t.tagline + '</p><p class="intro">' + t.intro + '</p>' +
+    '<form class="search" role="search" id="find" data-search hidden><label class="sr-only" for="query">' + t.search + '</label>' +
+    '<div>' + searchIcon + '<input id="query" name="q" type="search" autocomplete="off" placeholder="' + t.placeholder + '"></div>' +
+    '<button class="button primary" type="submit">' + t.cta + '</button></form><div class="hero-actions">' +
+    '<a class="button primary" href="#catalog" data-search-fallback>' + t.cta + ' ' + arrow + '</a>' +
     '<a class="hero-source" href="' + repo + '">' + t.source + ' ' + external + '</a></div></div>' +
-    shelf + '<p class="hero-meta">' + t.count(skills.length, groups.size) +
+    workbench(lang, from) + '<p class="hero-meta">' + t.count(skills.length, groups.size) +
     '<span aria-hidden="true"> / </span><a href="' + repo + '/blob/main/LICENSE">MIT</a></p></div></section>\n' +
-    '<section class="shell catalog" id="catalog"><div class="section-heading"><div><h2>' + t.index + '</h2><p>' + t.catalogText + '</p></div>' +
-    '<div class="search" data-search hidden><label class="sr-only" for="query">' + t.search + '</label>' + searchIcon +
-    '<input id="query" type="search" autocomplete="off" placeholder="' + t.placeholder + '"></div></div>' +
+    '<section class="shell catalog" id="catalog" aria-labelledby="catalog-title" tabindex="-1"><div class="section-heading"><div><h2 id="catalog-title">' + t.index + '</h2><p>' + t.catalogText +
+    '</p></div><a class="text-link" href="#find" data-edit-search hidden>' + t.editSearch + '</a></div>' +
     '<div class="catalog-layout"><nav class="categories" aria-label="' + t.category + '"><p>' + t.category +
     '</p><ul>' + categories + '</ul></nav><div class="catalog-content"><p class="result-count" role="status" data-count data-template="' +
     t.total("{n}") + '" data-single="' + t.total(1) + '">' + t.total(skills.length) + '</p>' +
@@ -240,10 +256,11 @@ async function detailPage(lang: Lang, skill: Skill) {
   const source = repo + "/blob/main/" + dir
   const guide = await Bun.file(join(root, dir, "README.md")).exists()
   const related = skills.filter(item => item.cat === skill.cat && item.id !== skill.id)
+  const sample = specimens.find(item => item.id === skill.id)
   const command = "npx skills add " + repoSlug
   const install = '<section class="install" aria-labelledby="install-title"><div class="install-heading"><h2 id="install-title">' + t.install +
-    '</h2>' + copyButton(lang, "install-command", t.copyCommand) + '</div>' +
-    '<pre><code id="install-command">' + escape(command) + ' <span>--skill ' + escape(skill.id) + '</span></code></pre><p>' + t.installHelp + ' <a href="' + installer + '">' +
+    '</h2>' + copyButton(lang, "install-command", t.copyCommand) + '</div><div class="install-prereq"><h3>' + t.prepare +
+    '</h3><p>' + escape(skill.preparation) + '</p></div><pre><code id="install-command">' + escape(command) + ' <span>--skill ' + escape(skill.id) + '</span></code></pre><p>' + t.installHelp + ' <a href="' + installer + '">' +
     t.requirements + '</a></p><p class="copy-feedback" role="status" data-feedback="install-command"></p></section>'
 
   return frame(lang,
@@ -254,8 +271,10 @@ async function detailPage(lang: Lang, skill: Skill) {
     '</code></p></div><span class="record-number" aria-hidden="true">' + skill.number + '</span></header>\n' +
     '<div class="detail-intro"><section class="skill-summary"><h2>' + t.use + '</h2><p>' + inline(skill.use) +
     '</p><h2>' + t.output + '</h2><p>' + inline(skill.output) + '</p></section>' + install + '</div>' +
-    '<div class="detail-layout"><section class="prompt"><div class="prompt-heading"><h2>' + t.example + '</h2>' + copyButton(lang, "example", t.copy) +
-    '</div><blockquote id="example">' + escape(skill.prompt) + '</blockquote><p class="copy-feedback" role="status" data-feedback="example"></p></section>' +
+    '<div class="detail-layout"><div class="detail-notes">' +
+    (sample ? '<section class="detail-specimen"><h2>' + t.sample + '</h2>' + specimen(lang, sample) + '</section>' : '') +
+    '<section class="prompt"><div class="prompt-heading"><h2>' + t.example + '</h2>' + copyButton(lang, "example", t.copy) +
+    '</div><blockquote id="example">' + escape(skill.prompt) + '</blockquote><p class="copy-feedback" role="status" data-feedback="example"></p></section></div>' +
     '<aside class="files"><h2>' + t.package + '</h2><ul>' +
     (guide ? '<li><a href="' + source + 'README.md"><span>' + t.guide + '<small>README.md</small></span>' + external + '</a></li>' : "") +
     '<li><a href="' + source + 'SKILL.md"><span>' + t.spec + '<small>SKILL.md</small></span>' + external + '</a></li></ul>' +
