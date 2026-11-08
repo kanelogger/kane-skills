@@ -4,8 +4,8 @@
 
 ## 目录与加载
 
-- 正式技能位于 `skills/<分类>/<技能名>/`，分类为 `reading/`（阅读与解读）、`creation/`（创作与成文）、`editing/`（文稿加工与审校）、`assets/`（素材获取与处理）、`planning/`（需求探索与选型）、`engineering/`（开发维护与交付）。
-- 每个技能按用户眼前的主要任务唯一归类，而非按输入来源分类。原料成文归 `creation`；已有稿件的修改、翻译、合稿、评审归 `editing`。
+- 正式技能位于 `skills/<分类>/<技能名>/`，分类为 `reading/`（阅读与解读）、`creation/`（创作与成文）、`editing/`（文稿加工与审校）、`assets/`（素材获取与处理）、`publishing/`（内容发布）、`planning/`（需求探索与选型）、`engineering/`（开发维护与交付）。
+- 每个技能按用户眼前的主要任务唯一归类，而非按输入来源分类。原料成文归 `creation`；已有稿件的修改、翻译、合稿、评审归 `editing`；面向内容平台的排版、存草稿和发表归 `publishing`。
 - 同名技能优先加载项目版本：项目 `skills/` → `$HOME/.kane-skills/` → 系统级。
 
 ## 技能维护

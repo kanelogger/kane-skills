@@ -21,7 +21,7 @@ beforeAll(async () => {
   fixtureRoot = await mkdtemp(join(tmpdir(), "kane skills test-"))
   tmp = join(fixtureRoot, "knowledge", "copied repository")
   await mkdir(tmp, { recursive: true })
-  for (const file of ["skills", "docs", "README.md", "README-CN.md", "LICENSE"]) {
+  for (const file of ["skills", "docs", "assets", "README.md", "README-CN.md", "LICENSE"]) {
     await cp(join(root, file), join(tmp, file), { recursive: true, filter: path => !path.endsWith("node_modules") && !path.endsWith(".DS_Store") })
   }
 })

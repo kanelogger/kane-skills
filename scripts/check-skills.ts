@@ -2,7 +2,7 @@ import { readdir, readFile, realpath, stat } from "node:fs/promises"
 import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path"
 
 const root = await realpath(resolve(process.argv[2] ?? join(import.meta.dir, "..")))
-const cats = ["reading", "creation", "editing", "assets", "planning", "engineering"]
+const cats = ["reading", "creation", "editing", "assets", "publishing", "planning", "engineering"]
 const legacy = new Set([
   "article-analyzer", "blog-checker", "concept-fable", "document-clarifier",
   "douban-dice-review", "merge-drafts", "subtext-article", "github-reuse-scout",
@@ -151,7 +151,7 @@ for (const file of ["README.md", "README-CN.md"]) {
   await links(path, prose(text, path), root, false)
   check(text.includes(`Skills-${paths.length}-green.svg`), path, "skill badge count mismatch")
   check(new RegExp(`(?:The ${paths.length} skills|${paths.length} 个技能)`).test(text), path, "total count mismatch")
-  for (const cat of cats) check(new RegExp(`^### .+[（(]${counts.get(cat)}[）)]$`, "m").test(text), path, `category count missing: ${cat}`)
+  for (const cat of cats) check(new RegExp(`^### ${cat} .+[（(]${counts.get(cat)}[）)]$`, "m").test(text), path, `category count missing: ${cat}`)
   const rows = [...text.matchAll(/\[(`[^`]+`)\]\((skills\/[^)]+)\)/g)]
   check(rows.length === paths.length, path, "skill list count mismatch")
   for (const skill of paths) check(rows.some(row => row[2] === skill && row[1] === `\`${skill.split("/").at(-2)}\``), path, `name must link directly to ${skill}`)
