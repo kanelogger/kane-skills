@@ -9,6 +9,8 @@ Reusable Agent Skills created by Kane.
 
 This repository is a public, self-contained skill library. Each package is inspectable, copyable, and adaptable without depending on private project configuration.
 
+[Browse the skill catalog](https://kanelogger.github.io/kane-skills/en/)
+
 ---
 
 ## What this repo is
