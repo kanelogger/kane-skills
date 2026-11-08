@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-19-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-20-green.svg)](skills/)
 
 > Languages: [English README](README.md) | [中文 README](README-CN.md)
 
@@ -20,7 +20,7 @@ This repository is a public, self-contained skill library. Each package is inspe
 
 ## Skills
 
-The 19 skills are organized into 6 categories under `skills/<category>/<skill-name>/`. Each skill belongs to exactly one category based on the user's immediate primary task, not the input source. To use a skill separately, copy or install its package directory containing `SKILL.md`.
+The 20 skills are organized into 6 categories under `skills/<category>/<skill-name>/`. Each skill belongs to exactly one category based on the user's immediate primary task, not the input source. To use a skill separately, copy or install its package directory containing `SKILL.md`.
 
 ### reading — Reading and explanation (2)
 
@@ -62,7 +62,7 @@ The 19 skills are organized into 6 categories under `skills/<category>/<skill-na
 | [`requirement-explorer`](skills/planning/requirement-explorer/SKILL.md) | Turn raw business needs into a standard software requirements document. | Markdown requirements document with Mermaid flows and a completeness check. | [SKILL](skills/planning/requirement-explorer/SKILL.md) |
 | [`github-reuse-scout`](skills/planning/github-reuse-scout/SKILL.md) | Search GitHub for reusable open-source projects before building and decide whether to fork, reference, or build without reuse. | `.reuse/reuse-plan.md` reuse decision and migration ledger. | [SKILL](skills/planning/github-reuse-scout/SKILL.md) |
 
-### engineering — Development, maintenance, and delivery (4)
+### engineering — Development, maintenance, and delivery (5)
 
 | Skill | Use When | Output | Docs |
 | ----- | -------- | ------ | ---- |
@@ -70,6 +70,7 @@ The 19 skills are organized into 6 categories under `skills/<category>/<skill-na
 | [`simplify-codebase`](skills/engineering/simplify-codebase/SKILL.md) | Audit or simplify codebases by removing accidental complexity with reachability and contract evidence. | Ranked proof records, or a validated simplification with an operation receipt. | [SKILL](skills/engineering/simplify-codebase/SKILL.md) |
 | [`git-commit-push`](skills/engineering/git-commit-push/SKILL.md) | Stage only the current task's changes, create a Conventional Commit, and push only when requested. | Verified commit and optional push result with unrelated changes preserved. | [SKILL](skills/engineering/git-commit-push/SKILL.md) |
 | [`kane-task-retro`](skills/engineering/kane-task-retro/SKILL.md) | Retrospect on a single task or Agent collaboration using delivery evidence. | A short retrospective with up to one next action and a way to verify it. | [SKILL](skills/engineering/kane-task-retro/SKILL.md) |
+| [`kane-task-cleanup`](skills/engineering/kane-task-cleanup/SKILL.md) | Invoke explicitly at task or session closeout to choose a scope, confirm file cleanup, and separately confirm which background tasks to stop. | Cleanup summary with retained deliverables, skipped items, and verified background task shutdowns. | [SKILL](skills/engineering/kane-task-cleanup/SKILL.md) |
 
 ## License
 

@@ -1,7 +1,7 @@
 # Kane Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-19-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-20-green.svg)](skills/)
 
 > 语言版本: [English README](README.md) | [中文 README](README-CN.md)
 
@@ -21,7 +21,7 @@ Kane 创建的可复用智能体技能库。
 
 ## 技能列表
 
-19 个技能分为 6 个分类，放在 `skills/<分类>/<技能名>/` 下，每个技能按用户眼前的主要任务唯一归类，而非按输入来源分类。单独使用某个技能时，复制或安装包含 `SKILL.md` 的技能目录即可。
+20 个技能分为 6 个分类，放在 `skills/<分类>/<技能名>/` 下，每个技能按用户眼前的主要任务唯一归类，而非按输入来源分类。单独使用某个技能时，复制或安装包含 `SKILL.md` 的技能目录即可。
 
 ### reading · 阅读与解读（2）
 
@@ -63,7 +63,7 @@ Kane 创建的可复用智能体技能库。
 | [`requirement-explorer`](skills/planning/requirement-explorer/SKILL.md) | 将原始业务需求推进成标准软件需求文档。 | 含 Mermaid 流程图和完整性自检的 Markdown 需求文档。 | [SKILL](skills/planning/requirement-explorer/SKILL.md) |
 | [`github-reuse-scout`](skills/planning/github-reuse-scout/SKILL.md) | 开发前搜索可复用的开源项目，并基于证据判断复用、参考或放弃复用。 | `.reuse/reuse-plan.md` 复用决策与迁移台账。 | [SKILL](skills/planning/github-reuse-scout/SKILL.md) |
 
-### engineering · 开发维护与交付（4）
+### engineering · 开发维护与交付（5）
 
 | 技能 | 使用场景 | 输出 | 文档 |
 | ---- | -------- | ---- | ---- |
@@ -71,6 +71,7 @@ Kane 创建的可复用智能体技能库。
 | [`simplify-codebase`](skills/engineering/simplify-codebase/SKILL.md) | 以可达性、契约和验证证据审计或简化代码库，移除意外复杂度。 | 排序后的证明记录，或带操作回执的已验证简化结果。 | [SKILL](skills/engineering/simplify-codebase/SKILL.md) |
 | [`git-commit-push`](skills/engineering/git-commit-push/SKILL.md) | 只暂存当前任务改动，依据暂存区 diff 生成 Conventional Commit，仅在请求包含推送时推送。 | 已验证的提交及按需推送结果，同时保留无关改动。 | [SKILL](skills/engineering/git-commit-push/SKILL.md) |
 | [`kane-task-retro`](skills/engineering/kane-task-retro/SKILL.md) | 基于交付证据复盘一次任务或一次 Agent 协作。 | 一张简短复盘卡，最多一项建议动作及其验证方式。 | [SKILL](skills/engineering/kane-task-retro/SKILL.md) |
+| [`kane-task-cleanup`](skills/engineering/kane-task-cleanup/SKILL.md) | 显式调用后确定范围、确认文件清单，并单独确认要停止的后台任务。 | 清理摘要，列明保留、跳过及经核验的后台任务停止结果。 | [SKILL](skills/engineering/kane-task-cleanup/SKILL.md) |
 
 ## 许可
 
