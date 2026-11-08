@@ -3,6 +3,7 @@ name: blog-checker
 description: >
   审阅和评估中文技术博客文章的质量。当用户要求审阅、检查或评估技术文章、博客、技术写作时使用。
   不用于翻译、重写、创作新文章，也不用于非技术类内容（如小说、散文、营销文案）的评估。
+disable-model-invocation: true
 ---
 
 # 技术文章审阅技能

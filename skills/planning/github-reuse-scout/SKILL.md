@@ -8,6 +8,7 @@ description: >-
   需求、希望"先找开源现成方案""避免重复造轮子""站在已有项目上开发""先调研 GitHub 再动手"、
   或要求"渐进迁移到某框架"时。不用于仅查找某个依赖库或代码片段、通用开源项目调研报告、
   已有明确选型的技术方案设计、纯 prompt 优化、文章分析或需求文档撰写。
+disable-model-invocation: true
 ---
 
 # GitHub 复用侦察（GitHub Reuse Scout）

@@ -2,6 +2,8 @@
 
 用 B 站普通视频链接、`b23.tv` 短链、BV 号或 av 号导出已有字幕。默认取 P1，优先人工轨，导出带时间轴的 Markdown。
 
+在 Codex 中输入 `$kane-bilibili-transcript` 显式调用。
+
 ## 使用
 
 请 Agent 使用 `kane-bilibili-transcript`，或复制技能目录后用 Bun 运行。以下命令导出 P2 的 SRT。

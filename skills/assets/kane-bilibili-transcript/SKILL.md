@@ -1,6 +1,7 @@
 ---
 name: kane-bilibili-transcript
 description: 按 B 站视频链接、b23.tv 短链、BV 号或 av 号列出并下载指定分 P 的已有字幕。用于获取人工或自动字幕并导出 Markdown、SRT、VTT、TXT 或 JSON。
+disable-model-invocation: true
 ---
 
 # B 站字幕获取

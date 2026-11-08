@@ -1,6 +1,7 @@
 ---
 name: kane-compress-image
 description: 将本地静态图片压缩为 WebP、PNG 或 JPEG，支持单文件、目录批处理和递归处理。用于压缩图片、减小图片体积或转为 WebP；保留原图，报告实际压缩率，不用于裁剪、缩放或动图处理。
+disable-model-invocation: true
 ---
 
 # 图片压缩

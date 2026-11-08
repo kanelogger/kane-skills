@@ -2,6 +2,8 @@
 
 将本地静态图片压缩为 WebP、PNG 或 JPEG，支持单文件、目录批处理和递归处理。默认质量 80、WebP 输出，原图始终保留。
 
+在 Codex 中输入 `$kane-compress-image` 显式调用。
+
 ## 使用
 
 让 Agent 使用 `kane-compress-image`，并提供图片或目录路径。例如：「把这组图片压缩为 WebP，包含子目录，保留原图。」

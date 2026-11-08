@@ -1,6 +1,7 @@
 ---
 name: kane-translate
-description: 翻译文章、文档或网页；遇到翻译、本地化或译文审校需求时主动调用。
+description: 翻译文章、文档或网页，也支持本地化与译文审校。
+disable-model-invocation: true
 ---
 
 # 翻译器

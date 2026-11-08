@@ -1,6 +1,7 @@
 ---
 name: kane-url-to-markdown
 description: 优先使用现成网页读取工具获取完整 Markdown，动态页或登录页通过 ego-browser、browser-skill 等浏览器工具读取正文，再保存为带来源元数据的 md 文件。用于“链接转 md”“保存网页正文”“URL to Markdown”；不用于摘要、翻译、整站爬取、PDF 转换或音视频转写。
+disable-model-invocation: true
 ---
 
 # URL 获取 Markdown

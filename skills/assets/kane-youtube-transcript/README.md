@@ -1,6 +1,8 @@
 # kane-youtube-transcript
 
-显式调用 `kane-youtube-transcript`，提供一个 YouTube HTTPS 视频链接或 11 位 ID，获取已有字幕并导出 Markdown、SRT、VTT、TXT 或 JSON。不下载视频、不生成 ASR、不改写字幕。
+提供一个 YouTube HTTPS 视频链接或 11 位 ID，获取已有字幕并导出 Markdown、SRT、VTT、TXT 或 JSON。不下载视频、不生成 ASR、不改写字幕。
+
+在 Codex 中输入 `$kane-youtube-transcript` 显式调用。
 
 ## 使用
 

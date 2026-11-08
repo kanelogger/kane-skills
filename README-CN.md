@@ -1,7 +1,7 @@
 # ![Kane Skills](assets/brand/kane-skills-armory-logo.svg)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-23-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-24-green.svg)](skills/)
 
 > 语言版本: [English README](README.md) | [中文 README](README-CN.md)
 
@@ -23,7 +23,9 @@ Kane 创建的可复用智能体技能库。
 
 ## 技能列表
 
-23 个技能分为 7 个分类，放在 `skills/<分类>/<技能名>/` 下，每个技能按用户眼前的主要任务唯一归类，而非按输入来源分类。单独使用某个技能时，复制或安装包含 `SKILL.md` 的技能目录即可。
+24 个技能分为 7 个分类，放在 `skills/<分类>/<技能名>/` 下，每个技能按用户眼前的主要任务唯一归类，而非按输入来源分类。单独使用某个技能时，复制或安装包含 `SKILL.md` 的技能目录即可。
+
+所有技能均需显式调用。在 Codex 中输入 `$技能名`，例如 `$kane-translate`。
 
 ### reading · 阅读与解读（2）
 
@@ -66,12 +68,13 @@ Kane 创建的可复用智能体技能库。
 | [`kane-post-to-x`](skills/publishing/kane-post-to-x/SKILL.md) | 为 X 整理已有普通帖、引用帖或 Markdown 长文并交接发表。 | 本地预览、已核实的草稿或发表链接。 | [SKILL](skills/publishing/kane-post-to-x/SKILL.md) |
 | [`kane-post-to-weibo`](skills/publishing/kane-post-to-weibo/SKILL.md) | 准备文字、图片或视频微博，或将 Markdown 排成头条文章。 | 本地预览，或已填写、供用户核对发布的编辑页。 | [SKILL](skills/publishing/kane-post-to-weibo/SKILL.md) |
 
-### planning · 需求探索与选型（2）
+### planning · 需求探索与选型（3）
 
 | 技能 | 使用场景 | 输出 | 文档 |
 | ---- | -------- | ---- | ---- |
 | [`requirement-explorer`](skills/planning/requirement-explorer/SKILL.md) | 将原始业务需求推进成标准软件需求文档。 | 含 Mermaid 流程图和完整性自检的 Markdown 需求文档。 | [SKILL](skills/planning/requirement-explorer/SKILL.md) |
 | [`github-reuse-scout`](skills/planning/github-reuse-scout/SKILL.md) | 开发前搜索可复用的开源项目，并基于证据判断复用、参考或放弃复用。 | `.reuse/reuse-plan.md` 复用决策与迁移台账。 | [SKILL](skills/planning/github-reuse-scout/SKILL.md) |
+| [`kane-task-planner`](skills/planning/kane-task-planner/SKILL.md) | 仅由用户点名调用，在执行前规划任务，优先复用当前可用技能，按需建议脚本、子代理或新技能。 | 简短粗粒度执行计划，列出执行方式、推荐理由、预期产出及必要先后关系；只提建议。 | [SKILL](skills/planning/kane-task-planner/SKILL.md) |
 
 ### engineering · 开发维护与交付（5）
 

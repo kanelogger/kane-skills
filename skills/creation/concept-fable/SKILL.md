@@ -1,6 +1,7 @@
 ---
 name: concept-fable
 description: 写高密度的中文概念寓言：从用户指定的领域里提取一个真实、偏硬核的高阶概念，把它藏进三段式故事，再揭示并建立理论映射。当用户要求「概念寓言」「三段式概念寓言」「用寓言解释概念」「把高级理论写成故事」「story-based concept explanation」「Concept Reveal」，或要求把一个领域写成带理论映射、误导性直觉、适用边界、争议、置信度与延伸阅读方向的寓言时使用。
+disable-model-invocation: true
 ---
 
 # 概念寓言（Concept Fable）

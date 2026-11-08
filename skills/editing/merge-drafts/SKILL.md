@@ -1,6 +1,7 @@
 ---
 name: merge-drafts
 description: 把多份稿件合并成一篇高质量成稿。通读所有稿件，选出一份作为底稿，吸收其余稿件中的亮点与缺失内容，最终产出打磨后的成稿。当用户提出「merge drafts」「合并稿子」「合稿」「把这几篇合成一篇」「综合这几份稿子」「combine drafts」「merge articles」「merge documents」，或给出多份稿件并表达合并意图时使用。也适用于「consolidate drafts」「整合稿件」「统稿」，以及用户希望把多个版本综合成一篇连贯成稿的场景。
+disable-model-invocation: true
 ---
 
 # 稿件合并（Merge Drafts）

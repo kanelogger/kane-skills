@@ -1,6 +1,7 @@
 ---
 name: subtext-article
 description: 将字幕、ASR 转写、播客或访谈逐字稿整理成忠实原文的中文文章，保留主张、论证顺序、数据、例子和关键引文，交付源文、可读转写与同名 Markdown 终稿。用于“字幕成文”“转写稿整理成长文”等请求；不用于仅提炼摘要、转换字幕格式、翻译或从音视频生成转写。
+disable-model-invocation: true
 ---
 
 # 字幕成文（Subtext Article）

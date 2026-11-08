@@ -1,6 +1,7 @@
 ---
 name: git-commit-push
 description: 安全发布当前任务的本地 Git 改动：只暂存相关文件，基于暂存区 diff 生成符合 Conventional Commits 1.0.0 的提交信息，完成提交并推送当前分支。当用户要求提交、提交并推送、发布或上传已完成的工作，或明确要求把 git add、git commit、git push 作为一个流程执行时使用。
+disable-model-invocation: true
 ---
 
 # 提交并推送（Git Commit Push）

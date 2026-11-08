@@ -1,6 +1,7 @@
 ---
 name: it-system-skill-distiller
 description: 将已有 IT 业务系统、企业应用、SaaS 产品、内部工具或遗留业务代码库逆向蒸馏为 AI 可理解、可检索、可调用的独立 Skills 技能包。适用于用户要求分析业务系统、从需求/数据库/本体模型/源码/API 路由中抽取领域语义、生成 distilled/ Markdown 能力中心、设计业务用例级 API 文档、沉淀领域对象/业务规则/Schema/枚举/错误码/冲突清单/验证场景，或把一个业务系统改造成自然语言 Agent 可操作的技能包时。不用于普通代码审查、API 文档润色、数据库建模、单接口调试、通用 prompt 优化、文章改写，或没有目标业务系统资料的抽象架构讨论。
+disable-model-invocation: true
 ---
 
 # IT 业务系统技能包蒸馏

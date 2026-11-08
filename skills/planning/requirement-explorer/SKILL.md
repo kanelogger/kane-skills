@@ -1,6 +1,7 @@
 ---
 name: requirement-explorer
 description: 引导业务专家完成软件需求探索、需求确认和需求文档生成。当用户想把原始业务需求变成结构化的软件需求文档，要求做需求探索、需求分析、需求访谈、需求确认、软件需求文档、业务对象/业务功能/流程/岗位角色梳理，或需要一份可支撑后续本体/建模工作的需求文档时使用。
+disable-model-invocation: true
 ---
 
 # 需求探索（Requirement Exploration）

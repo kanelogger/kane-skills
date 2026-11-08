@@ -1,6 +1,7 @@
 ---
 name: kane-post-to-wx
 description: 将已有 Markdown、HTML 或纯文本文章排版为微信公众号稿件，或用有序图片制作贴图。适用于生成公众号预览、保存草稿或明确要求正式发表，复用用户已登录的浏览器。不用于公众号文章采集或从零写稿。
+disable-model-invocation: true
 ---
 
 # 微信公众号投稿

@@ -1,6 +1,7 @@
 ---
 name: kane-post-to-weibo
 description: 为新浪微博准备已有文案、图片或视频，或把 Markdown 成稿排成微博头条文章。用于「发微博」「准备微博草稿」「发头条文章」，支持本地预览或在已登录浏览器中填写，最终由用户核对并手动发布。
+disable-model-invocation: true
 ---
 
 # 微博投稿

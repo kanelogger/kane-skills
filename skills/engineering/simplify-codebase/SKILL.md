@@ -1,6 +1,7 @@
 ---
 name: simplify-codebase
 description: 以消除偶发复杂度为明确目标的代码库简化审计，或经授权的代码库简化。用于对死代码、重复状态、冗余 API 与冗余分层、无主抽象、过期兼容逻辑与设计记录，以及任何语言里的过度设计，做有证据支撑的删除或合并；也用于「代码简化」或「熵回收」。不用于普通代码审查、项目上手、纯风格重构或性能调优。
+disable-model-invocation: true
 ---
 
 # 代码库简化（Simplify Codebase）

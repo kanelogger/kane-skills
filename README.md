@@ -1,7 +1,7 @@
 # ![Kane Skills](assets/brand/kane-skills-armory-logo.svg)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-23-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-24-green.svg)](skills/)
 
 > Languages: [English README](README.md) | [中文 README](README-CN.md)
 
@@ -22,7 +22,9 @@ This repository is a public, self-contained skill library. Each package is inspe
 
 ## Skills
 
-The 23 skills are organized into 7 categories under `skills/<category>/<skill-name>/`. Each skill belongs to exactly one category based on the user's immediate primary task, not the input source. To use a skill separately, copy or install its package directory containing `SKILL.md`.
+The 24 skills are organized into 7 categories under `skills/<category>/<skill-name>/`. Each skill belongs to exactly one category based on the user's immediate primary task, not the input source. To use a skill separately, copy or install its package directory containing `SKILL.md`.
+
+All skills require explicit invocation. In Codex, type `$skill-name`, for example `$kane-translate`.
 
 ### reading — Reading and explanation (2)
 
@@ -65,12 +67,13 @@ The 23 skills are organized into 7 categories under `skills/<category>/<skill-na
 | [`kane-post-to-x`](skills/publishing/kane-post-to-x/SKILL.md) | Prepare an existing X post, quote post, or Markdown Article and hand it off for publication. | Local preview, verified draft, or verified publication link. | [SKILL](skills/publishing/kane-post-to-x/SKILL.md) |
 | [`kane-post-to-weibo`](skills/publishing/kane-post-to-weibo/SKILL.md) | Prepare a Weibo post with text, images, or video, or a headline article from Markdown. | Local preview or a populated editor for the user to review and publish. | [SKILL](skills/publishing/kane-post-to-weibo/SKILL.md) |
 
-### planning — Requirements exploration and solution selection (2)
+### planning — Requirements exploration and solution selection (3)
 
 | Skill | Use When | Output | Docs |
 | ----- | -------- | ------ | ---- |
 | [`requirement-explorer`](skills/planning/requirement-explorer/SKILL.md) | Turn raw business needs into a standard software requirements document. | Markdown requirements document with Mermaid flows and a completeness check. | [SKILL](skills/planning/requirement-explorer/SKILL.md) |
 | [`github-reuse-scout`](skills/planning/github-reuse-scout/SKILL.md) | Search GitHub for reusable open-source projects before building and decide whether to fork, reference, or build without reuse. | `.reuse/reuse-plan.md` reuse decision and migration ledger. | [SKILL](skills/planning/github-reuse-scout/SKILL.md) |
+| [`kane-task-planner`](skills/planning/kane-task-planner/SKILL.md) | Invoke only when the user explicitly names the skill to plan a task before execution, prioritizing available skills and recommending scripts, subagents, or new skills where useful. | A brief, high-level execution plan with methods, reasons, expected outputs, and necessary dependencies; recommendations only. | [SKILL](skills/planning/kane-task-planner/SKILL.md) |
 
 ### engineering — Development, maintenance, and delivery (5)
 

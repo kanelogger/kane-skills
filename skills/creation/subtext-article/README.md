@@ -2,6 +2,8 @@
 
 把字幕、ASR 转写、播客或访谈逐字稿整理成忠实原文的中文文章，保留源文副本与可读转写供回查，不强制归档每一步。
 
+在 Codex 中输入 `$subtext-article` 显式调用。
+
 ## 适用场景与边界
 
 - 输入已有转写文件或粘贴文本，如 B 站 AIsubtitle、Whisper、YouTube json3、SRT/VTT、ASS/SSA、LRC、timedtext XML/TTML 或纯文本。

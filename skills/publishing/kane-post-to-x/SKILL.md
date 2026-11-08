@@ -1,6 +1,7 @@
 ---
 name: kane-post-to-x
 description: 将已有成稿准备为 X（Twitter）普通帖、图片或视频帖、引用帖，或将 Markdown 排版为 X Articles。用于本地预览、协助保存 X 草稿、在已登录浏览器中交接发表并核对链接。不用于从零写稿或采集 X 内容。
+disable-model-invocation: true
 ---
 
 # 投稿到 X
