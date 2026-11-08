@@ -1,7 +1,7 @@
 # ![Kane Skills](assets/brand/kane-skills-armory-logo.svg)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-21-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-23-green.svg)](skills/)
 
 > Languages: [English README](README.md) | [中文 README](README-CN.md)
 
@@ -20,7 +20,7 @@ This repository is a public, self-contained skill library. Each package is inspe
 
 ## Skills
 
-The 21 skills are organized into 7 categories under `skills/<category>/<skill-name>/`. Each skill belongs to exactly one category based on the user's immediate primary task, not the input source. To use a skill separately, copy or install its package directory containing `SKILL.md`.
+The 23 skills are organized into 7 categories under `skills/<category>/<skill-name>/`. Each skill belongs to exactly one category based on the user's immediate primary task, not the input source. To use a skill separately, copy or install its package directory containing `SKILL.md`.
 
 ### reading — Reading and explanation (2)
 
@@ -55,11 +55,13 @@ The 21 skills are organized into 7 categories under `skills/<category>/<skill-na
 | [`kane-compress-image`](skills/assets/kane-compress-image/SKILL.md) | Compress local static images into WebP, PNG, or JPEG, individually or in batches. | New images with originals preserved, plus size-reduction and failure reports. | [SKILL](skills/assets/kane-compress-image/SKILL.md) |
 | [`kane-url-to-markdown`](skills/assets/kane-url-to-markdown/SKILL.md) | Save webpage Markdown from existing reader tools or capture rendered content through browser tools. | A new Markdown file with source metadata, article structure and remote image links. | [SKILL](skills/assets/kane-url-to-markdown/SKILL.md) |
 
-### publishing — Content publishing (1)
+### publishing — Content publishing (3)
 
 | Skill | Use When | Output | Docs |
 | ----- | -------- | ------ | ---- |
 | [`kane-post-to-wx`](skills/publishing/kane-post-to-wx/SKILL.md) | Prepare or publish an existing article or image post for a WeChat Official Account. | Local preview, verified draft, or publication record. | [SKILL](skills/publishing/kane-post-to-wx/SKILL.md) |
+| [`kane-post-to-x`](skills/publishing/kane-post-to-x/SKILL.md) | Prepare an existing X post, quote post, or Markdown Article and hand it off for publication. | Local preview, verified draft, or verified publication link. | [SKILL](skills/publishing/kane-post-to-x/SKILL.md) |
+| [`kane-post-to-weibo`](skills/publishing/kane-post-to-weibo/SKILL.md) | Prepare a Weibo post with text, images, or video, or a headline article from Markdown. | Local preview or a populated editor for the user to review and publish. | [SKILL](skills/publishing/kane-post-to-weibo/SKILL.md) |
 
 ### planning — Requirements exploration and solution selection (2)
 

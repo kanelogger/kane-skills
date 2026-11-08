@@ -1,7 +1,7 @@
 # ![Kane Skills](assets/brand/kane-skills-armory-logo.svg)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-21-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-23-green.svg)](skills/)
 
 > 语言版本: [English README](README.md) | [中文 README](README-CN.md)
 
@@ -21,7 +21,7 @@ Kane 创建的可复用智能体技能库。
 
 ## 技能列表
 
-21 个技能分为 7 个分类，放在 `skills/<分类>/<技能名>/` 下，每个技能按用户眼前的主要任务唯一归类，而非按输入来源分类。单独使用某个技能时，复制或安装包含 `SKILL.md` 的技能目录即可。
+23 个技能分为 7 个分类，放在 `skills/<分类>/<技能名>/` 下，每个技能按用户眼前的主要任务唯一归类，而非按输入来源分类。单独使用某个技能时，复制或安装包含 `SKILL.md` 的技能目录即可。
 
 ### reading · 阅读与解读（2）
 
@@ -56,11 +56,13 @@ Kane 创建的可复用智能体技能库。
 | [`kane-compress-image`](skills/assets/kane-compress-image/SKILL.md) | 将本地静态图片压缩为 WebP、PNG 或 JPEG，支持单张与批量处理。 | 保留原图的新图片、真实体积变化和失败清单。 | [SKILL](skills/assets/kane-compress-image/SKILL.md) |
 | [`kane-url-to-markdown`](skills/assets/kane-url-to-markdown/SKILL.md) | 优先保存现成网页读取工具返回的 Markdown，动态或登录页复用浏览器工具获取正文。 | 带来源元数据、正文结构和远程图片链接的新 Markdown 文件。 | [SKILL](skills/assets/kane-url-to-markdown/SKILL.md) |
 
-### publishing · 内容发布（1）
+### publishing · 内容发布（3）
 
 | 技能 | 使用场景 | 输出 | 文档 |
 | ---- | -------- | ---- | ---- |
 | [`kane-post-to-wx`](skills/publishing/kane-post-to-wx/SKILL.md) | 为微信公众号排版或发表已有文章及贴图。 | 本地排版预览、已核实的公众号草稿或发表记录。 | [SKILL](skills/publishing/kane-post-to-wx/SKILL.md) |
+| [`kane-post-to-x`](skills/publishing/kane-post-to-x/SKILL.md) | 为 X 整理已有普通帖、引用帖或 Markdown 长文并交接发表。 | 本地预览、已核实的草稿或发表链接。 | [SKILL](skills/publishing/kane-post-to-x/SKILL.md) |
+| [`kane-post-to-weibo`](skills/publishing/kane-post-to-weibo/SKILL.md) | 准备文字、图片或视频微博，或将 Markdown 排成头条文章。 | 本地预览，或已填写、供用户核对发布的编辑页。 | [SKILL](skills/publishing/kane-post-to-weibo/SKILL.md) |
 
 ### planning · 需求探索与选型（2）
 
