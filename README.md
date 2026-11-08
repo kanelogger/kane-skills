@@ -1,4 +1,4 @@
-# Kane Skills
+# ![Kane Skills](assets/brand/kane-skills-armory-logo.svg)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Skills](https://img.shields.io/badge/Skills-20-green.svg)](skills/)
