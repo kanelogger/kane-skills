@@ -38,22 +38,51 @@ if (search && input && count && empty) {
 
   input.addEventListener("input", filter)
   window.addEventListener("pageshow", filter)
+  empty.querySelector("button")?.addEventListener("click", () => {
+    input.value = ""
+    filter()
+    input.focus()
+  })
+  for (const link of document.querySelectorAll("[data-shelf-link]")) {
+    link.addEventListener("click", () => {
+      if (!input.value) return
+      input.value = ""
+      filter()
+    })
+  }
   search.hidden = false
   filter()
 }
 
-const copy = document.querySelector<HTMLButtonElement>("[data-copy]")
-const example = document.querySelector<HTMLElement>("#example")
-const feedback = document.querySelector<HTMLElement>("[data-feedback]")
+if (navigator.clipboard?.writeText) {
+  for (const button of document.querySelectorAll<HTMLButtonElement>("[data-copy]")) {
+    const id = button.dataset.copy
+    if (!id) continue
+    const target = document.getElementById(id)
+    const feedback = document.querySelector<HTMLElement>('[data-feedback="' + id + '"]')
+    const label = button.querySelector("span")
+    if (!target || !feedback || !label) continue
 
-if (copy && example && feedback && navigator.clipboard) {
-  copy.hidden = false
-  copy.addEventListener("click", async () => {
-    try {
-      await navigator.clipboard.writeText(example.textContent?.trim() ?? "")
-      feedback.textContent = feedback.dataset.success ?? ""
-    } catch {
-      feedback.textContent = feedback.dataset.failure ?? ""
-    }
-  })
+    const initial = label.textContent
+    let reset: number | undefined
+    button.hidden = false
+    button.addEventListener("click", async () => {
+      window.clearTimeout(reset)
+      try {
+        await navigator.clipboard.writeText(target.textContent ?? "")
+        const done = button.dataset.done ?? ""
+        label.textContent = done
+        feedback.textContent = done
+        feedback.dataset.state = "done"
+        reset = window.setTimeout(() => {
+          label.textContent = initial
+          feedback.textContent = ""
+        }, 2200)
+      } catch {
+        label.textContent = initial
+        feedback.textContent = button.dataset.failure ?? ""
+        feedback.dataset.state = "error"
+      }
+    })
+  }
 }
