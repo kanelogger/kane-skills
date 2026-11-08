@@ -28,7 +28,7 @@ Kane 创建的可复用智能体技能库。
 | 技能 | 使用场景 | 输出 | 文档 |
 | ---- | -------- | ---- | ---- |
 | [`article-analyzer`](skills/reading/article-analyzer/SKILL.md) | 分析文章、论文、报告或长篇论述。 | 一组 Markdown 分析文件及 `99-summary.md`。 | [SKILL](skills/reading/article-analyzer/SKILL.md) |
-| [`kane-explainer`](skills/reading/kane-explainer/SKILL.md) | 用通俗语言解释技术规格、RFC、设计提案或工作区变更。 | 独立可读、包含行为和 schema 变化的中文技术说明。 | [SKILL](skills/reading/kane-explainer/SKILL.md) |
+| [`kane-explainer`](skills/reading/kane-explainer/SKILL.md) | 显式调用，将文章、复杂话题或技术变更做成视觉解释。 | 大图少字的 HTML、分步互动教程或按问题选择的结构图解。 | [SKILL](skills/reading/kane-explainer/SKILL.md) |
 
 ### creation · 创作与成文（3）
 

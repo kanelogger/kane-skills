@@ -27,7 +27,7 @@ The 18 skills are organized into 6 categories under `skills/<category>/<skill-na
 | Skill | Use When | Output | Docs |
 | ----- | -------- | ------ | ---- |
 | [`article-analyzer`](skills/reading/article-analyzer/SKILL.md) | Analyze articles, papers, reports, or long-form arguments. | A folder of Markdown analysis files plus `99-summary.md`. | [SKILL](skills/reading/article-analyzer/SKILL.md) |
-| [`kane-explainer`](skills/reading/kane-explainer/SKILL.md) | Explain technical specifications, RFCs, design proposals, or workspace changes in plain language. | A self-contained Chinese technical explanation with behavior and schema changes. | [SKILL](skills/reading/kane-explainer/SKILL.md) |
+| [`kane-explainer`](skills/reading/kane-explainer/SKILL.md) | Invoke explicitly to explain articles, complex topics, or technical changes visually. | An illustration-led HTML explainer, a step-by-step interactive lesson, or a diagram suited to the relationships. | [SKILL](skills/reading/kane-explainer/SKILL.md) |
 
 ### creation — Creation and composition (3)
 
