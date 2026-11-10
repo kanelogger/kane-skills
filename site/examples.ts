@@ -79,6 +79,11 @@ export const examples: Record<string, [zhTitle: string, enTitle: string, zhPromp
     "用 kane-post-to-weibo 把这段文字和三张图按顺序填到微博，我来点发布。",
     "Use kane-post-to-weibo to fill the Weibo editor with this text and these three images in order. I’ll publish it.",
   ],
+  "kane-clarify-questions": [
+    "提问完善", "Context Clarification",
+    "$kane-clarify-questions 我想组织一次团队工作坊，现有想法附在下面。请补齐会影响方案的上下文，整理已确认事实、采用的假设和仍未确定的事项。",
+    "$kane-clarify-questions I want to organize a team workshop; my current ideas are below. Clarify the context that would affect the plan, then summarize confirmed facts, assumptions adopted, and remaining unknowns.",
+  ],
   "requirement-explorer": [
     "软件需求梳理", "Software requirements",
     "用 requirement-explorer 梳理这个业务想法，和我确认流程及边界，最后给我一份需求文档。",

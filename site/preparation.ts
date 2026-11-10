@@ -63,6 +63,10 @@ export const preparation: Record<string, [zh: string, en: string]> = {
     "准备正文和本地媒体文件。网页交接需要已登录的微博账号，头条文章本地转换使用 Bun 1.3.8 或更新版本。",
     "Prepare the text and local media files. Browser handoff needs a signed-in Weibo account. Local Article conversion uses Bun 1.3.8 or later.",
   ],
+  "kane-clarify-questions": [
+    "点名 $kane-clarify-questions，提供任务目标与现有材料即可；无需先填固定问卷，信息充足时不提问。",
+    "Invoke $kane-clarify-questions and share your task goal and existing materials. No fixed questionnaire is required; sufficient context means no questions are needed.",
+  ],
   "requirement-explorer": [
     "先提供原始业务需求、涉及的角色和已知约束，随后确认项目特有的规则与边界。",
     "Start with the business need, the people involved, and known constraints. Then confirm project-specific rules and boundaries.",
