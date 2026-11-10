@@ -75,6 +75,10 @@ export const preparation: Record<string, [zh: string, en: string]> = {
     "说明目标需求、项目目录和技术约束。搜索和检出脚本使用 Python 3.9 或更新版本、curl 和 Git。",
     "Describe the need, project directory, and technical constraints. Search and checkout scripts use Python 3.9 or later, curl, and Git.",
   ],
+  "kane-task-planner": [
+    "点名 $kane-task-planner，提供任务目标、期望产出及已知约束；可附任务材料和可用技能清单。无需额外依赖，仅交付执行前计划。",
+    "Invoke $kane-task-planner with your task goal, expected outputs, and known constraints. Optionally include task materials and available skills. No extra dependencies are required; it delivers a plan before execution only.",
+  ],
   "it-system-skill-distiller": [
     "提供系统目录、现有资料和输出位置。动态验证还需要明确测试环境和操作权限。",
     "Provide the system directory, existing material, and an output location. Dynamic verification also needs a test environment and defined permissions.",

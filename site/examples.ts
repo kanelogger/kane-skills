@@ -94,6 +94,11 @@ export const examples: Record<string, [zhTitle: string, enTitle: string, zhPromp
     "用 github-reuse-scout 调研 GitHub 上有哪些项目能支撑这个需求，比较架构和迁移成本。",
     "Use github-reuse-scout to find GitHub projects that fit this need and compare their architectures and migration costs.",
   ],
+  "kane-task-planner": [
+    "任务执行规划", "Task execution planning",
+    "$kane-task-planner 为把这批访谈整理成专题报告做执行前规划，优先复用当前可用技能，说明主要环节、建议执行方式和预期产出，只给大致计划。",
+    "$kane-task-planner Plan how to turn these interviews into a thematic report. Prioritize available skills and outline the main steps, suggested methods, and expected outputs. Provide a high-level plan only.",
+  ],
   "it-system-skill-distiller": [
     "IT 系统能力提炼", "IT system capability extraction",
     "用 it-system-skill-distiller 从这个业务系统的代码和文档里提炼一份 Agent 能力包。",
