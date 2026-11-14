@@ -21,7 +21,7 @@ async function query(path: string) {
   const { code, data: payload } = fields(await response.json())
   if (!payload) return { code }
   const data = fields(payload)
-  if (typeof data.v_voucher === "string") return { code, data: { v_voucher: true } }
+  if (data.v_voucher) return { code, data: { v_voucher: true } }
   if (url.pathname === "/x/web-interface/nav") {
     const { img_url, sub_url } = fields(data.wbi_img)
     return { code, data: { isLogin: data.isLogin, wbi_img: { img_url, sub_url } } }

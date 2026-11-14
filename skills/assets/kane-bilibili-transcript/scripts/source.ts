@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto"
+import { setTimeout as pause } from "node:timers/promises"
 
 const api = "https://api.bilibili.com"
 const site = "https://www.bilibili.com"
@@ -145,12 +146,28 @@ function subtitleHost(url: URL) {
   return url.hostname.endsWith(".hdslb.com") || url.hostname === "subtitle.bilibili.com"
 }
 
-function apiData(response: Record<string, unknown> | undefined, label: string) {
+class RetryableError extends Error {}
+
+async function retry<T>(request: () => Promise<T>) {
+  const limit = 3
+  for (let attempt = 0; ; attempt++) {
+    try {
+      return await request()
+    } catch (error) {
+      if (!(error instanceof RetryableError)) throw error
+      if (attempt === limit) throw new Error(`${error.message}；已重试 ${limit} 次（共 ${limit + 1} 次请求），请稍后再试`)
+      console.error(`${error.message}；2 秒后重试（${attempt + 1}/${limit}）`)
+      await pause(2000)
+    }
+  }
+}
+
+function apiData(response: Record<string, unknown> | undefined, label: string, anonymous = false) {
   const code = response?.code
-  if (code === -101) throw new Error(`${label}需要登录，请检查 B 站浏览器会话`)
+  if (code === -101 && !anonymous) throw new Error(`${label}需要登录，请检查 B 站浏览器会话`)
   const data = object(response?.data)
-  if (code === -352 || data?.v_voucher) throw new Error(`${label}触发了 B 站风控验证`)
-  if (code !== 0 || !data) {
+  if (code === -352 || data?.v_voucher) throw new RetryableError(`${label}触发了 B 站风控验证`)
+  if ((code !== 0 && !(anonymous && code === -101)) || !data) {
     throw new Error(`${label}失败（B 站 API ${typeof code === "number" ? code : "响应异常"}）`)
   }
   return data
@@ -169,22 +186,22 @@ export async function openVideo(input: string, browser?: BrowserRequest) {
     return object(data)
   }
 
-  const nav = await apiRequest("/x/web-interface/nav", "B 站 WBI 参数")
-  if (nav?.code !== 0 && nav?.code !== -101) apiData(nav, "B 站 WBI 参数")
-  const navData = object(nav?.data)
-  if (browser && navData?.isLogin !== true) throw new Error("当前浏览器未登录 B 站，请在浏览器中完成登录")
-  const wbi = object(navData?.wbi_img)
+  const navData = await retry(async () => apiData(await apiRequest("/x/web-interface/nav", "B 站 WBI 参数"), "B 站 WBI 参数", true))
+  if (browser && navData.isLogin !== true) throw new Error("当前浏览器未登录 B 站，请在浏览器中完成登录")
+  const wbi = object(navData.wbi_img)
   if (!wbi) throw new Error("B 站未返回 WBI 签名参数")
   const keys = key(wbi.img_url) + key(wbi.sub_url)
 
-  async function signed(path: string, params: Record<string, string>, label: string) {
-    const query = signQuery(params, keys, Math.floor(Date.now() / 1000))
-    return apiData(await apiRequest(`${path}?${query}`, label), label)
+  async function signed<T>(path: string, params: Record<string, string>, label: string, read: (data: Record<string, unknown>) => T) {
+    return retry(async () => {
+      const query = signQuery(params, keys, Math.floor(Date.now() / 1000))
+      return read(apiData(await apiRequest(`${path}?${query}`, label), label))
+    })
   }
 
   const isBV = bvPattern.test(target.id)
   const identity = isBV ? { bvid: target.id } : { aid: target.id.slice(2) }
-  const detail = await signed("/x/web-interface/wbi/view/detail", { ...identity, need_elec: "0" }, "B 站视频详情")
+  const detail = await signed("/x/web-interface/wbi/view/detail", { ...identity, need_elec: "0" }, "B 站视频详情", data => data)
   const view = object(detail.View)
   const bvid = text(view?.bvid)
   const aid = view?.aid
@@ -203,27 +220,32 @@ export async function openVideo(input: string, browser?: BrowserRequest) {
     url: `${site}/video/${bvid}/?p=${target.page}`,
   }
 
-  const player = await signed("/x/player/wbi/v2", { aid: String(aid), cid: String(cid) }, "B 站字幕轨")
-  if ((player.aid !== undefined && player.aid !== aid) || (player.cid !== undefined && player.cid !== cid)) {
-    throw new Error("B 站返回的字幕轨与请求的视频分 P 不一致")
+  function readTracks(player: Record<string, unknown>) {
+    if ((player.aid !== undefined && player.aid !== aid) || (player.cid !== undefined && player.cid !== cid)) {
+      throw new Error("B 站返回的字幕轨与请求的视频分 P 不一致")
+    }
+    const subtitles = object(player.subtitle)?.subtitles
+    if (subtitles != null && !Array.isArray(subtitles)) throw new Error("B 站返回的字幕轨格式异常")
+    const tracks: Track[] = []
+    const rows: unknown[] = subtitles ?? []
+    for (const item of rows) {
+      const row = object(item)
+      const code = text(row?.lan)
+      const url = text(row?.subtitle_url)
+      if (!languagePattern.test(code) || !url) continue
+      const kind = row?.ai_type === 1 || /^ai-/i.test(code) ? "generated" : "manual"
+      tracks.push({ code, name: text(row?.lan_doc) || code, kind, url })
+    }
+    if (!tracks.length) {
+      if (player.need_login_subtitle === true) throw new Error("此分 P 的字幕需要登录，请使用或检查已登录的 B 站浏览器会话")
+      if (rows.length) throw new Error(`P${target.page} 未返回有效的可下载字幕轨`)
+      const hint = browser ? "" : "，部分字幕登录后才可见"
+      throw new RetryableError(`P${target.page} 暂未返回可下载的字幕轨（可能无字幕，也可能为瞬时风控或空响应）${hint}`)
+    }
+    return tracks
   }
-  const subtitles = object(player.subtitle)?.subtitles
-  if (subtitles != null && !Array.isArray(subtitles)) throw new Error("B 站返回的字幕轨格式异常")
-  const tracks: Track[] = []
-  const rows: unknown[] = subtitles ?? []
-  for (const item of rows) {
-    const row = object(item)
-    const code = text(row?.lan)
-    const url = text(row?.subtitle_url)
-    if (!languagePattern.test(code) || !url) continue
-    const kind = row?.ai_type === 1 || /^ai-/i.test(code) ? "generated" : "manual"
-    tracks.push({ code, name: text(row?.lan_doc) || code, kind, url })
-  }
-  if (!tracks.length) {
-    if (player.need_login_subtitle === true && !browser) throw new Error("此分 P 的字幕需要登录，请使用已登录的 B 站浏览器会话")
-    const hint = browser ? "" : "，部分字幕登录后才可见"
-    throw new Error(`P${target.page} 未返回可下载的字幕轨${hint}`)
-  }
+
+  const tracks = await signed("/x/player/wbi/v2", { aid: String(aid), cid: String(cid) }, "B 站字幕轨", readTracks)
 
   async function download(track: Track) {
     const url = parseUrl(track.url.startsWith("//") ? `https:${track.url}` : track.url)
