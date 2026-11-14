@@ -1,7 +1,7 @@
 # ![Kane Skills](assets/brand/kane-skills-armory-logo.svg)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-25-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-26-green.svg)](skills/)
 
 > 语言版本: [English README](README.md) | [中文 README](README-CN.md)
 
@@ -23,7 +23,7 @@ Kane 创建的可复用智能体技能库。
 
 ## 技能列表
 
-25 个技能分为 7 个分类，放在 `skills/<分类>/<技能名>/` 下，每个技能按用户眼前的主要任务唯一归类，而非按输入来源分类。单独使用某个技能时，复制或安装包含 `SKILL.md` 的技能目录即可。
+26 个技能分为 7 个分类，放在 `skills/<分类>/<技能名>/` 下，每个技能按用户眼前的主要任务唯一归类，而非按输入来源分类。单独使用某个技能时，复制或安装包含 `SKILL.md` 的技能目录即可。
 
 所有技能均需显式调用。在 Codex 中输入 `$技能名`，例如 `$kane-translate`。
 
@@ -77,12 +77,13 @@ Kane 创建的可复用智能体技能库。
 | [`github-reuse-scout`](skills/planning/github-reuse-scout/SKILL.md) | 开发前搜索可复用的开源项目，并基于证据判断复用、参考或放弃复用。 | `.reuse/reuse-plan.md` 复用决策与迁移台账。 | [SKILL](skills/planning/github-reuse-scout/SKILL.md) |
 | [`kane-task-planner`](skills/planning/kane-task-planner/SKILL.md) | 仅由用户点名调用，在执行前规划任务，优先复用当前可用技能，按需建议脚本、子代理或新技能。 | 简短粗粒度执行计划，列出执行方式、推荐理由、预期产出及必要先后关系；只提建议。 | [SKILL](skills/planning/kane-task-planner/SKILL.md) |
 
-### engineering · 开发维护与交付（5）
+### engineering · 开发维护与交付（6）
 
 | 技能 | 使用场景 | 输出 | 文档 |
 | ---- | -------- | ---- | ---- |
 | [`it-system-skill-distiller`](skills/engineering/it-system-skill-distiller/SKILL.md) | 将 IT 业务系统提炼为智能体可读的能力包。 | 经过校验的 `distilled/` 包结构。 | [SKILL](skills/engineering/it-system-skill-distiller/SKILL.md) |
 | [`simplify-codebase`](skills/engineering/simplify-codebase/SKILL.md) | 以可达性、契约和验证证据审计或简化代码库，移除意外复杂度。 | 排序后的证明记录，或带操作回执的已验证简化结果。 | [SKILL](skills/engineering/simplify-codebase/SKILL.md) |
+| [`kane-migrate-to-rust`](skills/engineering/kane-migrate-to-rust/SKILL.md) | 显式调用，将 GitHub 仓库或本地遗留代码库迁移至安全 Rust，验证输出一致性，并按条件执行 LLVM PGO。 | Rust 工作区、架构蓝图、实测迁移遥测及交互式 HTML 报告。 | [README](skills/engineering/kane-migrate-to-rust/README.md) |
 | [`git-commit-push`](skills/engineering/git-commit-push/SKILL.md) | 只暂存当前任务改动，在 Conventional Commit 中记录改动、原因、已有验证方式与结果、回滚方法，仅按授权推送。 | 提交及按需推送状态、验证记录和回滚步骤；不执行改动验证。 | [SKILL](skills/engineering/git-commit-push/SKILL.md) |
 | [`kane-task-retro`](skills/engineering/kane-task-retro/SKILL.md) | 基于交付证据复盘一次任务或一次 Agent 协作。 | 一张简短复盘卡，最多一项建议动作及其验证方式。 | [SKILL](skills/engineering/kane-task-retro/SKILL.md) |
 | [`kane-task-cleanup`](skills/engineering/kane-task-cleanup/SKILL.md) | 显式调用后默认清理本次任务已核实的一次性临时文件，可指定范围、只保留成果或先看清单。 | 经核验的删除结果、保留成果、跳过项及获准停止的后台任务。 | [SKILL](skills/engineering/kane-task-cleanup/SKILL.md) |

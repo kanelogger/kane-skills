@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>安全 Rust 迁移报告与信息图</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%2064%2064%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20role%3D%22img%22%20aria-label%3D%22%E4%BB%A3%E7%A0%81%E8%BF%81%E7%A7%BB%E8%87%B3%20Rust%22%20focusable%3D%22false%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%23b7410e%22%2F%3E%3Cpath%20d%3D%22m22%2018-14%2014%2014%2014m20-28%2014%2014-14%2014%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%224.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3Cpath%20d%3D%22M25%2032h14m-6-6%206%206-6%206%22%20fill%3D%22none%22%20stroke%3D%22%23fed7aa%22%20stroke-width%3D%224.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root,
+    html[data-theme="light"] {
+      --bg-page: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-subtle: #f1f5f9;
+      --bg-hover: #e2e8f0;
+      --bg-code: #0f172a;
+      --text-code: #f8fafc;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --accent-primary: #2563eb;
+      --accent-primary-hover: #1d4ed8;
+      --accent-primary-soft: #eff6ff;
+      --accent-primary-text: #1e40af;
+      --accent-success: #059669;
+      --accent-success-soft: #ecfdf5;
+      --accent-success-text: #065f46;
+      --accent-warning: #d97706;
+      --accent-warning-soft: #fffbeb;
+      --accent-warning-text: #92400e;
+      --accent-danger: #dc2626;
+      --accent-danger-soft: #fef2f2;
+      --accent-danger-text: #991b1b;
+      --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.08);
+    }
+
+    html[data-theme="dark"] {
+      --bg-page: #0b0f19;
+      --bg-surface: #111827;
+      --bg-subtle: #1e293b;
+      --bg-hover: #334155;
+      --bg-code: #090d16;
+      --text-code: #e2e8f0;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-color: #1e293b;
+      --border-strong: #334155;
+      --accent-primary: #3b82f6;
+      --accent-primary-hover: #60a5fa;
+      --accent-primary-soft: rgba(59, 130, 246, 0.14);
+      --accent-primary-text: #93c5fd;
+      --accent-success: #10b981;
+      --accent-success-soft: rgba(16, 185, 129, 0.14);
+      --accent-success-text: #6ee7b7;
+      --accent-warning: #f59e0b;
+      --accent-warning-soft: rgba(245, 158, 11, 0.14);
+      --accent-warning-text: #fcd34d;
+      --accent-danger: #ef4444;
+      --accent-danger-soft: rgba(239, 68, 68, 0.14);
+      --accent-danger-text: #fca5a5;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    code, pre, .mono {
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 0;
+    }
+
+    a {
+      color: var(--accent-primary);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* 吸顶栏 */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+    }
+    .topbar-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 0;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-sm);
+    }
+    .brand-title {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin: 0;
+      color: var(--text-primary);
+    }
+
+    .nav-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+    .tab-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--bg-subtle);
+      padding: 4px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+    }
+    .tab-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .tab-btn:hover {
+      color: var(--text-primary);
+    }
+    .tab-btn.active {
+      background: var(--bg-surface);
+      color: var(--accent-primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .theme-toggle {
+      border: 1px solid var(--border-color);
+      background: var(--bg-surface);
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 6px 11px;
+      border-radius: 9px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .theme-toggle:hover {
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .badge-primary {
+      background: var(--accent-primary-soft);
+      color: var(--accent-primary-text);
+    }
+    .badge-success {
+      background: var(--accent-success-soft);
+      color: var(--accent-success-text);
+    }
+    .badge-warning {
+      background: var(--accent-warning-soft);
+      color: var(--accent-warning-text);
+    }
+    .badge-danger {
+      background: var(--accent-danger-soft);
+      color: var(--accent-danger-text);
+    }
+
+    .section-stack {
+      padding: 24px 0 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* 顶部四项关键绩效指标，一目了然 */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+    @media (min-width: 880px) {
+      .kpi-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    .kpi-card {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 16px 18px;
+    }
+    .kpi-card.kpi-featured {
+      border-color: var(--accent-primary);
+      background: linear-gradient(180deg, var(--accent-primary-soft) 0%, var(--bg-surface) 75%);
+    }
+    .kpi-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .kpi-label {
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+    }
+    .kpi-val {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-top: 6px;
+      color: var(--text-primary);
+    }
+    .kpi-sub {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* 用于渐进展示的可折叠卡片 */
+    details.collapsible-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+    details.collapsible-card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 16px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      user-select: none;
+      transition: background-color 0.15s ease;
+    }
+    details.collapsible-card > summary::-webkit-details-marker {
+      display: none;
+    }
+    details.collapsible-card > summary:hover {
+      background: var(--bg-subtle);
+    }
+    .summary-left {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .summary-title {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+    .summary-sub {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .summary-toggle-pill {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent-primary-text);
+      background: var(--accent-primary-soft);
+      padding: 5px 11px;
+      border-radius: 8px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    details.collapsible-card[open] > summary {
+      border-bottom: 1px solid var(--border-color);
+      background: var(--bg-subtle);
+    }
+    details.collapsible-card[open] .summary-toggle-pill::after {
+      content: " ▲";
+    }
+    details.collapsible-card:not([open]) .summary-toggle-pill::after {
+      content: " ▼";
+    }
+    .collapsible-body {
+      padding: 20px 22px;
+    }
+
+    /* 进度条 */
+    .bar-track {
+      width: 100%;
+      height: 8px;
+      background: var(--bg-subtle);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.5s ease;
+    }
+
+    /* 评分卡网格 */
+    .scorecard-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 640px) {
+      .scorecard-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (min-width: 960px) {
+      .scorecard-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    .score-item {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    /* 代码对比框 */
+    .code-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 880px) {
+      .code-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .code-box {
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--bg-code);
+      color: var(--text-code);
+      display: flex;
+      flex-direction: column;
+    }
+    .code-box-header {
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- 顶部导航与模式切换 -->
+
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">
+        <div class="brand-logo" title="安全 Rust 迁移报告">
+          <svg width="36" height="36" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="代码迁移至 Rust" focusable="false">
+            <rect width="64" height="64" rx="14" fill="#b7410e"/>
+            <path d="m22 18-14 14 14 14m20-28 14 14-14 14" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M25 32h14m-6-6 6 6-6 6" fill="none" stroke="#fed7aa" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-bottom:2px;">
+            <span class="badge badge-primary">kane-migrate-to-rust</span>
+            <span id="nav-lang-badge" class="badge badge-primary">编程语言：未测量</span>
+            <span id="nav-model-badge" class="badge badge-primary hidden"></span>
+          </div>
+          <h1 id="nav-project-title" class="brand-title">Rust 迁移遥测报告</h1>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <div class="tab-group" role="tablist" aria-label="报告视图模式">
+          <button onclick="setViewMode('all')" id="btn-mode-all" class="tab-btn active">概览与迁移过程</button>
+          <button onclick="setViewMode('executive')" id="btn-mode-executive" class="tab-btn">管理层摘要</button>
+          <button onclick="setViewMode('technical')" id="btn-mode-technical" class="tab-btn">代码与基准测试</button>
+        </div>
+
+        <button onclick="toggleTheme()" id="theme-toggle-btn" class="theme-toggle" title="切换浅色与深色主题">
+          <span id="theme-toggle-icon">🌙</span>
+          <span id="theme-toggle-label">深色模式</span>
+        </button>
+      </div>
+    </div>
+
+  </header>
+
+  <main class="container section-stack">
+
+    <!-- 1. 顶部摘要卡片：成果一览 -->
+    <section class="card">
+      <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; margin-bottom:10px;">
+        <span class="badge badge-primary">🤖 第一人称迁移报告</span>
+        <span id="hero-timestamp" style="font-size:12.5px; color:var(--text-muted);">未测量</span>
+      </div>
+
+      <h2 id="hero-headline" style="margin:0 0 10px; font-size:24px; font-weight:800; letter-spacing:-0.02em; line-height:1.3;">
+        尚未渲染的迁移报告模板
+      </h2>
+
+      <p id="hero-narrative" style="margin:0; font-size:14.5px; color:var(--text-secondary); max-width:960px; line-height:1.6;">
+        运行 scripts/telemetry.py render-infographic，将实测的迁移遥测数据注入此模板。
+      </p>
+
+      <!-- 四项成效指标，一目了然 -->
+      <div class="kpi-grid">
+        <!-- 指标 1：实测智能体执行时间 -->
+        <div class="kpi-card kpi-featured">
+          <div class="kpi-top">
+            <span class="kpi-label">⏱️ 智能体执行时间</span>
+            <span id="hero-roi-badge" class="badge badge-primary">未测量</span>
+          </div>
+          <div id="hero-total-time" class="kpi-val" style="color:var(--accent-primary);">未测量</div>
+          <div id="hero-roi-sub" class="kpi-sub">
+            未记录阶段计时
+          </div>
+        </div>
+
+        <!-- 指标 2：加速比 -->
+        <div class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">⚡ 最终 PGO 加速比</span>
+            <span id="hero-speed-grade" class="badge badge-success">不适用</span>
+          </div>
+          <div id="hero-speedup" class="kpi-val" style="color:var(--accent-success);">未测量</div>
+          <div id="hero-speed-sub" class="kpi-sub">
+            通过 log-benchmark 记录基准测试
+          </div>
+        </div>
+
+        <!-- 指标 3：内存安全 -->
+        <div class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">🛡️ 内存安全</span>
+            <span id="hero-safety-badge" class="badge badge-warning">未测量</span>
+          </div>
+          <div id="hero-unsafe" class="kpi-val">未测量</div>
+          <div id="hero-safety-sub" class="kpi-sub">
+            通过 scan-codebase 扫描代码库
+          </div>
+        </div>
+
+        <!-- 指标 4：输出一致性 -->
+        <div class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">🎯 输出复现</span>
+            <span id="hero-parity-seeds" class="badge badge-primary">未测量</span>
+          </div>
+          <div id="hero-parity" class="kpi-val">未测量</div>
+          <div id="hero-parity-sub" class="kpi-sub">
+            未记录一致性验证运行
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. 基准测试与时间摘要（始终可见） -->
+    <section id="sec-benchmarks-time" class="card">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:24px;">
+        <!-- 左侧：四阶段 PGO 加速阶梯 -->
+        <div>
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:6px;">
+            <h3 style="margin:0; font-size:17px; font-weight:800;">⚡ 四阶段性能阶梯</h3>
+            <span id="ch5-pgo-badge" class="badge badge-primary">未记录基准测试</span>
+          </div>
+          <p id="ch5-narrative" style="margin:0 0 14px; font-size:13px; color:var(--text-secondary);">
+            从原始基线开始，依次优化为安全 Rust、数组结构（SoA）布局，并应用基于性能剖析的优化（PGO）。
+          </p>
+          <div id="benchmark-staircase" style="display:flex; flex-direction:column; gap:10px;"></div>
+        </div>
+
+        <!-- 右侧：实测智能体执行时间明细 -->
+        <div>
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:6px;">
+            <h3 style="margin:0; font-size:17px; font-weight:800;">⏱️ 智能体执行时间明细</h3>
+            <span id="ch6-total-badge" class="badge badge-primary">未测量</span>
+          </div>
+          <p style="margin:0 0 14px; font-size:13px; color:var(--text-secondary);">
+            六个迁移阶段的实测实际耗时。
+          </p>
+          <div id="time-stacked-bar" style="width:100%; height:14px; border-radius:999px; overflow:hidden; display:flex; border:1px solid var(--border-color); margin-bottom:12px;"></div>
+          <div id="time-buckets-grid" style="display:grid; grid-template-columns:repeat(2, 1fr); gap:8px;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 可折叠管理层评分卡（八个维度的迁移前后对比） -->
+    <details id="sec-scorecard" class="collapsible-card" open>
+      <summary>
+        <div class="summary-left">
+          <div class="summary-title">
+            <span>🏅 管理层迁移评分卡（迁移前后对比）</span>
+            <span id="overall-before-score" class="badge badge-danger">遗留代码：未测量</span>
+            <span>→</span>
+            <span id="overall-after-score" class="badge badge-success">安全 Rust：未测量</span>
+          </div>
+          <div class="summary-sub">
+            八个工程维度均以 0–100 分评分，严格依据实测的仓库代码概况统计、编译器检查、测试覆盖率与基准测试。
+          </div>
+        </div>
+        <span class="summary-toggle-pill">评分卡</span>
+      </summary>
+      <div class="collapsible-body">
+        <div id="scorecard-grid" class="scorecard-grid"></div>
+      </div>
+    </details>
+
+    <!-- 4. 可折叠 AI 迁移过程章节（渐进展示） -->
+    <div id="sec-story" style="display:flex; flex-direction:column; gap:14px;">
+
+      <!-- 第 1 章：探查与遗留代码中的隐藏缺陷 -->
+      <details class="collapsible-card" open>
+        <summary>
+          <div class="summary-left">
+            <div class="summary-title">
+              <span>🔍 第 1 章：遗留代码审计与隐藏缺陷发现</span>
+              <span id="ch1-bugs-pill" class="badge badge-warning">审计尚未测量</span>
+            </div>
+            <div id="ch1-narrative" class="summary-sub">
+              尚未记录。
+            </div>
+          </div>
+          <span class="summary-toggle-pill">查看详情</span>
+        </summary>
+        <div class="collapsible-body">
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:10px; margin-bottom:16px;">
+            <div style="background:var(--bg-subtle); border:1px solid var(--border-color); border-radius:10px; padding:12px;">
+              <div style="font-size:11px; color:var(--text-muted); font-weight:700; text-transform:uppercase;">最大的遗留文件</div>
+              <div id="ch1-max-loc" style="font-size:18px; font-weight:800; color:var(--accent-danger); margin-top:2px;">未测量</div>
+            </div>
+            <div style="background:var(--bg-subtle); border:1px solid var(--border-color); border-radius:10px; padding:12px;">
+              <div style="font-size:11px; color:var(--text-muted); font-weight:700; text-transform:uppercase;">遗留代码注释占比</div>
+              <div id="ch1-comment-pct" style="font-size:18px; font-weight:800; color:var(--accent-warning); margin-top:2px;">未测量</div>
+            </div>
+            <div style="background:var(--bg-subtle); border:1px solid var(--border-color); border-radius:10px; padding:12px;">
+              <div style="font-size:11px; color:var(--text-muted); font-weight:700; text-transform:uppercase;">内存与指针风险</div>
+              <div id="ch1-hazards" style="font-size:18px; font-weight:800; color:var(--accent-danger); margin-top:2px;">未测量</div>
+            </div>
+            <div style="background:var(--bg-subtle); border:1px solid var(--border-color); border-radius:10px; padding:12px;">
+              <div style="font-size:11px; color:var(--text-muted); font-weight:700; text-transform:uppercase;">发现的潜在缺陷</div>
+              <div id="ch1-latent-bugs" style="font-size:18px; font-weight:800; color:var(--accent-warning); margin-top:2px;">未测量</div>
+            </div>
+          </div>
+
+          <div id="opportunities-list" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:10px;"></div>
+        </div>
+      </details>
+
+      <!-- 第 2 章：模块化架构与代码整洁度 -->
+      <details class="collapsible-card">
+        <summary>
+          <div class="summary-left">
+            <div class="summary-title">
+              <span>🗂️ 第 2 章：模块化架构、代码整洁度与 Rustdoc</span>
+              <span id="ch2-doc-delta" class="badge badge-success">未测量</span>
+              <span id="ch2-loc-delta" class="badge badge-primary">未测量</span>
+            </div>
+            <div id="ch2-narrative" class="summary-sub">
+              尚未记录。
+            </div>
+          </div>
+          <span class="summary-toggle-pill">查看详情</span>
+        </summary>
+        <div class="collapsible-body">
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:14px;">
+            <div style="background:var(--bg-subtle); border:1px solid var(--border-color); border-radius:12px; padding:14px;">
+              <div style="font-size:13px; font-weight:700; margin-bottom:8px;">📚 注释与文档密度</div>
+              <div style="font-size:12px; color:var(--text-secondary); display:flex; justify-content:space-between; margin-bottom:4px;">
+                <span>迁移前（遗留代码）</span>
+                <span id="ch2-doc-before">未测量</span>
+              </div>
+              <div class="bar-track" style="margin-bottom:8px;">
+                <div id="ch2-doc-bar-before" class="bar-fill" style="width:0%; background:var(--accent-danger);"></div>
+              </div>
+              <div style="font-size:12px; font-weight:600; display:flex; justify-content:space-between; margin-bottom:4px;">
+                <span>迁移后（Rust + Rustdoc）</span>
+                <span id="ch2-doc-after" style="color:var(--accent-success);">未测量</span>
+              </div>
+              <div class="bar-track">
+                <div id="ch2-doc-bar-after" class="bar-fill" style="width:0%; background:var(--accent-success);"></div>
+              </div>
+            </div>
+
+            <div style="background:var(--bg-subtle); border:1px solid var(--border-color); border-radius:12px; padding:14px;">
+              <div style="font-size:13px; font-weight:700; margin-bottom:8px;">🗂️ 最大文件行数（≤400 行代码规则）</div>
+              <div style="font-size:12px; color:var(--text-secondary); display:flex; justify-content:space-between; margin-bottom:4px;">
+                <span>迁移前（单体代码）</span>
+                <span id="ch2-loc-before">未测量</span>
+              </div>
+              <div class="bar-track" style="margin-bottom:8px;">
+                <div id="ch2-loc-bar-before" class="bar-fill" style="width:0%; background:var(--accent-danger);"></div>
+              </div>
+              <div style="font-size:12px; font-weight:600; display:flex; justify-content:space-between; margin-bottom:4px;">
+                <span>迁移后（模块化 Rust）</span>
+                <span id="ch2-loc-after" style="color:var(--accent-success);">未测量</span>
+              </div>
+              <div class="bar-track">
+                <div id="ch2-loc-bar-after" class="bar-fill" style="width:0%; background:var(--accent-success);"></div>
+              </div>
+            </div>
+
+            <div style="background:var(--bg-subtle); border:1px solid var(--border-color); border-radius:12px; padding:14px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <span style="font-size:13px; font-weight:700;">🧠 认知简洁度</span>
+                <span id="ch2-simplicity-delta" class="badge badge-success">未测量</span>
+              </div>
+              <div style="font-size:12px; color:var(--text-secondary); display:flex; justify-content:space-between; margin-bottom:4px;">
+                <span>迁移前（函数行数 / 嵌套深度）</span>
+                <span id="ch2-simp-before">未测量</span>
+              </div>
+              <div class="bar-track" style="margin-bottom:8px;">
+                <div id="ch2-simp-bar-before" class="bar-fill" style="width:0%; background:var(--accent-danger);"></div>
+              </div>
+              <div style="font-size:12px; font-weight:600; display:flex; justify-content:space-between; margin-bottom:4px;">
+                <span>迁移后（函数行数 / 嵌套深度）</span>
+                <span id="ch2-simp-after" style="color:var(--accent-success);">未测量</span>
+              </div>
+              <div class="bar-track">
+                <div id="ch2-simp-bar-after" class="bar-fill" style="width:0%; background:var(--accent-success);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- 第 3、4 章：自动修复测试循环与 A/B 一致性验证 -->
+      <details class="collapsible-card">
+        <summary>
+          <div class="summary-left">
+            <div class="summary-title">
+              <span>🧪 第 3、4 章：自动修复测试循环与并排对比一致性证明</span>
+              <span id="ch3-initial-fail-badge" class="badge badge-warning">未记录测试运行</span>
+              <span id="ch4-parity-badge" class="badge badge-success">一致性尚未测量</span>
+            </div>
+            <div id="ch3-narrative" class="summary-sub">
+              尚未记录。
+            </div>
+          </div>
+          <span class="summary-toggle-pill">查看详情</span>
+        </summary>
+        <div class="collapsible-body" style="display:flex; flex-direction:column; gap:18px;">
+          <div>
+            <h4 style="margin:0 0 8px; font-size:14px; font-weight:700;">单元测试、文档测试与基于属性的测试迭代（自动修复审计记录）</h4>
+            <div id="test-iterations-list" style="display:flex; flex-direction:column; gap:10px;"></div>
+          </div>
+          <div style="padding-top:14px; border-top:1px solid var(--border-color);">
+            <h4 style="margin:0 0 4px; font-size:14px; font-weight:700;">A/B 差分输出一致性（遗留程序与 Rust 二进制程序对比）</h4>
+            <p id="ch4-narrative" style="margin:0 0 10px; font-size:12.5px; color:var(--text-secondary);"></p>
+            <div id="parity-iterations-list" style="display:flex; flex-direction:column; gap:10px;"></div>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <!-- 5. 技术证据：迁移前后代码重点对比 -->
+    <details id="sec-technical" class="collapsible-card" open>
+      <summary>
+        <div class="summary-left">
+          <div class="summary-title">
+            <span>🔬 代码重点对比：遗留实现与目标 Rust 实现</span>
+          </div>
+          <div id="spotlight-explanation" class="summary-sub">
+            尚未记录。
+          </div>
+        </div>
+        <span class="summary-toggle-pill">代码差异</span>
+      </summary>
+      <div class="collapsible-body">
+        <div class="code-grid">
+          <div class="code-box">
+            <div class="code-box-header" style="background:rgba(220, 38, 38, 0.18); color:#fca5a5;">
+              <span>❌ 迁移前：遗留实现</span>
+              <code id="spotlight-legacy-file" style="font-size:11px; color:#cbd5e1;">未测量</code>
+            </div>
+            <pre id="spotlight-legacy-code" style="padding:14px; font-size:12px; line-height:1.55; overflow-x:auto;"></pre>
+          </div>
+
+          <div class="code-box">
+            <div class="code-box-header" style="background:rgba(16, 185, 129, 0.18); color:#6ee7b7;">
+              <span>✅ 迁移后：目标 Rust 实现</span>
+              <code id="spotlight-rust-file" style="font-size:11px; color:#cbd5e1;">未测量</code>
+            </div>
+            <pre id="spotlight-rust-code" style="padding:14px; font-size:12px; line-height:1.55; overflow-x:auto;"></pre>
+          </div>
+        </div>
+      </div>
+    </details>
+
+  </main>
+
+<script>
+    const RAW_INJECTED = "__TELEMETRY_JSON_PLACEHOLDER__";
+    const DATA = (typeof RAW_INJECTED === "object" && RAW_INJECTED !== null)
+      ? RAW_INJECTED
+      : null;
+
+    // 主题管理
+    function applyTheme(theme) {
+      const resolved = theme === 'dark' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', resolved);
+      const iconEl = document.getElementById('theme-toggle-icon');
+      const labelEl = document.getElementById('theme-toggle-label');
+      if (iconEl && labelEl) {
+        if (resolved === 'dark') {
+          iconEl.textContent = '☀️';
+          labelEl.textContent = '浅色模式';
+        } else {
+          iconEl.textContent = '🌙';
+          labelEl.textContent = '深色模式';
+        }
+      }
+      try {
+        localStorage.setItem('migrate_to_rust_theme', resolved);
+      } catch (e) {}
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+    }
+
+    (function initTheme() {
+      let saved = 'light';
+      try {
+        const stored = localStorage.getItem('migrate_to_rust_theme');
+        if (stored === 'dark' || stored === 'light') saved = stored;
+      } catch (e) {}
+      applyTheme(saved);
+    })();
+
+    // 将 AI 耗时（分钟）严格格式化为紧凑的 H:MM 格式
+    function formatAiDuration(totalMins) {
+      const m = Math.max(0, Math.round(Number(totalMins) || 0));
+      const hrs = Math.floor(m / 60);
+      const mins = m % 60;
+      return `${hrs}:${String(mins).padStart(2, '0')}`;
+    }
+
+    let currentViewMode = 'all';
+
+    function setViewMode(mode, skipUrlUpdate) {
+      if (!['all', 'executive', 'technical'].includes(mode)) mode = 'all';
+      currentViewMode = mode;
+      const secBench = document.getElementById('sec-benchmarks-time');
+      const secScorecard = document.getElementById('sec-scorecard');
+      const secStory = document.getElementById('sec-story');
+      const secTech = document.getElementById('sec-technical');
+
+      ['all', 'executive', 'technical'].forEach(m => {
+        const btn = document.getElementById('btn-mode-' + m);
+        if (!btn) return;
+        if (m === mode) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      if (mode === 'all') {
+        secBench.classList.remove('hidden');
+        secScorecard.classList.remove('hidden');
+        secStory.classList.remove('hidden');
+        secTech.classList.remove('hidden');
+      } else if (mode === 'executive') {
+        secBench.classList.remove('hidden');
+        secScorecard.classList.remove('hidden');
+        secStory.classList.remove('hidden');
+        secTech.classList.add('hidden');
+      } else if (mode === 'technical') {
+        secBench.classList.remove('hidden');
+        secScorecard.classList.add('hidden');
+        secStory.classList.add('hidden');
+        secTech.classList.remove('hidden');
+        secTech.open = true;
+      }
+
+      if (!skipUrlUpdate && typeof window !== 'undefined' && window.history && window.history.replaceState && window.location) {
+        const base = String(window.location.href || '').split('?')[0];
+        const nextUrl = mode === 'all' ? base : `${base}?mode=${encodeURIComponent(mode)}`;
+        window.history.replaceState({ mode }, '', nextUrl);
+      }
+    }
+
+    function gradeFromScore(s) {
+      if (s === null || s === undefined) return '不适用';
+      if (s >= 95) return 'A+';
+      if (s >= 90) return 'A';
+      if (s >= 80) return 'B';
+      if (s >= 70) return 'C';
+      if (s >= 55) return 'D';
+      return 'F';
+    }
+
+    function renderAll() {
+      if (!DATA) {
+        const mainEl = document.querySelector('main');
+        if (mainEl) {
+          mainEl.innerHTML = `
+            <section class="card" style="border:2px dashed var(--accent-warning); text-align:center; padding:48px 24px;">
+              <span class="badge badge-warning" style="margin-bottom:12px;">未渲染模板（失败时关闭）</span>
+              <h2 style="margin:0 0 10px; font-size:22px; font-weight:800;">尚未注入遥测数据</h2>
+              <p style="margin:0 auto; max-width:640px; font-size:14px; color:var(--text-secondary); line-height:1.6;">
+                此 HTML 文件是未渲染的模板。运行 <code>python3 scripts/telemetry.py render-infographic --telemetry migration_telemetry.json --out migration_infographic.html</code>，注入实测迁移遥测数据。
+              </p>
+            </section>
+          `;
+        }
+        return;
+      }
+      const beforeCensus = (DATA.census && DATA.census.before) || {};
+      const afterCensus = (DATA.census && DATA.census.after) || {};
+      const hasAfterUnsafe = afterCensus.unsafe_blocks !== null && afterCensus.unsafe_blocks !== undefined;
+      const hasBeforeHazards = beforeCensus.hazards_count !== null && beforeCensus.hazards_count !== undefined;
+
+      document.getElementById('nav-project-title').textContent = DATA.project_name || 'Rust 迁移遥测报告';
+      const navLangBadgeEl = document.getElementById('nav-lang-badge');
+      if (hasAfterUnsafe && Number(afterCensus.unsafe_blocks) === 0) {
+        navLangBadgeEl.textContent = `${DATA.legacy_language || '遗留语言'} → 安全 Rust`;
+        navLangBadgeEl.className = 'badge badge-success';
+      } else if (afterCensus.scanned) {
+        navLangBadgeEl.textContent = `${DATA.legacy_language || '遗留语言'} → Rust`;
+        navLangBadgeEl.className = 'badge badge-primary';
+      } else {
+        navLangBadgeEl.textContent = DATA.legacy_language ? `${DATA.legacy_language}（目标：Rust）` : '语言：尚未测量';
+        navLangBadgeEl.className = 'badge badge-primary';
+      }
+      const modelBadgeEl = document.getElementById('nav-model-badge');
+      if (DATA.model && String(DATA.model).trim() && String(DATA.model).toLowerCase() !== 'unspecified') {
+        modelBadgeEl.textContent = `模型：${DATA.model}`;
+        modelBadgeEl.classList.remove('hidden');
+      } else {
+        modelBadgeEl.classList.add('hidden');
+      }
+      document.getElementById('hero-timestamp').textContent = (DATA.completed_at && afterCensus.scanned)
+        ? `完成于 ${DATA.completed_at}`
+        : (DATA.completed_at ? `快照时间：${DATA.completed_at}（未完成）` : '未完成／进行中');
+
+      const story = DATA.story || {};
+      document.getElementById('hero-headline').textContent = story.headline
+        || `${DATA.project_name || '代码仓库'} 迁移遥测`;
+      document.getElementById('hero-narrative').textContent = story.intro
+        || '尚未通过 set-story 记录叙述摘要。';
+      document.getElementById('ch1-narrative').textContent = story.ch1_narrative || '尚未记录。';
+      document.getElementById('ch2-narrative').textContent = story.ch2_narrative || '尚未记录。';
+      document.getElementById('ch3-narrative').textContent = story.ch3_narrative || '尚未记录。';
+      document.getElementById('ch4-narrative').textContent = story.ch4_narrative || '';
+      document.getElementById('ch5-narrative').textContent = story.ch5_narrative
+        || '从遗留代码基线逐步推进到 Rust 的基准测试阶段。';
+
+      const benches = DATA.benchmarks || [];
+      if (benches.length >= 2) {
+        const baseBench = benches[0];
+        const finalBench = benches[benches.length - 1];
+        const speedup = Number(finalBench.speedup || (baseBench.wall_time_ms / Math.max(finalBench.wall_time_ms, 0.001)));
+        const runtimeSavedPct = ((1 - 1 / Math.max(speedup, 1)) * 100).toFixed(1);
+        document.getElementById('hero-speedup').textContent = `${speedup.toFixed(2)}x`;
+        document.getElementById('hero-speed-sub').textContent = `${runtimeSavedPct}% 提速（${baseBench.wall_time_ms} → ${finalBench.wall_time_ms} ms）`;
+      } else {
+        document.getElementById('hero-speedup').textContent = '尚未测量';
+        document.getElementById('hero-speed-sub').textContent = '通过 log-benchmark 记录基准测试';
+        document.getElementById('hero-speed-grade').textContent = '不适用';
+      }
+
+      const safetyBadgeEl = document.getElementById('hero-safety-badge');
+
+      if (hasAfterUnsafe) {
+        document.getElementById('hero-unsafe').textContent = `${afterCensus.unsafe_blocks} 个 unsafe 块`;
+        if (Number(afterCensus.unsafe_blocks) === 0) {
+          safetyBadgeEl.textContent = '#![forbid(unsafe)]';
+          safetyBadgeEl.className = 'badge badge-success';
+        } else {
+          safetyBadgeEl.textContent = `${afterCensus.unsafe_blocks} 个 unsafe 块`;
+          safetyBadgeEl.className = 'badge badge-warning';
+        }
+      } else {
+        document.getElementById('hero-unsafe').textContent = '尚未测量';
+        safetyBadgeEl.textContent = '尚未测量';
+        safetyBadgeEl.className = 'badge badge-warning';
+      }
+      if (hasBeforeHazards && hasAfterUnsafe) {
+        if (Number(afterCensus.unsafe_blocks) === 0) {
+          document.getElementById('hero-safety-sub').textContent = `已消除 ${beforeCensus.hazards_count} 处遗留指针／内存隐患`;
+        } else {
+          document.getElementById('hero-safety-sub').textContent = `${beforeCensus.hazards_count} 处遗留隐患 → ${afterCensus.unsafe_blocks} 个 Rust unsafe 块`;
+        }
+      } else if (hasBeforeHazards) {
+        document.getElementById('hero-safety-sub').textContent = `已扫描出 ${beforeCensus.hazards_count} 处遗留隐患（待执行迁移后扫描）`;
+      } else {
+        document.getElementById('hero-safety-sub').textContent = '通过 scan-codebase --phase before 扫描遗留代码库';
+      }
+
+      const parityRuns = DATA.parity_iterations || [];
+      const covText = (afterCensus.branch_coverage_pct !== null && afterCensus.branch_coverage_pct !== undefined)
+        ? `${afterCensus.branch_coverage_pct}% 覆盖率`
+        : '尚未测量覆盖率';
+      if (parityRuns.length > 0) {
+        const lastParity = parityRuns[parityRuns.length - 1];
+        const parityPct = lastParity.seeds_tested > 0 ? ((lastParity.seeds_passed / lastParity.seeds_tested) * 100).toFixed(1) : '0.0';
+        document.getElementById('hero-parity-seeds').textContent = `${lastParity.seeds_tested} 个种子`;
+        document.getElementById('hero-parity').textContent = `${parityPct}%`;
+        document.getElementById('hero-parity-sub').textContent = `已在容差范围内验证 • ${covText}`;
+      } else {
+        document.getElementById('hero-parity-seeds').textContent = '尚未测量';
+        document.getElementById('hero-parity').textContent = '尚未测量';
+        document.getElementById('hero-parity-sub').textContent = `尚未记录一致性测试 • ${covText}`;
+      }
+
+      // 智能体实测耗时指标
+      const buckets = DATA.time_buckets || [];
+      const totalMins = buckets.reduce((acc, b) => acc + (b.minutes || 0), 0);
+      const activeStages = buckets.filter(b => (b.minutes || 0) > 0).length;
+      const formattedAiTime = formatAiDuration(totalMins);
+
+      if (activeStages > 0) {
+        document.getElementById('hero-total-time').textContent = formattedAiTime;
+        document.getElementById('hero-roi-badge').textContent = `${activeStages}/${buckets.length || 6} 个阶段已计时`;
+        document.getElementById('hero-roi-sub').textContent = `各任务计时分组实测共 ${totalMins} 分钟`;
+      } else {
+        document.getElementById('hero-total-time').textContent = '尚未测量';
+        document.getElementById('hero-roi-badge').textContent = '尚未测量';
+        document.getElementById('hero-roi-sub').textContent = '尚未记录阶段计时';
+      }
+
+      // 渲染评分卡网格
+      const scorecard = DATA.scorecard || [];
+      if (scorecard[0] && scorecard[0].after_grade && scorecard[0].after_score !== null && scorecard[0].after_score !== undefined) {
+        document.getElementById('hero-speed-grade').textContent = scorecard[0].after_grade;
+      } else {
+        document.getElementById('hero-speed-grade').textContent = '不适用';
+      }
+      const gridEl = document.getElementById('scorecard-grid');
+      gridEl.innerHTML = '';
+      let sumBefore = 0, countBefore = 0, sumAfter = 0, countAfter = 0;
+
+      scorecard.forEach(item => {
+        const hasBefore = item.before_score !== null && item.before_score !== undefined;
+        const hasAfter = item.after_score !== null && item.after_score !== undefined;
+        if (hasBefore) { sumBefore += item.before_score; countBefore++; }
+        if (hasAfter) { sumAfter += item.after_score; countAfter++; }
+        const beforeScoreText = hasBefore ? `${item.before_score}/100 (${item.before_grade})` : '尚未测量';
+        const afterScoreText = hasAfter ? `${item.after_score}/100 (${item.after_grade})` : '尚未测量';
+        const barWidth = hasAfter ? item.after_score : 0;
+
+        const card = document.createElement('div');
+        card.className = "score-item";
+        card.innerHTML = `
+          <div>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:6px; margin-bottom:8px;">
+              <span style="font-size:12.5px; font-weight:700;">${item.icon || '📊'} ${item.title}</span>
+              <span class="badge ${hasAfter ? 'badge-success' : 'badge-warning'}">${item.delta_badge}</span>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; background:var(--bg-surface); border:1px solid var(--border-color); border-radius:9px; padding:8px 10px; margin-bottom:8px;">
+              <div>
+                <div style="font-size:10px; text-transform:uppercase; color:var(--text-muted);">迁移前</div>
+                <div style="font-size:13px; font-weight:700; color:var(--accent-danger);">${beforeScoreText}</div>
+                <div style="font-size:11px; color:var(--text-secondary);">${item.before_label}</div>
+              </div>
+              <div style="font-weight:700; color:var(--text-muted);">→</div>
+              <div style="text-align:right;">
+                <div style="font-size:10px; text-transform:uppercase; color:var(--text-muted);">迁移后（Rust）</div>
+                <div style="font-size:13px; font-weight:800; color:var(--accent-success);">${afterScoreText}</div>
+                <div style="font-size:11px; color:var(--accent-success); font-weight:600;">${item.after_label}</div>
+              </div>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:${barWidth}%; background:var(--accent-success);"></div>
+            </div>
+          </div>
+          <div style="font-size:11.5px; color:var(--text-secondary); line-height:1.45;">
+            ${item.explanation}
+          </div>
+        `;
+        gridEl.appendChild(card);
+      });
+
+      const avgBefore = countBefore > 0 ? Math.round(sumBefore / countBefore) : null;
+      const avgAfter = countAfter > 0 ? Math.round(sumAfter / countAfter) : null;
+      document.getElementById('overall-before-score').textContent = avgBefore !== null
+        ? `遗留代码：${avgBefore}/100（${gradeFromScore(avgBefore)}）`
+        : '遗留代码：尚未测量';
+      document.getElementById('overall-after-score').textContent = avgAfter !== null
+        ? `安全 Rust：${avgAfter}/100（${gradeFromScore(avgAfter)}）`
+        : '安全 Rust：尚未测量';
+
+      // 第 1 章：指标与改进机会
+      const latentBugsRaw = beforeCensus.latent_bugs_found;
+      const hasLatentBugsCount = (
+        latentBugsRaw !== null &&
+        latentBugsRaw !== undefined &&
+        (Boolean(beforeCensus.scanned) || (Array.isArray(DATA.opportunities) && DATA.opportunities.length > 0))
+      );
+      if (hasLatentBugsCount) {
+        const bugsCount = Number(latentBugsRaw);
+        document.getElementById('ch1-bugs-pill').textContent = `发现 ${bugsCount} 个潜在缺陷`;
+        document.getElementById('ch1-latent-bugs').textContent = `${bugsCount} 个缺陷`;
+      } else {
+        document.getElementById('ch1-bugs-pill').textContent = '尚未测量审计指标';
+        document.getElementById('ch1-latent-bugs').textContent = '尚未测量';
+      }
+      document.getElementById('ch1-max-loc').textContent = beforeCensus.max_file_loc ? `${beforeCensus.max_file_loc.toLocaleString()} 行代码` : '尚未测量';
+      document.getElementById('ch1-comment-pct').textContent = (beforeCensus.comment_pct !== null && beforeCensus.comment_pct !== undefined) ? `${beforeCensus.comment_pct}%` : '尚未测量';
+      document.getElementById('ch1-hazards').textContent = (beforeCensus.hazards_count !== null && beforeCensus.hazards_count !== undefined) ? `${beforeCensus.hazards_count} 处隐患` : '尚未测量';
+
+      const oppEl = document.getElementById('opportunities-list');
+      oppEl.innerHTML = '';
+      (DATA.opportunities || []).forEach(opp => {
+        const cat = String(opp.category || 'architecture');
+        const isBug = cat === 'latent_bug';
+        const badgeClass = isBug ? 'badge-danger' : 'badge-primary';
+        const badgeLabel = isBug ? '🐞 遗留代码潜在缺陷' : `💡 ${{ performance: '性能', safety: '安全', hygiene: '代码整洁度', architecture: '架构' }[cat] || cat.toUpperCase()}`;
+        const item = document.createElement('div');
+        item.style.cssText = "background:var(--bg-subtle); border:1px solid var(--border-color); border-radius:12px; padding:14px;";
+        item.innerHTML = `
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:6px;">
+            <span class="badge ${badgeClass}">${badgeLabel}</span>
+            <code style="font-size:11px; color:var(--text-muted);">${opp.file || ''}</code>
+          </div>
+          <div style="font-size:13px; font-weight:700; margin-bottom:4px;">${opp.title || ''}</div>
+          <div style="font-size:12.5px; color:var(--text-secondary); line-height:1.5;">${opp.description || ''}</div>
+        `;
+        oppEl.appendChild(item);
+      });
+
+      // 第 2 章：代码整洁度与简洁度条形图
+      const docBeforePct = beforeCensus.comment_pct;
+      const docAfterPct = afterCensus.comment_pct;
+      if (docBeforePct !== null && docBeforePct !== undefined && docAfterPct !== null && docAfterPct !== undefined) {
+        const docIncreasePct = docBeforePct > 0 ? Math.round(((docAfterPct - docBeforePct) / docBeforePct) * 100) : 0;
+        const docTestsVal = (afterCensus.doc_tests !== null && afterCensus.doc_tests !== undefined) ? afterCensus.doc_tests : null;
+        document.getElementById('ch2-doc-delta').textContent = docIncreasePct >= 0
+          ? `文档增加 ${docIncreasePct}%`
+          : (docTestsVal !== null ? `${docTestsVal} 个文档测试` : `${docAfterPct}% 文档占比`);
+        const beforeLinesPart = (beforeCensus.comment_loc !== null && beforeCensus.comment_loc !== undefined) ? `（${beforeCensus.comment_loc} 行）` : '';
+        const afterLinesPart = (afterCensus.comment_loc !== null && afterCensus.comment_loc !== undefined)
+          ? `（${afterCensus.comment_loc} 行${docTestsVal !== null ? ` • ${docTestsVal} 个文档测试` : ''}）`
+          : (docTestsVal !== null ? `（${docTestsVal} 个文档测试）` : '');
+        document.getElementById('ch2-doc-before').textContent = `${docBeforePct}%${beforeLinesPart}`;
+        document.getElementById('ch2-doc-after').textContent = `${docAfterPct}%${afterLinesPart}`;
+        document.getElementById('ch2-doc-bar-before').style.width = `${Math.min(100, Math.max(5, Math.round(docBeforePct * 2)))}%`;
+        document.getElementById('ch2-doc-bar-after').style.width = `${Math.min(100, Math.max(5, Math.round(docAfterPct * 2.5)))}%`;
+      } else {
+        document.getElementById('ch2-doc-delta').textContent = '尚未测量';
+        document.getElementById('ch2-doc-before').textContent = docBeforePct !== null && docBeforePct !== undefined ? `${docBeforePct}%` : '尚未测量';
+        document.getElementById('ch2-doc-after').textContent = docAfterPct !== null && docAfterPct !== undefined ? `${docAfterPct}%` : '尚未测量';
+        document.getElementById('ch2-doc-bar-before').style.width = '0%';
+        document.getElementById('ch2-doc-bar-after').style.width = '0%';
+      }
+
+      const maxLocBefore = beforeCensus.max_file_loc || 0;
+      const maxLocAfter = afterCensus.max_file_loc || 0;
+      if (maxLocBefore > 0 && maxLocAfter > 0) {
+        const locDropPct = Math.round(((maxLocBefore - maxLocAfter) / maxLocBefore) * 100);
+        document.getElementById('ch2-loc-delta').textContent = `${locDropPct >= 0 ? '-' : '+'}${Math.abs(locDropPct)}% 最大文件行数`;
+        document.getElementById('ch2-loc-before').textContent = `最多 ${maxLocBefore.toLocaleString()} 行代码`;
+        document.getElementById('ch2-loc-after').textContent = `最多 ${maxLocAfter.toLocaleString()} 行代码`;
+        document.getElementById('ch2-loc-bar-before').style.width = '95%';
+        document.getElementById('ch2-loc-bar-after').style.width = `${Math.min(95, Math.max(10, Math.round((maxLocAfter / Math.max(maxLocBefore, 400)) * 95)))}%`;
+      } else {
+        document.getElementById('ch2-loc-delta').textContent = '尚未测量';
+        document.getElementById('ch2-loc-before').textContent = maxLocBefore > 0 ? `${maxLocBefore} 行代码` : '尚未测量';
+        document.getElementById('ch2-loc-after').textContent = maxLocAfter > 0 ? `${maxLocAfter} 行代码` : '尚未测量';
+        document.getElementById('ch2-loc-bar-before').style.width = '0%';
+        document.getElementById('ch2-loc-bar-after').style.width = '0%';
+      }
+
+      const fnBefore = beforeCensus.avg_fn_loc;
+      const fnAfter = afterCensus.avg_fn_loc;
+      const depthBefore = beforeCensus.max_nesting_depth;
+      const depthAfter = afterCensus.max_nesting_depth;
+      if (fnBefore !== null && fnBefore !== undefined && fnAfter !== null && fnAfter !== undefined) {
+        const fnDropPct = fnBefore > 0 ? Math.round(((fnBefore - fnAfter) / fnBefore) * 100) : 0;
+        const hasDepth = depthBefore !== null && depthBefore !== undefined && depthAfter !== null && depthAfter !== undefined;
+        document.getElementById('ch2-simplicity-delta').textContent = fnDropPct >= 0
+          ? `函数复杂度降低 ${fnDropPct}%`
+          : (hasDepth ? `嵌套深度 ${depthBefore} → ${depthAfter}` : `${fnAfter} 行代码／函数`);
+        document.getElementById('ch2-simp-before').textContent = `${fnBefore} 行代码／函数${depthBefore !== null && depthBefore !== undefined ? ` • 嵌套深度 ${depthBefore}` : ''}`;
+        document.getElementById('ch2-simp-after').textContent = `${fnAfter} 行代码／函数${depthAfter !== null && depthAfter !== undefined ? ` • 嵌套深度 ${depthAfter}` : ''}`;
+        const maxFn = Math.max(fnBefore, fnAfter, 1);
+        document.getElementById('ch2-simp-bar-before').style.width = `${Math.min(95, Math.max(10, Math.round((fnBefore / maxFn) * 90)))}%`;
+        document.getElementById('ch2-simp-bar-after').style.width = `${Math.min(95, Math.max(10, Math.round((fnAfter / maxFn) * 90)))}%`;
+      } else {
+        document.getElementById('ch2-simplicity-delta').textContent = '尚未测量';
+        document.getElementById('ch2-simp-before').textContent = (fnBefore !== null && fnBefore !== undefined) ? `${fnBefore} 行代码／函数` : '尚未测量';
+        document.getElementById('ch2-simp-after').textContent = (fnAfter !== null && fnAfter !== undefined) ? `${fnAfter} 行代码／函数` : '尚未测量';
+        document.getElementById('ch2-simp-bar-before').style.width = '0%';
+        document.getElementById('ch2-simp-bar-after').style.width = '0%';
+      }
+
+      // 第 3 章：测试自动修复列表
+      const testListEl = document.getElementById('test-iterations-list');
+      testListEl.innerHTML = '';
+      const testRuns = DATA.test_iterations || [];
+      if (testRuns.length > 0) {
+        const firstRun = testRuns[0];
+        const lastRun = testRuns[testRuns.length - 1];
+        const firstFailPct = firstRun.total > 0 ? ((firstRun.failed / firstRun.total) * 100).toFixed(1) : "0.0";
+        const lastPassPct = lastRun.total > 0 ? ((lastRun.passed / lastRun.total) * 100).toFixed(1) : "0.0";
+        document.getElementById('ch3-initial-fail-badge').textContent =
+          `首次测试：${firstFailPct}% 失败 → 最终测试：${lastPassPct}% 通过`;
+      } else {
+        document.getElementById('ch3-initial-fail-badge').textContent = '尚未记录测试运行';
+      }
+      testRuns.forEach(tr => {
+        const passPct = tr.total > 0 ? ((tr.passed / tr.total) * 100).toFixed(1) : "0.0";
+        const isClean = tr.failed === 0;
+        const covDisplay = (tr.coverage_pct !== null && tr.coverage_pct !== undefined) ? `${tr.coverage_pct}%` : '尚未测量';
+        const clippyDisplay = (tr.clippy_warnings !== null && tr.clippy_warnings !== undefined) ? String(tr.clippy_warnings) : '尚未测量';
+        const row = document.createElement('div');
+        row.style.cssText = "background:var(--bg-subtle); border:1px solid var(--border-color); border-radius:12px; padding:14px; font-size:12.5px;";
+        row.innerHTML = `
+          <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; margin-bottom:6px;">
+            <div>
+              <span class="badge ${isClean ? 'badge-success' : 'badge-warning'}">第 ${tr.iteration} 次测试</span>
+              <strong style="margin-left:6px;">${tr.passed}/${tr.total} 通过（${passPct}%）• ${tr.failed} 失败</strong>
+            </div>
+            <span style="color:var(--text-secondary);">覆盖率：<strong>${covDisplay}</strong> • Clippy 警告：<strong>${clippyDisplay}</strong></span>
+          </div>
+          <div style="color:var(--text-secondary); margin-top:4px;"><strong>诊断：</strong> ${tr.failures_summary}</div>
+          <div style="color:var(--accent-success-text); margin-top:3px;"><strong>自动修复操作：</strong> ${tr.fix_applied}</div>
+        `;
+        testListEl.appendChild(row);
+      });
+
+      // 第 4 章：一致性测试迭代
+      const parityEl = document.getElementById('parity-iterations-list');
+      parityEl.innerHTML = '';
+      if (parityRuns.length > 0) {
+        const lp = parityRuns[parityRuns.length - 1];
+        const pct = lp.seeds_tested > 0 ? ((lp.seeds_passed / lp.seeds_tested) * 100).toFixed(1) : '0.0';
+        document.getElementById('ch4-parity-badge').textContent = `${pct}% 输出一致性`;
+      } else {
+        document.getElementById('ch4-parity-badge').textContent = '尚未测量一致性';
+      }
+      parityRuns.forEach(pr => {
+        const isClean = pr.seeds_passed === pr.seeds_tested;
+        const row = document.createElement('div');
+        row.style.cssText = "background:var(--bg-subtle); border:1px solid var(--border-color); border-radius:12px; padding:14px; font-size:12.5px;";
+        row.innerHTML = `
+          <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; margin-bottom:6px;">
+            <span class="badge ${isClean ? 'badge-success' : 'badge-warning'}">第 ${pr.iteration} 次 A/B 一致性测试：${pr.seeds_passed}/${pr.seeds_tested} 个种子结果一致</span>
+            <span style="color:var(--text-secondary);">最大误差：<strong>${pr.max_abs_error}</strong></span>
+          </div>
+          <div style="color:var(--text-secondary);"><strong>发现：</strong> ${pr.divergence_cause}</div>
+          <div style="color:var(--accent-success-text); margin-top:3px;"><strong>解决方案：</strong> ${pr.fix_applied}</div>
+        `;
+        parityEl.appendChild(row);
+      });
+
+      // 第 5 章：PGO 基准测试阶梯图
+      const stairEl = document.getElementById('benchmark-staircase');
+      stairEl.innerHTML = '';
+      if (benches.length >= 2) {
+        const prePgo = benches[benches.length - 2];
+        const postPgo = benches[benches.length - 1];
+        if (prePgo && postPgo && postPgo.wall_time_ms > 0) {
+          const pgoGain = Math.round(((prePgo.wall_time_ms - postPgo.wall_time_ms) / prePgo.wall_time_ms) * 100);
+          if (pgoGain > 0) {
+            document.getElementById('ch5-pgo-badge').textContent = `PGO 额外提速 ${pgoGain}%`;
+          } else {
+            document.getElementById('ch5-pgo-badge').textContent = `已记录 ${benches.length} 个阶段`;
+          }
+        }
+      } else if (benches.length === 1) {
+        document.getElementById('ch5-pgo-badge').textContent = '已记录 1 个阶段';
+      } else {
+        document.getElementById('ch5-pgo-badge').textContent = '尚未记录基准测试';
+      }
+      const firstBenchMs = benches.length > 0 ? Math.max(0.001, benches[0].wall_time_ms) : 1.0;
+      benches.forEach((b, idx) => {
+        const timeRatioPct = Math.min(100, Math.max(10, Math.round((b.wall_time_ms / firstBenchMs) * 100)));
+        const isFinal = idx === benches.length - 1;
+        const barCol = idx === 0 ? 'var(--text-muted)' : (isFinal ? 'var(--accent-success)' : 'var(--accent-primary)');
+        const row = document.createElement('div');
+        row.style.cssText = "background:var(--bg-subtle); border:1px solid var(--border-color); border-radius:10px; padding:11px 13px;";
+        row.innerHTML = `
+          <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:6px; font-size:12.5px; margin-bottom:5px;">
+            <strong>${b.label}</strong>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="mono" style="font-size:11.5px; color:var(--text-secondary);">${b.wall_time_ms} ms • ${b.peak_rss_mb} MB</span>
+              <span class="badge ${isFinal ? 'badge-success' : 'badge-primary'}">${b.speedup.toFixed(2)}x</span>
+            </div>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:${timeRatioPct}%; background:${barCol};"></div>
+          </div>
+          <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">${b.notes || ''}</div>
+        `;
+        stairEl.appendChild(row);
+      });
+
+      // 第 6 章：任务计时分组
+      document.getElementById('ch6-total-badge').textContent = activeStages > 0 ? `总计：${formattedAiTime}` : '尚未测量';
+      const stackedBar = document.getElementById('time-stacked-bar');
+      const bucketsGrid = document.getElementById('time-buckets-grid');
+      stackedBar.innerHTML = '';
+      bucketsGrid.innerHTML = '';
+
+      const palette = ['#3b82f6', '#6366f1', '#10b981', '#f59e0b', '#06b6d4', '#8b5cf6'];
+      buckets.forEach((b, idx) => {
+        const pct = totalMins > 0 ? ((b.minutes / totalMins) * 100).toFixed(1) : '0.0';
+        const col = palette[idx % palette.length];
+        if (b.minutes > 0) {
+          const seg = document.createElement('div');
+          seg.style.cssText = `width:${pct}%; height:100%; background:${col};`;
+          seg.title = `${b.label}: ${formatAiDuration(b.minutes)} (${pct}%)`;
+          stackedBar.appendChild(seg);
+        }
+
+        const card = document.createElement('div');
+        card.style.cssText = "background:var(--bg-subtle); border:1px solid var(--border-color); border-radius:10px; padding:9px 11px; display:flex; align-items:center; justify-content:space-between; gap:8px;";
+        card.innerHTML = `
+          <div style="display:flex; align-items:center; gap:7px;">
+            <span style="width:9px; height:9px; border-radius:999px; background:${col}; flex-shrink:0;"></span>
+            <div>
+              <div style="font-size:12px; font-weight:700;">${b.label}</div>
+              <div style="font-size:10.5px; color:var(--text-muted);">${b.minutes > 0 ? `占智能体耗时的 ${pct}%` : '尚未计时'}</div>
+            </div>
+          </div>
+          <strong class="mono" style="font-size:12.5px;">${b.minutes > 0 ? formatAiDuration(b.minutes) : '尚未测量'}</strong>
+        `;
+        bucketsGrid.appendChild(card);
+      });
+
+      // 重点展示
+      const spot = DATA.spotlight || {};
+      document.getElementById('spotlight-explanation').textContent = spot.explanation || '尚未记录。';
+      document.getElementById('spotlight-legacy-file').textContent = spot.legacy_file || '尚未测量';
+      document.getElementById('spotlight-legacy-code').textContent = spot.legacy_code || '';
+      document.getElementById('spotlight-rust-file').textContent = spot.rust_file || '尚未测量';
+      document.getElementById('spotlight-rust-code').textContent = spot.rust_code || '';
+    }
+
+    renderAll();
+    if (typeof window !== 'undefined' && window.location && window.location.search) {
+      const m = String(window.location.search).match(/[?&]mode=([^&]+)/);
+      const modeParam = m ? decodeURIComponent(m[1]) : null;
+      if (modeParam && ['all', 'executive', 'technical'].includes(modeParam)) {
+        setViewMode(modeParam, true);
+      }
+    }
+  </script>
+
+</body>
+</html>
