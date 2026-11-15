@@ -36,7 +36,7 @@ description: Processes a specific input into a defined output. Use when the user
 3. 如需提问，按下节原文内联用户输入规则。
 4. 将分支细节、模板及可执行脚本分别放入包内的 `references/`、`assets/`、`scripts/`，在入口声明何时读取或运行。
 5. 编写面向使用者的 `README.md`，说明适用场景、输入、输出、依赖和限制。改变已有技能行为时同步其 README 及相关说明。
-6. 在根目录 [README.md](../README.md) 与 [README-CN.md](../README-CN.md) 同步分类、列表、链接和数量；列表中的技能名称直接链接到对应 `SKILL.md`。
+6. 在根目录 [README.md](../README.md) 与 [README-CN.md](../README-CN.md) 同步分类、列表、链接和数量；列表中的技能名称直接链接到对应 `SKILL.md`，文档列链接到对应 `README.md`。
 7. 验证 frontmatter、引用、脚本及独立复制后的可用性，运行相关测试，审阅 diff 并执行 `git diff --check`。未完成的动态或模型测试必须如实披露。
 
 ## User Input Tools
