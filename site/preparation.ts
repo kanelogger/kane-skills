@@ -47,6 +47,10 @@ export const preparation: Record<string, [zh: string, en: string]> = {
     "提供文章、笔记、结构化数据或主题材料。会集中补齐交付形式、受众与用途、风格、尺寸、语言、数量和关键内容，并用于文案、布局与完整独立提示词。仅提示词无需生图工具；图片需已有授权的生图工具及看图验收能力，无自带脚本。",
     "Provide an article, notes, structured data, or topic materials. Missing deliverable, audience and use, style, dimensions, language, count, and key content are clarified together and applied to copy, layout, and complete standalone prompts. Prompts need no image tool; images need an already authorized generation tool and visual review. No bundled scripts are required.",
   ],
+  "kane-xhs-images": [
+    "提供文章、笔记或主题材料，可附参考图。会集中补齐交付形式、受众与读者所得、风格、比例尺寸、数量、语言、必留禁用内容及参考素材用途，并用于逐页文案、图形关系、构图和提示词；推荐的 3:4 比例经确认后生效。仅提示词无需生图服务；图片需可用且已授权的生图与看图工具，无自带脚本，不附带发布或流量承诺。",
+    "Provide an article, notes, or topic materials, with optional references. Missing deliverable, audience and takeaway, style, ratio and dimensions, count, language, required and excluded content, and reference use are clarified together and applied to page copy, visual relationships, composition, and prompts. The recommended 3:4 ratio applies after confirmation. Prompts need no generation service; images need available, authorized generation and viewing tools. No bundled scripts, publishing, or traffic guarantees are included.",
+  ],
   "kane-bilibili-transcript": [
     "提供视频链接或 BV 号。视频须已有字幕轨，受限字幕可能需要已登录的 B 站浏览器会话。",
     "Provide a video URL or BV ID. The video needs an existing caption track. Restricted tracks may require a signed-in Bilibili session.",

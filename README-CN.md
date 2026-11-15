@@ -1,7 +1,7 @@
 # ![Kane Skills](assets/brand/kane-skills-armory-logo.svg)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-29-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-30-green.svg)](skills/)
 
 > 语言版本: [English README](README.md) | [中文 README](README-CN.md)
 
@@ -23,7 +23,7 @@ Kane 创建的可复用智能体技能库。
 
 ## 技能列表
 
-29 个技能分为 7 个分类，放在 `skills/<分类>/<技能名>/` 下，每个技能按用户眼前的主要任务唯一归类，而非按输入来源分类。单独使用某个技能时，复制或安装包含 `SKILL.md` 的技能目录即可。
+30 个技能分为 7 个分类，放在 `skills/<分类>/<技能名>/` 下，每个技能按用户眼前的主要任务唯一归类，而非按输入来源分类。单独使用某个技能时，复制或安装包含 `SKILL.md` 的技能目录即可。
 
 可按名称调用技能。在 Codex 中输入 `$技能名`，例如 `$kane-translate`。是否支持自动选择取决于技能的调用策略和运行时。
 
@@ -51,13 +51,14 @@ Kane 创建的可复用智能体技能库。
 | [`merge-drafts`](skills/editing/merge-drafts/SKILL.md) | 将多份草稿合并为一篇润色后的文章。 | 最终合并文章及合并报告。 | [SKILL](skills/editing/merge-drafts/SKILL.md) |
 | [`blog-checker`](skills/editing/blog-checker/SKILL.md) | 审阅中文技术博客文章。 | 结构化诊断审阅。 | [SKILL](skills/editing/blog-checker/SKILL.md) |
 
-### assets · 素材获取与处理（7）
+### assets · 素材获取与处理（8）
 
 | 技能 | 使用场景 | 输出 | 文档 |
 | ---- | -------- | ---- | ---- |
 | [`kane-article-illustrator`](skills/assets/kane-article-illustrator/SKILL.md) | 集中补齐交付形式、受众、风格、尺寸和数量等关键要求，再根据答案完善配图。 | 配图方案、统一风格的提示词或已验收图片，可选生成带图 Markdown 副本；默认保留原稿。 | [SKILL](skills/assets/kane-article-illustrator/SKILL.md) |
 | [`kane-cover-image`](skills/assets/kane-cover-image/SKILL.md) | 从文章、摘要、标题或主题提炼主要传播主题，集中补齐关键要求后绘制封面。 | 封面设计简报、完整独立提示词，或附完整提示词的已验收图片。 | [SKILL](skills/assets/kane-cover-image/SKILL.md) |
 | [`kane-infographic`](skills/assets/kane-infographic/SKILL.md) | 将文章、笔记、结构化数据或主题材料组织成独立信息图，集中补齐影响结果的缺失要求。 | 含文案与布局的信息图方案、完整独立提示词、已验收图片，或提示词与图片两者。 | [SKILL](skills/assets/kane-infographic/SKILL.md) |
+| [`kane-xhs-images`](skills/assets/kane-xhs-images/SKILL.md) | 将文章、笔记或主题材料转为图形主导的小红书分享图，集中补齐影响结果的缺失要求。 | 含逐页文案、图形关系和构图的单图或系列方案、完整独立提示词、已验收图片，或提示词与图片两者。 | [SKILL](skills/assets/kane-xhs-images/SKILL.md) |
 | [`kane-bilibili-transcript`](skills/assets/kane-bilibili-transcript/SKILL.md) | 按视频链接或 ID 获取 B 站已有字幕，选择分 P、语言和字幕类型。 | 包含元数据、原始字幕 JSON 和 Markdown/SRT/VTT/纯文本/JSON 导出的新目录。 | [SKILL](skills/assets/kane-bilibili-transcript/SKILL.md) |
 | [`kane-youtube-transcript`](skills/assets/kane-youtube-transcript/SKILL.md) | 按视频链接或 ID 获取 YouTube 已有字幕，选择语言与人工/自动类型。 | 包含元数据、原始 JSON3 和 Markdown/SRT/VTT/纯文本/JSON 导出的新目录。 | [SKILL](skills/assets/kane-youtube-transcript/SKILL.md) |
 | [`kane-compress-image`](skills/assets/kane-compress-image/SKILL.md) | 将本地静态图片压缩为 WebP、PNG 或 JPEG，支持单张与批量处理。 | 保留原图的新图片、真实体积变化和失败清单。 | [SKILL](skills/assets/kane-compress-image/SKILL.md) |

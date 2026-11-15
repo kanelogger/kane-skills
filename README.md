@@ -1,7 +1,7 @@
 # ![Kane Skills](assets/brand/kane-skills-armory-logo.svg)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-29-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-30-green.svg)](skills/)
 
 > Languages: [English README](README.md) | [中文 README](README-CN.md)
 
@@ -22,7 +22,7 @@ This repository is a public, self-contained skill library. Each package is inspe
 
 ## Skills
 
-The 29 skills are organized into 7 categories under `skills/<category>/<skill-name>/`. Each skill belongs to exactly one category based on the user's immediate primary task, not the input source. To use a skill separately, copy or install its package directory containing `SKILL.md`.
+The 30 skills are organized into 7 categories under `skills/<category>/<skill-name>/`. Each skill belongs to exactly one category based on the user's immediate primary task, not the input source. To use a skill separately, copy or install its package directory containing `SKILL.md`.
 
 Skills can be invoked by name. In Codex, type `$skill-name`, for example `$kane-translate`. Automatic selection depends on each skill's invocation policy and the runtime.
 
@@ -50,13 +50,14 @@ Skills can be invoked by name. In Codex, type `$skill-name`, for example `$kane-
 | [`merge-drafts`](skills/editing/merge-drafts/SKILL.md) | Merge several drafts into one polished article. | Final merged article plus merge report. | [SKILL](skills/editing/merge-drafts/SKILL.md) |
 | [`blog-checker`](skills/editing/blog-checker/SKILL.md) | Review Chinese technical blog posts. | Structured diagnostic review. | [SKILL](skills/editing/blog-checker/SKILL.md) |
 
-### assets — Asset acquisition and processing (7)
+### assets — Asset acquisition and processing (8)
 
 | Skill | Use When | Output | Docs |
 | ----- | -------- | ------ | ---- |
 | [`kane-article-illustrator`](skills/assets/kane-article-illustrator/SKILL.md) | Clarify missing deliverable, audience, style, dimensions, and count together, then use the answers to shape the illustrations. | An illustration plan, consistent prompts, or reviewed images, with an optional illustrated Markdown copy; the source is preserved by default. | [SKILL](skills/assets/kane-article-illustrator/SKILL.md) |
 | [`kane-cover-image`](skills/assets/kane-cover-image/SKILL.md) | Turn an article, summary, title, or topic into a cover centered on its main message, clarifying missing requirements together. | A cover brief, complete standalone prompts, or reviewed images with their full prompts. | [SKILL](skills/assets/kane-cover-image/SKILL.md) |
 | [`kane-infographic`](skills/assets/kane-infographic/SKILL.md) | Organize articles, notes, structured data, or topic materials into standalone infographics, clarifying missing requirements together. | An infographic plan with copy and layout, complete standalone prompts, reviewed images, or both prompts and images. | [SKILL](skills/assets/kane-infographic/SKILL.md) |
+| [`kane-xhs-images`](skills/assets/kane-xhs-images/SKILL.md) | Turn articles, notes, or topic materials into graphic-led Xiaohongshu sharing images, clarifying missing requirements together. | A single-image or series plan with page copy, visual relationships, and composition; complete standalone prompts, reviewed images, or both. | [SKILL](skills/assets/kane-xhs-images/SKILL.md) |
 | [`kane-bilibili-transcript`](skills/assets/kane-bilibili-transcript/SKILL.md) | Fetch existing Bilibili captions by video URL or ID, with part and track selection. | A new folder with metadata, raw subtitle JSON, and Markdown/SRT/VTT/text/JSON export. | [SKILL](skills/assets/kane-bilibili-transcript/SKILL.md) |
 | [`kane-youtube-transcript`](skills/assets/kane-youtube-transcript/SKILL.md) | Fetch existing YouTube captions by video URL or ID, with language and caption-type selection. | A new folder with metadata, raw JSON3, and Markdown/SRT/VTT/text/JSON export. | [SKILL](skills/assets/kane-youtube-transcript/SKILL.md) |
 | [`kane-compress-image`](skills/assets/kane-compress-image/SKILL.md) | Compress local static images into WebP, PNG, or JPEG, individually or in batches. | New images with originals preserved, plus size-reduction and failure reports. | [SKILL](skills/assets/kane-compress-image/SKILL.md) |
