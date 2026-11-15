@@ -51,8 +51,8 @@ export const examples: Record<string, [zhTitle: string, enTitle: string, zhPromp
   ],
   "kane-cover-image": [
     "绘制封面", "Cover design",
-    "$kane-cover-image 只写 1 张封面的完整提示词，主题是把零散笔记整理成知识体系，面向知识工作者，用于个人博客头图。采用米白底、深蓝铅笔线条和少量橙色的温暖手绘风，1536×1024，完整画幅展示，不裁切；不加正文文案，保留默认水印 kanelogger。主体要有零散卡片汇入一本打开的书，禁止人物、机器人和其他品牌标志。",
-    "$kane-cover-image Deliver only the complete prompt for one cover. The topic is turning scattered notes into a knowledge system, for knowledge workers viewing a personal blog header. Use a warm hand-drawn style with an off-white background, dark blue pencil lines, and small orange accents, at 1536×1024. Show the full frame without cropping, with no body copy and the default kanelogger watermark. Show scattered cards flowing into an open book; exclude people, robots, and other brand logos.",
+    "$kane-cover-image 只写 1 张封面的完整提示词，主题是把零散笔记整理成知识体系，面向知识工作者，用于个人博客头图。采用米白底、深蓝铅笔线条和少量橙色的温暖手绘风，1536×1024，完整画幅展示，不裁切；不加正文文案，保留默认水印 kanelogger，右下角、小号清晰、opacity 0.6，不遮挡主体。主体要有零散卡片汇入一本打开的书，禁止人物、机器人和其他品牌标志。",
+    "$kane-cover-image Deliver only the complete prompt for one cover. The topic is turning scattered notes into a knowledge system, for knowledge workers viewing a personal blog header. Use a warm hand-drawn style with an off-white background, dark blue pencil lines, and small orange accents, at 1536×1024. Show the full frame without cropping, with no body copy and the default kanelogger watermark: bottom right, small and legible, opacity 0.6, clear of the subject. Show scattered cards flowing into an open book; exclude people, robots, and other brand logos.",
   ],
   "kane-infographic": [
     "信息图", "Infographics",
