@@ -20,9 +20,12 @@ interface Image {
 }
 
 const tags = "article section div p br h1 h2 h3 h4 h5 h6 blockquote pre code ul ol li table thead tbody tfoot tr th td strong b em i s del u sub sup hr a img figure figcaption span input".split(" ")
+const headingStyle = "margin:24px 0 12px;line-height:1.4;color:#203952"
 const styles: Record<string, string> = {
   p: "margin:0 0 16px;line-height:1.75",
-  "h1,h2,h3,h4,h5,h6": "margin:24px 0 12px;line-height:1.4;color:#203952",
+  "h1,h4,h5,h6": headingStyle,
+  h2: `${headingStyle};font-size:20px;font-weight:700`,
+  h3: `${headingStyle};font-size:18px;font-weight:700`,
   blockquote: "margin:16px 0;padding:8px 12px;border-left:3px solid #486e97;background:#f4f7fa",
   "ul,ol": "margin:0 0 16px;padding-left:24px",
   pre: "margin:0 0 16px;padding:12px;background:#f4f7fa;white-space:pre-wrap;overflow-wrap:anywhere",
