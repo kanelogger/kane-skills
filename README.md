@@ -1,7 +1,7 @@
 # ![Kane Skills](assets/brand/kane-skills-armory-logo.svg)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-26-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-27-green.svg)](skills/)
 
 > Languages: [English README](README.md) | [中文 README](README-CN.md)
 
@@ -22,9 +22,9 @@ This repository is a public, self-contained skill library. Each package is inspe
 
 ## Skills
 
-The 26 skills are organized into 7 categories under `skills/<category>/<skill-name>/`. Each skill belongs to exactly one category based on the user's immediate primary task, not the input source. To use a skill separately, copy or install its package directory containing `SKILL.md`.
+The 27 skills are organized into 7 categories under `skills/<category>/<skill-name>/`. Each skill belongs to exactly one category based on the user's immediate primary task, not the input source. To use a skill separately, copy or install its package directory containing `SKILL.md`.
 
-All skills require explicit invocation. In Codex, type `$skill-name`, for example `$kane-translate`.
+Skills can be invoked by name. In Codex, type `$skill-name`, for example `$kane-translate`. Automatic selection depends on each skill's invocation policy and the runtime.
 
 ### reading — Reading and explanation (2)
 
@@ -50,10 +50,11 @@ All skills require explicit invocation. In Codex, type `$skill-name`, for exampl
 | [`merge-drafts`](skills/editing/merge-drafts/SKILL.md) | Merge several drafts into one polished article. | Final merged article plus merge report. | [SKILL](skills/editing/merge-drafts/SKILL.md) |
 | [`blog-checker`](skills/editing/blog-checker/SKILL.md) | Review Chinese technical blog posts. | Structured diagnostic review. | [SKILL](skills/editing/blog-checker/SKILL.md) |
 
-### assets — Asset acquisition and processing (4)
+### assets — Asset acquisition and processing (5)
 
 | Skill | Use When | Output | Docs |
 | ----- | -------- | ------ | ---- |
+| [`kane-article-illustrator`](skills/assets/kane-article-illustrator/SKILL.md) | Plan or create article illustrations that help readers understand the content. | An illustration plan, consistent prompts, or reviewed images, with an optional illustrated Markdown copy; the source is preserved by default. | [SKILL](skills/assets/kane-article-illustrator/SKILL.md) |
 | [`kane-bilibili-transcript`](skills/assets/kane-bilibili-transcript/SKILL.md) | Fetch existing Bilibili captions by video URL or ID, with part and track selection. | A new folder with metadata, raw subtitle JSON, and Markdown/SRT/VTT/text/JSON export. | [SKILL](skills/assets/kane-bilibili-transcript/SKILL.md) |
 | [`kane-youtube-transcript`](skills/assets/kane-youtube-transcript/SKILL.md) | Fetch existing YouTube captions by video URL or ID, with language and caption-type selection. | A new folder with metadata, raw JSON3, and Markdown/SRT/VTT/text/JSON export. | [SKILL](skills/assets/kane-youtube-transcript/SKILL.md) |
 | [`kane-compress-image`](skills/assets/kane-compress-image/SKILL.md) | Compress local static images into WebP, PNG, or JPEG, individually or in batches. | New images with originals preserved, plus size-reduction and failure reports. | [SKILL](skills/assets/kane-compress-image/SKILL.md) |

@@ -1,0 +1,4 @@
+interface:
+  display_name: "文章插图"
+  short_description: "分析文章配图位置，统一风格并生成、验收插图与可插入正文的交付文件"
+  default_prompt: "使用 $kane-article-illustrator 为这篇文章规划并制作插图，保持整组风格一致，完成后检查成图。"

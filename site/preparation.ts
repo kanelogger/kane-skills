@@ -35,6 +35,10 @@ export const preparation: Record<string, [zh: string, en: string]> = {
     "提供完整的中文技术文章。只给片段时，审查限于可见内容。",
     "Share the complete Chinese technical article. With an excerpt, the review covers only the material provided.",
   ],
+  "kane-article-illustrator": [
+    "提供文章正文或可读文件，可附参考图、数量和风格要求。完整出图需要运行时可用的生图与看图工具；只做方案或提示词无需生图工具。",
+    "Provide the article text or a readable file, with optional reference images, count, and style requirements. Full generation needs image generation and viewing tools; plans and prompts do not.",
+  ],
   "kane-bilibili-transcript": [
     "提供视频链接或 BV 号。视频须已有字幕轨，受限字幕可能需要已登录的 B 站浏览器会话。",
     "Provide a video URL or BV ID. The video needs an existing caption track. Restricted tracks may require a signed-in Bilibili session.",
@@ -78,6 +82,10 @@ export const preparation: Record<string, [zh: string, en: string]> = {
   "kane-task-planner": [
     "点名 $kane-task-planner，提供任务目标、期望产出及已知约束；可附任务材料和可用技能清单。无需额外依赖，仅交付执行前计划。",
     "Invoke $kane-task-planner with your task goal, expected outputs, and known constraints. Optionally include task materials and available skills. No extra dependencies are required; it delivers a plan before execution only.",
+  ],
+  "kane-migrate-to-rust": [
+    "点名 $kane-migrate-to-rust，提供 GitHub HTTPS 地址或本地目录及代表性工作负载。需要 Python 3.10+、Git、Rust/Cargo、Clippy 和原项目构建工具；LLVM PGO 还需匹配工具链的 llvm-profdata。",
+    "Invoke $kane-migrate-to-rust with a GitHub HTTPS URL or local directory and a representative workload. Requires Python 3.10+, Git, Rust/Cargo, Clippy, and the legacy build tools; LLVM PGO also needs a toolchain-compatible llvm-profdata.",
   ],
   "it-system-skill-distiller": [
     "提供系统目录、现有资料和输出位置。动态验证还需要明确测试环境和操作权限。",

@@ -44,6 +44,11 @@ export const examples: Record<string, [zhTitle: string, enTitle: string, zhPromp
     "用 blog-checker 审阅这篇中文技术博客，列出最影响理解的问题和原文位置。",
     "Use blog-checker to review this Chinese technical post. Point out the main issues and where they appear.",
   ],
+  "kane-article-illustrator": [
+    "文章插图", "Article illustrations",
+    "用 kane-article-illustrator 为这篇文章制作插图，统一风格并检查成图，另存一份带图片的 Markdown。",
+    "Use kane-article-illustrator to create illustrations for this article, keep a consistent style, review the images, and save an illustrated Markdown copy.",
+  ],
   "kane-bilibili-transcript": [
     "B 站字幕导出", "Bilibili caption export",
     "用 kane-bilibili-transcript 导出这个 B 站视频第 2 P 的中文字幕为 SRT。",
@@ -98,6 +103,11 @@ export const examples: Record<string, [zhTitle: string, enTitle: string, zhPromp
     "任务执行规划", "Task execution planning",
     "$kane-task-planner 为把这批访谈整理成专题报告做执行前规划，优先复用当前可用技能，说明主要环节、建议执行方式和预期产出，只给大致计划。",
     "$kane-task-planner Plan how to turn these interviews into a thematic report. Prioritize available skills and outline the main steps, suggested methods, and expected outputs. Provide a high-level plan only.",
+  ],
+  "kane-migrate-to-rust": [
+    "安全 Rust 迁移", "Safe Rust migration",
+    "使用 $kane-migrate-to-rust，将 /path/to/legacy-project 迁移至安全 Rust，验证现有输出一致，并记录测试结果和实测性能。",
+    "Use $kane-migrate-to-rust to migrate /path/to/legacy-project to safe Rust, check output parity, and record test results and measured performance.",
   ],
   "it-system-skill-distiller": [
     "IT 系统能力提炼", "IT system capability extraction",
