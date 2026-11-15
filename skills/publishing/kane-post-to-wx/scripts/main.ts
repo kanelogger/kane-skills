@@ -11,10 +11,13 @@ const help = `用法：bun main.ts <文章.md|.html|.txt> [选项]
   --source-url <HTTPS>  设置阅读原文链接
   --cover <文件>        指定本地 PNG 或 JPEG 封面
   --keep-links         Markdown 保留行内网页链接
+  --theme <名称>       选择 themes/ 中的主题，默认 irene-green
+  --theme-css <文件>   在所选主题上叠加本地 CSS
+  --list-themes        列出可用主题
   -o, --output-dir     指定新产物目录
   -h, --help           查看帮助
 
-生成 body.html、body.txt 和 meta.json。默认输出到稿件同级的 <稿件名>-wechat/，拒绝覆盖。
+生成 body.html、preview.html、body.txt 和 meta.json。默认输出到稿件同级的 <稿件名>-wechat/，拒绝覆盖。
 首次运行先在脚本目录执行 bun install --frozen-lockfile。
 `
 
@@ -29,11 +32,19 @@ async function main() {
       "source-url": { type: "string" },
       cover: { type: "string" },
       "keep-links": { type: "boolean" },
+      theme: { type: "string" },
+      "theme-css": { type: "string" },
+      "list-themes": { type: "boolean" },
       "output-dir": { type: "string", short: "o" },
     },
   })
   if (values.help) {
     process.stdout.write(help)
+    return
+  }
+  if (values["list-themes"]) {
+    const { listThemes } = await import("./theme.ts")
+    console.log((await listThemes()).join("\n"))
     return
   }
   if (positionals.length !== 1 || !positionals[0].trim()) throw new Error("请提供一份本地文章，可用 --help 查看用法")
@@ -61,16 +72,18 @@ async function main() {
     }
     throw error
   }
-  const { html, text, ...fields } = await render(input, dirname(source), body, {
+  const { html, preview, text, ...fields } = await render(input, dirname(source), body, {
     title: values.title,
     author: values.author,
     summary: values.summary,
     cover: values.cover,
     sourceUrl: values["source-url"],
     keepLinks: values["keep-links"],
+    theme: values.theme,
+    themeCss: values["theme-css"],
   })
   const dir = resolve(values["output-dir"] ?? join(dirname(input), `${basename(input, ext)}-wechat`))
-  const files = { html: join(dir, "body.html"), text: join(dir, "body.txt"), meta: join(dir, "meta.json") }
+  const files = { html: join(dir, "body.html"), preview: join(dir, "preview.html"), text: join(dir, "body.txt"), meta: join(dir, "meta.json") }
   const meta = { status: "prepared", source, files, ...fields }
   try {
     await mkdir(dir)
@@ -80,6 +93,7 @@ async function main() {
   }
   try {
     await writeFile(files.html, html, { flag: "wx" })
+    await writeFile(files.preview, preview, { flag: "wx" })
     await writeFile(files.text, text, { flag: "wx" })
     await writeFile(files.meta, JSON.stringify(meta, null, 2) + "\n", { flag: "wx" })
   } catch (error) {

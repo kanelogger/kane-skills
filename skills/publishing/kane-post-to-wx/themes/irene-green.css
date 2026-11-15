@@ -1,0 +1,415 @@
+#nice {
+  font-family: "PingFang SC", "PingFang TC", "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+  font-size: 16px;
+  color: #3a3a3a;
+  line-height: 2.18;
+  letter-spacing: 1.2px;
+  text-align: justify;
+  overflow-wrap: anywhere;
+}
+
+#nice p {
+  margin: 2em 0;
+  font-size: 16px;
+  line-height: 2.18;
+  text-align: justify;
+  text-align-last: left;
+}
+
+#nice h1, #nice h2, #nice h3, #nice h4, #nice h5, #nice h6 {
+  margin: 24px 0 12px;
+  box-sizing: border-box;
+  max-width: 100%;
+  color: #157b32;
+  line-height: 1.4;
+  letter-spacing: 2px;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+#nice h2 {
+  display: table;
+  margin: 3em auto 1.8em;
+  padding: 6px 20px;
+  border: 0;
+  border-radius: 4px;
+  background-color: #25b449;
+  background-image: linear-gradient(135deg, #a8e7b9 0%, #25b449 80%);
+  color: #fff;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+}
+
+#nice h3 {
+  margin: 3em 0 1.5em;
+  padding: 8px 14px;
+  border-left: 5px solid #25b449;
+  border-radius: 4px;
+  background: #edf9f0;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+#nice h4 {
+  display: table;
+  margin: 32px 0;
+  padding: 2px 4px;
+  border: 0;
+  border-radius: 3px;
+  background: #25b449;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+}
+
+#nice h5, #nice h6 {
+  margin: 24px 0 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+#nice strong, #nice b {
+  color: #157b32;
+  font-weight: 600;
+}
+
+#nice h2 strong, #nice h3 strong, #nice h4 strong {
+  color: inherit;
+}
+
+#nice .emphasis-marker {
+  padding: 1px 3px;
+  background: #e4f6e9;
+  color: #126d2c;
+}
+
+#nice .emphasis-underline {
+  color: #157b32;
+  text-decoration: underline;
+  text-decoration-color: #83ce96;
+  text-underline-offset: 4px;
+}
+
+#nice .emphasis-neutral {
+  color: #3a3a3a;
+  font-weight: 700;
+}
+
+#nice em {
+  color: #446e50;
+}
+
+#nice a {
+  color: #157b32;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+#nice ul, #nice ol {
+  margin: 24px 0;
+  padding-left: 26px;
+}
+
+#nice li {
+  margin: 8px 0;
+  line-height: 2;
+}
+
+#nice li p {
+  margin: 8px 0;
+}
+
+#nice img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  margin: 32px auto;
+  border: 1.5px solid rgba(37, 180, 73, 0.3);
+  border-radius: 6px;
+  object-fit: contain;
+  box-sizing: border-box;
+  box-shadow: 0 1px 3px rgba(20, 104, 42, 0.06);
+}
+
+#nice figure {
+  margin: 32px 0;
+}
+
+#nice figure img {
+  margin: 0 auto;
+}
+
+#nice figcaption {
+  margin: 10px 0 0;
+  color: #566f5c;
+  font-size: 12px;
+  line-height: 1.8;
+  text-align: center;
+}
+
+#nice img.image-plain {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+#nice img.image-frame {
+  padding: 8px;
+  border: 1px solid #b8ddc1;
+  background: #f7fcf8;
+  box-shadow: none;
+}
+
+#nice img.image-shadow {
+  border: 0;
+  box-shadow: 0 4px 14px rgba(20, 104, 42, 0.1);
+}
+
+#nice blockquote {
+  margin: 28px 0;
+  padding: 16px 20px;
+  border-left: 3px solid #25b449;
+  border-radius: 4px;
+  background: #f0faf3;
+  color: #41654a;
+}
+
+#nice blockquote p {
+  margin: 12px 0;
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+#nice blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+#nice blockquote.quote-block {
+  border: 1px solid #bfdfc6;
+  border-radius: 8px;
+}
+
+#nice blockquote > .quote-block-label {
+  margin: 0 0 8px;
+  color: #216d36;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.6;
+  letter-spacing: 1px;
+}
+
+#nice blockquote.quote-tip {
+  border-color: #bdd9c8;
+  background: #f0f8f3;
+  color: #385d45;
+}
+
+#nice blockquote.quote-tip > .quote-block-label {
+  color: #285e39;
+}
+
+#nice blockquote.quote-important {
+  border-color: #9fd3ad;
+  background: #e6f6eb;
+  color: #265e36;
+}
+
+#nice blockquote.quote-warning {
+  border-color: #dfc89a;
+  background: #fff8e9;
+  color: #74541f;
+}
+
+#nice blockquote.quote-warning > .quote-block-label {
+  color: #76510e;
+}
+
+#nice blockquote.quote-caution {
+  border-color: #dfb8bd;
+  background: #fff1f2;
+  color: #874650;
+}
+
+#nice blockquote.quote-caution > .quote-block-label {
+  color: #8b3545;
+}
+
+#nice .code-block {
+  box-sizing: border-box;
+  max-width: 100%;
+  margin: 24px 0 32px;
+  border: 1.5px dashed rgba(37, 180, 73, 0.3);
+  border-radius: 10px;
+  background: #f8fbf8;
+  box-shadow: 0 4px 16px rgba(20, 104, 42, 0.06);
+  text-align: left;
+}
+
+#nice .code-block > .quote-block-label {
+  display: block;
+  padding: 6px 12px;
+  border-bottom: 1px dashed rgba(37, 180, 73, 0.3);
+  border-radius: 10px 10px 0 0;
+  background: rgba(37, 180, 73, 0.04);
+  color: #42644a;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.8;
+  letter-spacing: 1px;
+}
+
+#nice .code-block pre {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  padding: 14px 16px 18px;
+  background: transparent;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+#nice .code-block pre code {
+  display: block;
+  padding: 0;
+  background: transparent;
+  color: #48634f;
+  font-size: 14px;
+  line-height: 1.75;
+  letter-spacing: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+#nice .quote-prompt pre code {
+  font-size: 10px;
+  letter-spacing: 1.2px;
+}
+
+#nice .quote-inline-block {
+  display: inline;
+  padding: 2px 5px;
+  border: 1px solid #d0e9d6;
+  border-radius: 4px;
+  background: #eef8f1;
+  color: #276b3a;
+  font-size: 14px;
+  line-height: inherit;
+  letter-spacing: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+#nice .inline-kbd {
+  padding: 1px 6px;
+  border-color: #b4d1bc;
+  border-bottom-width: 2px;
+  background: #fff;
+  color: #35543e;
+}
+
+#nice .inline-tag {
+  padding: 2px 7px;
+  border: 0;
+  border-color: #d0e9d6;
+  border-radius: 3px;
+  background: #25b449;
+  color: #fff;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+#nice .inline-muted {
+  border: 0;
+  border-color: #d0e9d6;
+  background: #f0f5f1;
+  color: #566f5c;
+  font-family: inherit;
+}
+
+#nice table {
+  margin: 28px 0;
+  font-size: 14px;
+  line-height: 1.8;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#nice th, #nice td {
+  border: 1px solid #cee4d4;
+  padding: 10px 12px;
+  text-align: left;
+  letter-spacing: 0.4px;
+}
+
+#nice th {
+  background: #e4f5e9;
+  color: #245c32;
+}
+
+#nice tbody tr:nth-child(even) {
+  background: #f5fbf6;
+}
+
+#nice hr {
+  margin: 36px 0;
+  border: 0;
+  border-top: 1px solid #c2dfca;
+}
+
+#nice .heading-plain {
+  display: block;
+  margin: 32px 0 16px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #157b32;
+  text-align: left;
+}
+
+#nice .heading-underline {
+  display: block;
+  margin: 32px 0 16px;
+  padding: 0 0 10px;
+  border: 0;
+  border-bottom: 1px solid #9fd4ad;
+  border-radius: 0;
+  background: transparent;
+  color: #157b32;
+  text-align: left;
+}
+
+#nice .heading-band {
+  display: block;
+  margin: 32px 0 16px;
+  padding: 8px 14px;
+  border: 0;
+  border-left: 5px solid #25b449;
+  border-radius: 4px;
+  background: #edf9f0;
+  color: #157b32;
+  text-align: left;
+}
+
+#nice .heading-badge {
+  display: table;
+  margin: 28px 0 16px;
+  padding: 4px 10px;
+  border: 0;
+  border-radius: 3px;
+  background: #25b449;
+  color: #fff;
+  text-align: left;
+}
+
+#nice h2 *, #nice h4 *, #nice .heading-badge *, #nice .inline-tag * {
+  color: inherit;
+}

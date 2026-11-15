@@ -2,6 +2,10 @@ import createDOMPurify from "dompurify"
 import { JSDOM } from "jsdom"
 import { open, realpath, stat } from "node:fs/promises"
 import { basename, extname, isAbsolute, relative, resolve, sep } from "node:path"
+import juice from "juice"
+import { loadTheme } from "./theme.ts"
+import { pathToFileURL } from "node:url"
+import { cleanClasses, decorateBlocks } from "./blocks.ts"
 
 interface Options {
   title?: string
@@ -10,6 +14,8 @@ interface Options {
   cover?: string
   sourceUrl?: string
   keepLinks?: boolean
+  theme?: string
+  themeCss?: string
 }
 
 interface Image {
@@ -17,21 +23,10 @@ interface Image {
   file: string | null
   alt: string
   marker?: string
+  style?: string
 }
 
 const tags = "article section div p br h1 h2 h3 h4 h5 h6 blockquote pre code ul ol li table thead tbody tfoot tr th td strong b em i s del u sub sup hr a img figure figcaption span input".split(" ")
-const headingStyle = "margin:24px 0 12px;line-height:1.4;color:#203952"
-const styles: Record<string, string> = {
-  p: "margin:0 0 16px;line-height:1.75",
-  "h1,h4,h5,h6": headingStyle,
-  h2: `${headingStyle};font-size:20px;font-weight:700`,
-  h3: `${headingStyle};font-size:18px;font-weight:700`,
-  blockquote: "margin:16px 0;padding:8px 12px;border-left:3px solid #486e97;background:#f4f7fa",
-  "ul,ol": "margin:0 0 16px;padding-left:24px",
-  pre: "margin:0 0 16px;padding:12px;background:#f4f7fa;white-space:pre-wrap;overflow-wrap:anywhere",
-  table: "margin:0 0 16px;border-collapse:collapse;width:100%",
-  "th,td": "border:1px solid #dce2e8;padding:6px;text-align:left",
-}
 
 function compact(value: string | null | undefined) {
   return value?.replace(/\s+/g, " ").trim() || ""
@@ -76,6 +71,7 @@ async function resolveImage(source: string, base: string, explicit = false): Pro
 }
 
 export async function render(source: string, base: string, input: string, options: Options) {
+  const theme = await loadTheme(options.theme, options.themeCss)
   const ext = extname(source).toLowerCase()
   const markdown = ext === ".md" || ext === ".markdown"
   const plain = ext === ".txt"
@@ -108,10 +104,11 @@ export async function render(source: string, base: string, input: string, option
     createDOMPurify(dom.window).sanitize(doc.body, {
       IN_PLACE: true,
       ALLOWED_TAGS: ["body", ...tags],
-      ALLOWED_ATTR: ["href", "src", "alt", "colspan", "rowspan", "start", "type", "checked"],
+      ALLOWED_ATTR: ["href", "src", "alt", "colspan", "rowspan", "start", "type", "checked", "class"],
       ALLOW_ARIA_ATTR: false,
       ALLOW_DATA_ATTR: false,
     })
+    cleanClasses(doc)
     for (const el of doc.body.querySelectorAll("input")) {
       if (el.getAttribute("type") === "checkbox") el.replaceWith(el.hasAttribute("checked") ? "☑ " : "☐ ")
       else el.remove()
@@ -140,9 +137,8 @@ export async function render(source: string, base: string, input: string, option
       const file = await resolveImage(path, base)
       const id = `${marker}${images.length + 1}】`
       images.push({ marker: id, source: path, file, alt: img.getAttribute("alt") || "" })
-      img.replaceWith(id)
     }
-    if (!compact(doc.body.textContent)) throw new Error("净化后的文章正文为空")
+    if (!compact(doc.body.textContent) && !images.length) throw new Error("净化后的文章正文为空")
 
     const links = new Map<string, number>()
     let unsupported = 0
@@ -177,13 +173,46 @@ export async function render(source: string, base: string, input: string, option
       warnings.push("有远程图片尚未准备本地文件，请补齐后再保存完整草稿或发表")
     }
 
-    for (const [selector, style] of Object.entries(styles)) {
-      doc.body.querySelectorAll(selector).forEach(el => el.setAttribute("style", style))
+    decorateBlocks(doc)
+    const styled = juice.inlineContent(`<section id="nice">${doc.body.innerHTML}</section>`, theme.css, {
+      applyAttributesTableElements: false,
+      applyWidthAttributes: false,
+      applyHeightAttributes: false,
+      inlinePseudoElements: false,
+      preserveImportant: true,
+      preserveFontFaces: false,
+      preserveMediaQueries: false,
+      preserveKeyFrames: false,
+      preservePseudos: false,
+      insertPreservedExtraCss: false,
+    })
+    const output = new JSDOM(styled)
+    try {
+      const view = output.window.document
+      for (const [i, img] of [...view.body.querySelectorAll("img")].entries()) {
+        const item = images[i]
+        item.style = img.getAttribute("style") || ""
+        if (item.file) img.setAttribute("src", pathToFileURL(item.file).href)
+        else img.replaceWith(item.marker!)
+      }
+      const head = '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
+      const heading = view.createElement("h1")
+      heading.textContent = title
+      heading.setAttribute("style", "margin:0 0 32px;font:700 24px/1.5 sans-serif;color:#24292f")
+      const preview = `${head}<body style="max-width:680px;margin:32px auto;padding:0 20px;box-sizing:border-box">${heading.outerHTML}${view.body.innerHTML}</body>\n`
+      let i = 0
+      const localImages = [...view.body.querySelectorAll("img")]
+      for (const item of images) {
+        if (item.file) localImages[i++]?.replaceWith(item.marker!)
+      }
+      const html = `${head}${view.body.innerHTML}\n`
+      view.body.querySelectorAll(".code-block > .quote-block-label").forEach(el => el.remove())
+      view.body.querySelectorAll("p,div,section,li,pre,tr,h1,h2,h3,h4,h5,h6,br").forEach(el => el.append("\n"))
+      const text = (view.body.textContent || "").trim() + "\n"
+      return { html, preview, text, title, author, summary, sourceUrl, cover, images, warnings, theme: { name: theme.name, files: theme.files } }
+    } finally {
+      output.window.close()
     }
-    const html = `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><section style="font-size:16px;line-height:1.75;color:#24292f;overflow-wrap:anywhere">${doc.body.innerHTML}</section>\n`
-    doc.body.querySelectorAll("p,div,section,li,pre,tr,h1,h2,h3,h4,h5,h6,br").forEach(el => el.append("\n"))
-    const text = (doc.body.textContent || "").trim() + "\n"
-    return { html, text, title, author, summary, sourceUrl, cover, images, warnings }
   } finally {
     dom.window.close()
   }
