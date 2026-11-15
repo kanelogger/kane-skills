@@ -121,8 +121,8 @@ export const examples: Record<string, [zhTitle: string, enTitle: string, zhPromp
   ],
   "git-commit-push": [
     "Git 提交与推送", "Git commit and push",
-    "用 git-commit-push 只提交本次任务的改动，并推送当前分支。",
-    "Use git-commit-push to commit only this task’s changes and push the current branch.",
+    "用 git-commit-push，以快捷模式提交本次任务的改动，并推送当前分支。",
+    "Use git-commit-push in Quick mode to commit this task’s changes and push the current branch.",
   ],
   "kane-task-retro": [
     "任务复盘", "Task retrospective",

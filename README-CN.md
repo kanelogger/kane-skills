@@ -85,7 +85,7 @@ Kane 创建的可复用智能体技能库。
 | [`it-system-skill-distiller`](skills/engineering/it-system-skill-distiller/SKILL.md) | 将 IT 业务系统提炼为智能体可读的能力包。 | 经过校验的 `distilled/` 包结构。 | [SKILL](skills/engineering/it-system-skill-distiller/SKILL.md) |
 | [`simplify-codebase`](skills/engineering/simplify-codebase/SKILL.md) | 以可达性、契约和验证证据审计或简化代码库，移除意外复杂度。 | 排序后的证明记录，或带操作回执的已验证简化结果。 | [SKILL](skills/engineering/simplify-codebase/SKILL.md) |
 | [`kane-migrate-to-rust`](skills/engineering/kane-migrate-to-rust/SKILL.md) | 显式调用，将 GitHub 仓库或本地遗留代码库迁移至安全 Rust，验证输出一致性，并按条件执行 LLVM PGO。 | Rust 工作区、架构蓝图、实测迁移遥测及交互式 HTML 报告。 | [README](skills/engineering/kane-migrate-to-rust/README.md) |
-| [`git-commit-push`](skills/engineering/git-commit-push/SKILL.md) | 只暂存当前任务改动，在 Conventional Commit 中记录改动、原因、已有验证方式与结果、回滚方法，仅按授权推送。 | 提交及按需推送状态、验证记录和回滚步骤；不执行改动验证。 | [SKILL](skills/engineering/git-commit-push/SKILL.md) |
+| [`git-commit-push`](skills/engineering/git-commit-push/SKILL.md) | 先选快捷、全面或深度，再选仅提交或提交并推送；快捷依据 diff，全面复核改动，深度额外审查代码并运行相关检查。 | Conventional Commit 与 Git 状态；全面及深度另有验证和回滚记录，按选择报告推送结果。 | [SKILL](skills/engineering/git-commit-push/SKILL.md) |
 | [`kane-task-retro`](skills/engineering/kane-task-retro/SKILL.md) | 基于交付证据复盘一次任务或一次 Agent 协作。 | 一张简短复盘卡，最多一项建议动作及其验证方式。 | [SKILL](skills/engineering/kane-task-retro/SKILL.md) |
 | [`kane-task-cleanup`](skills/engineering/kane-task-cleanup/SKILL.md) | 显式调用后默认清理本次任务已核实的一次性临时文件，可指定范围、只保留成果或先看清单。 | 经核验的删除结果、保留成果、跳过项及获准停止的后台任务。 | [SKILL](skills/engineering/kane-task-cleanup/SKILL.md) |
 

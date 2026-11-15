@@ -96,8 +96,8 @@ export const preparation: Record<string, [zh: string, en: string]> = {
     "Name the repository or subsystem, the complexity to investigate, and available verification commands. Start with an audit if you want to review the evidence first.",
   ],
   "git-commit-push": [
-    "指定本次任务的改动范围。需要推送时，明确授权并提供可用的 Git 上游。",
-    "Identify the changes belonging to this task. Pushing requires explicit permission and a working Git upstream.",
+    "指定本次任务的改动范围，选择快捷、全面或深度，再选择仅提交或提交并推送；需要推送时确保 Git 上游可用。",
+    "Identify this task’s changes, choose Quick, Comprehensive, or Deep mode, then commit only or commit and push; pushing needs a working Git upstream.",
   ],
   "kane-task-retro": [
     "提供可见会话或相关片段，尽量附上原始目标、交付物和验收记录。",
