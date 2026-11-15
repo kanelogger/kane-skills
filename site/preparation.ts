@@ -39,6 +39,14 @@ export const preparation: Record<string, [zh: string, en: string]> = {
     "提供正文或可读文件，可附参考图。会集中询问影响结果的缺项，并把答案用于计划和提示词；已有要求不重复问，也可明确委托推荐。实际出图需可用生图与看图工具。",
     "Provide the text or a readable file, with optional references. Missing requirements are asked together and applied to the plan and prompts; known answers are reused, and you may delegate choices. Images need generation and viewing tools.",
   ],
+  "kane-cover-image": [
+    "提供文章、摘要、标题或主题，可附参考图，不要求完整文章。会集中补齐交付形式、受众与用途、风格、尺寸、可见文字、数量和元素约束，已有答案不重复问。仅提示词无需生图工具；实际图片需可用且已授权的生图工具与看图验收能力，无自带脚本。",
+    "Provide an article, summary, title, or topic, with optional reference images; a complete article is not required. Missing deliverable, audience and use, style, dimensions, visible text, count, and element constraints are clarified together, with known answers reused. Prompts need no image tool; images need an available, authorized generation tool and visual review. No bundled scripts are required.",
+  ],
+  "kane-infographic": [
+    "提供文章、笔记、结构化数据或主题材料。会集中补齐交付形式、受众与用途、风格、尺寸、语言、数量和关键内容，并用于文案、布局与完整独立提示词。仅提示词无需生图工具；图片需已有授权的生图工具及看图验收能力，无自带脚本。",
+    "Provide an article, notes, structured data, or topic materials. Missing deliverable, audience and use, style, dimensions, language, count, and key content are clarified together and applied to copy, layout, and complete standalone prompts. Prompts need no image tool; images need an already authorized generation tool and visual review. No bundled scripts are required.",
+  ],
   "kane-bilibili-transcript": [
     "提供视频链接或 BV 号。视频须已有字幕轨，受限字幕可能需要已登录的 B 站浏览器会话。",
     "Provide a video URL or BV ID. The video needs an existing caption track. Restricted tracks may require a signed-in Bilibili session.",

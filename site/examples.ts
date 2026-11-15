@@ -49,6 +49,16 @@ export const examples: Record<string, [zhTitle: string, enTitle: string, zhPromp
     "用 kane-article-illustrator 为这篇文章配图，集中补齐交付形式、受众、风格、尺寸和数量等要求，再根据我的回答完善配图。",
     "Use kane-article-illustrator for this article. Clarify the deliverable, audience, style, dimensions, and count together, then shape the illustrations around my answers.",
   ],
+  "kane-cover-image": [
+    "绘制封面", "Cover design",
+    "$kane-cover-image 只写 1 张封面的完整提示词，主题是把零散笔记整理成知识体系，面向知识工作者，用于个人博客头图。采用米白底、深蓝铅笔线条和少量橙色的温暖手绘风，1536×1024，完整画幅展示，不裁切；无任何可见文字。主体要有零散卡片汇入一本打开的书，禁止人物、机器人和品牌标志。",
+    "$kane-cover-image Deliver only the complete prompt for one cover. The topic is turning scattered notes into a knowledge system, for knowledge workers viewing a personal blog header. Use a warm hand-drawn style with an off-white background, dark blue pencil lines, and small orange accents, at 1536×1024. Show the full frame without cropping and include no visible text. Show scattered cards flowing into an open book; exclude people, robots, and brand logos.",
+  ],
+  "kane-infographic": [
+    "信息图", "Infographics",
+    "$kane-infographic 把这份团队周工时记录做成 1 张信息图的完整独立提示词，仅交付提示词：开发 40 小时、评审 25 小时、沟通 20 小时、学习 15 小时。受众是团队成员，用于周会复盘；采用简洁编辑式风格，白底蓝绿配色，1080×1350，简体中文。保留四类工时及合计，突出时间分配，不将样本写成行业统计。",
+    "$kane-infographic Create a complete standalone prompt for one infographic using this team’s weekly time log: development 40 hours, review 25 hours, communication 20 hours, learning 15 hours. Deliver the prompt only. The audience is team members at a weekly retrospective. Use a clean editorial style, white background with blue and green, 1080×1350, and English copy. Show all four categories and the total, emphasize time allocation, and do not present this sample as industry statistics.",
+  ],
   "kane-bilibili-transcript": [
     "B 站字幕导出", "Bilibili caption export",
     "用 kane-bilibili-transcript 导出这个 B 站视频第 2 P 的中文字幕为 SRT。",

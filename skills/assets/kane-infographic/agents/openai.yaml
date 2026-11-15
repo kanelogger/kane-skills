@@ -1,0 +1,4 @@
+interface:
+  display_name: "信息图"
+  short_description: "补齐受众、风格、尺寸与交付要求，将材料组织成信息图提示词或经检查的图片"
+  default_prompt: "使用 $kane-infographic 将这些材料做成信息图，集中补齐关键要求，再根据我的答案交付提示词、图片或两者。"
