@@ -55,7 +55,7 @@ Kane 创建的可复用智能体技能库。
 
 | 技能 | 使用场景 | 输出 | 文档 |
 | ---- | -------- | ---- | ---- |
-| [`kane-article-illustrator`](skills/assets/kane-article-illustrator/SKILL.md) | 为文章规划或生成帮助读者理解内容的配图。 | 配图方案、统一风格的提示词或已验收图片，可选生成带图 Markdown 副本；默认保留原稿。 | [SKILL](skills/assets/kane-article-illustrator/SKILL.md) |
+| [`kane-article-illustrator`](skills/assets/kane-article-illustrator/SKILL.md) | 集中补齐交付形式、受众、风格、尺寸和数量等关键要求，再根据答案完善配图。 | 配图方案、统一风格的提示词或已验收图片，可选生成带图 Markdown 副本；默认保留原稿。 | [SKILL](skills/assets/kane-article-illustrator/SKILL.md) |
 | [`kane-bilibili-transcript`](skills/assets/kane-bilibili-transcript/SKILL.md) | 按视频链接或 ID 获取 B 站已有字幕，选择分 P、语言和字幕类型。 | 包含元数据、原始字幕 JSON 和 Markdown/SRT/VTT/纯文本/JSON 导出的新目录。 | [SKILL](skills/assets/kane-bilibili-transcript/SKILL.md) |
 | [`kane-youtube-transcript`](skills/assets/kane-youtube-transcript/SKILL.md) | 按视频链接或 ID 获取 YouTube 已有字幕，选择语言与人工/自动类型。 | 包含元数据、原始 JSON3 和 Markdown/SRT/VTT/纯文本/JSON 导出的新目录。 | [SKILL](skills/assets/kane-youtube-transcript/SKILL.md) |
 | [`kane-compress-image`](skills/assets/kane-compress-image/SKILL.md) | 将本地静态图片压缩为 WebP、PNG 或 JPEG，支持单张与批量处理。 | 保留原图的新图片、真实体积变化和失败清单。 | [SKILL](skills/assets/kane-compress-image/SKILL.md) |

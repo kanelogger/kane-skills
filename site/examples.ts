@@ -46,8 +46,8 @@ export const examples: Record<string, [zhTitle: string, enTitle: string, zhPromp
   ],
   "kane-article-illustrator": [
     "文章插图", "Article illustrations",
-    "用 kane-article-illustrator 为这篇文章制作插图，统一风格并检查成图，另存一份带图片的 Markdown。",
-    "Use kane-article-illustrator to create illustrations for this article, keep a consistent style, review the images, and save an illustrated Markdown copy.",
+    "用 kane-article-illustrator 为这篇文章配图，集中补齐交付形式、受众、风格、尺寸和数量等要求，再根据我的回答完善配图。",
+    "Use kane-article-illustrator for this article. Clarify the deliverable, audience, style, dimensions, and count together, then shape the illustrations around my answers.",
   ],
   "kane-bilibili-transcript": [
     "B 站字幕导出", "Bilibili caption export",

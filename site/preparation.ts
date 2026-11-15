@@ -36,8 +36,8 @@ export const preparation: Record<string, [zh: string, en: string]> = {
     "Share the complete Chinese technical article. With an excerpt, the review covers only the material provided.",
   ],
   "kane-article-illustrator": [
-    "提供文章正文或可读文件，可附参考图、数量和风格要求。完整出图需要运行时可用的生图与看图工具；只做方案或提示词无需生图工具。",
-    "Provide the article text or a readable file, with optional reference images, count, and style requirements. Full generation needs image generation and viewing tools; plans and prompts do not.",
+    "提供正文或可读文件，可附参考图。会集中询问影响结果的缺项，并把答案用于计划和提示词；已有要求不重复问，也可明确委托推荐。实际出图需可用生图与看图工具。",
+    "Provide the text or a readable file, with optional references. Missing requirements are asked together and applied to the plan and prompts; known answers are reused, and you may delegate choices. Images need generation and viewing tools.",
   ],
   "kane-bilibili-transcript": [
     "提供视频链接或 BV 号。视频须已有字幕轨，受限字幕可能需要已登录的 B 站浏览器会话。",
