@@ -1,0 +1,4 @@
+interface:
+  display_name: "Kane Agent Bootstrap"
+  short_description: "根据已有技术栈和业务适配协作规范，准备并验证 Agent 开发环境"
+  default_prompt: "使用 $kane-agent-bootstrap，检查当前项目的技术栈与业务，合并适用规范，准备并验证最小可用的 Agent 开发环境。"

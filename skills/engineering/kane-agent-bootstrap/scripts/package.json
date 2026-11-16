@@ -1,0 +1,11 @@
+{
+  "name": "kane-agent-bootstrap-scripts",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "bun test ./tests"
+  },
+  "dependencies": {
+    "yaml": "2.9.1"
+  }
+}
