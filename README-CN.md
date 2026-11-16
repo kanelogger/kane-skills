@@ -85,7 +85,7 @@ Kane 创建的可复用智能体技能库。
 
 | 技能 | 使用场景 | 输出 | 文档 |
 | ---- | -------- | ---- | ---- |
-| [`kane-agent-bootstrap`](skills/engineering/kane-agent-bootstrap/SKILL.md) | 根据现有业务、技术栈与协作约定，多源取证并按需澄清，接入和验证 Agent 开发环境。 | 项目协作入口、环境声明、验证证据与受保护的恢复收据。 | [README](skills/engineering/kane-agent-bootstrap/README.md) |
+| [`kane-agent-bootstrap`](skills/engineering/kane-agent-bootstrap/SKILL.md) | 按已有业务与技术栈接入 Agent 开发环境，或在后续任务中按需读取和增量维护上下文。 | 项目协作入口、环境声明、上下文索引、验证证据与恢复收据。 | [README](skills/engineering/kane-agent-bootstrap/README.md) |
 | [`it-system-skill-distiller`](skills/engineering/it-system-skill-distiller/SKILL.md) | 将 IT 业务系统提炼为智能体可读的能力包。 | 经过校验的 `distilled/` 包结构。 | [README](skills/engineering/it-system-skill-distiller/README.md) |
 | [`simplify-codebase`](skills/engineering/simplify-codebase/SKILL.md) | 以可达性、契约和验证证据审计或简化代码库，移除意外复杂度。 | 排序后的证明记录，或带操作回执的已验证简化结果。 | [README](skills/engineering/simplify-codebase/README.md) |
 | [`kane-migrate-to-rust`](skills/engineering/kane-migrate-to-rust/SKILL.md) | 显式调用，将 GitHub 仓库或本地遗留代码库迁移至安全 Rust，验证输出一致性，并按条件执行 LLVM PGO。 | Rust 工作区、架构蓝图、实测迁移遥测及交互式 HTML 报告。 | [README](skills/engineering/kane-migrate-to-rust/README.md) |

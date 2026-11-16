@@ -110,6 +110,19 @@ export class Files {
     if (!dir) return null
     try { return await this.readAt(dir.fd, dir.name, max) } finally { await dir.close() }
   }
+  async identity(path: string) {
+    const dir = await this.parent(path)
+    if (!dir) return null
+    try {
+      const fd = result(ffi().lib.symbols.openat!(dir.fd, cstr(dir.name), constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK, 0) as number, path)
+      if (fd === null) return null
+      try {
+        const meta = await info(fd)
+        if (!meta.isFile()) throw new BootstrapError("file_type", "Context identity requires an ordinary file.", path)
+        return String(meta.dev) + ":" + String(meta.ino)
+      } finally { await shut(fd) }
+    } finally { await dir.close() }
+  }
   async write(path: string, data: Buffer, expected: string | null, mode = 0o644, expectedMode = expected === null ? undefined : mode) {
     const dir = await this.parent(path, true)
     if (!dir) throw new BootstrapError("directory_failed", "Unable to access parent directory.", path)

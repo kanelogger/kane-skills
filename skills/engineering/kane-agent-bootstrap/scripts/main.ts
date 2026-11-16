@@ -1,10 +1,11 @@
-import { realpath, stat } from "node:fs/promises"
+import { realpath, stat, lstat } from "node:fs/promises"
 import { resolve, join } from "node:path"
 import { randomUUID } from "node:crypto"
 import { parseDocument } from "yaml"
 import { Files, BootstrapError, hash, limit, parts } from "./files"
 import { assessContext, privatePath, readBounded, record } from "./context"
 import { inspectProject, verifyProject } from "./checks"
+import { searchContext, getContext, checkContext, nodeContext, prepareIndexUpdate } from "./routes"
 
 type Output = Record<string, unknown> & { status: string }
 type Operation = { path: string; expected: string | null; content: Buffer; sha256: string }
@@ -55,8 +56,8 @@ async function asset(id: unknown) {
   } finally { await fs.close() }
 }
 
-async function plan(path: string): Promise<Operation[]> {
-  const data = await json(resolve(path))
+async function plan(input: string | Record<string, unknown>): Promise<Operation[]> {
+  const data = typeof input === "string" ? await json(resolve(input)) : input
   if (!record(data) || data.schema_version !== 1 || Object.keys(data).sort().join() !== "files,schema_version" || !Array.isArray(data.files) || data.files.length > 128) throw new BootstrapError("invalid_plan", "Use schema_version 1 and at most 128 file operations.")
   const out: Operation[] = []
   const seen = new Set<string>()
@@ -92,7 +93,19 @@ async function store(fs: Files, path: string, data: Receipt, expected: string | 
   return hash(content)
 }
 
-export async function applyPlan(root: string, planPath: string, opts: Options = {}): Promise<Output> {
+async function affectedContext(root: string, changed: string[]) {
+  const selected = changed.filter(path => pathKey(path) !== ".agents/context/index.json")
+  if (!selected.length) return undefined
+  try { await lstat(join(root, ".agents/context/index.json")) }
+  catch (err) {
+    if ((err as NodeJS.ErrnoException).code === "ENOENT") return undefined
+    return { status: "unverified", findings: [{ code: "context_index_unavailable", message: "Inspect the context index before maintaining affected knowledge." }] }
+  }
+  try { return await checkContext(root, { changed: selected }) }
+  catch { return { status: "unverified", findings: [{ code: "context_index_unavailable", message: "Context index could not be checked; preserve source changes and inspect the index." }] } }
+}
+
+export async function applyPlan(root: string, planPath: string | Record<string, unknown>, opts: Options = {}): Promise<Output> {
   const operations = await plan(planPath)
   const report = output("apply")
   report.dry_run = opts.dryRun === true
@@ -152,7 +165,8 @@ export async function applyPlan(root: string, planPath: string, opts: Options = 
     }
     receipt.state = "applied"
     try { await store(fs, location, receipt, saved) } catch (err) { return { ...report, status: "failed", partial: true, completed, error: errorDetail(err), recovery: "Read the receipt and verify completed files before continuing." } }
-    return { ...report, completed }
+    const context_updates = await affectedContext(root, completed)
+    return { ...report, completed, ...(context_updates ? { context_updates } : {}) }
   } finally { await fs.close() }
 }
 
@@ -227,12 +241,76 @@ export async function recover(root: string, location: string, opts: { dryRun?: b
   } finally { await fs.close() }
 }
 
-const help = "Usage: bun main.ts inspect TARGET | apply TARGET --plan PLAN [--context CONTEXT] [--receipt RELPATH] [--dry-run] | verify TARGET [--paths FILE ...] [--context CONTEXT] | recover TARGET --receipt RELPATH [--dry-run]"
+const contextHelp = "context get TARGET ID... [--max-bytes N] | context search TARGET QUERY [--limit N] | context check TARGET [--keys ID...] [--changed FILE...] | context node TARGET start|plan|implement|verify|handoff [--keys ID...] [--changed FILE...] [--task FILE] [--max-bytes N] | context update TARGET --plan PLAN [--dry-run] [--receipt RELPATH]"
+const help = "Usage: bun main.ts inspect TARGET | apply TARGET --plan PLAN [--context CONTEXT] [--receipt RELPATH] [--dry-run] | verify TARGET [--paths FILE ...] [--context CONTEXT] | recover TARGET --receipt RELPATH [--dry-run] | " + contextHelp
+
+async function runContext(args: string[]): Promise<Record<string, unknown>> {
+  const action = args[0]
+  if (!action || !["get", "search", "check", "node", "update"].includes(action) || !args[1] || args[1]!.startsWith("--")) throw new BootstrapError("usage", contextHelp)
+  const root = await realpath(args[1]!)
+  if (!(await stat(root)).isDirectory()) throw new BootstrapError("invalid_target", "Target must be an existing directory.")
+  const options: Record<string, string | string[] | boolean> = {}
+  const positional: string[] = []
+  const allowed = action === "get" ? ["--max-bytes"] : action === "search" ? ["--limit"] : action === "check" ? ["--keys", "--changed"] : action === "node" ? ["--keys", "--changed", "--task", "--max-bytes"] : ["--plan", "--dry-run", "--receipt"]
+  for (let i = 2; i < args.length; i++) {
+    const value = args[i]!
+    if (!value.startsWith("--")) { positional.push(value); continue }
+    if (!allowed.includes(value) || value in options) throw new BootstrapError("usage", "Unknown or repeated context option.")
+    if (value === "--dry-run") options[value] = true
+    else if (["--keys", "--changed"].includes(value)) {
+      const items: string[] = []
+      while (args[i + 1] && !args[i + 1]!.startsWith("--")) items.push(args[++i]!)
+      if (!items.length) throw new BootstrapError("usage", value + " needs one or more values.")
+      options[value] = items
+    } else {
+      const item = args[++i]
+      if (!item || item.startsWith("--")) throw new BootstrapError("usage", value + " needs a value.")
+      options[value] = item
+    }
+  }
+  const number = (name: string, max: number) => {
+    const value = options[name]
+    if (value === undefined) return undefined
+    if (typeof value !== "string" || !/^[1-9][0-9]*$/.test(value) || !Number.isSafeInteger(Number(value)) || Number(value) > max) throw new BootstrapError("usage", name + " must be a positive bounded integer.")
+    return Number(value)
+  }
+  const keys = options["--keys"] as string[] | undefined
+  const changed = options["--changed"] as string[] | undefined
+  if (action === "get") {
+    if (!positional.length) throw new BootstrapError("usage", "context get needs one or more keys.")
+    return await getContext(root, positional, { maxBytes: number("--max-bytes", 65536) })
+  }
+  if (action === "search") {
+    if (positional.length !== 1) throw new BootstrapError("usage", "context search needs one query; quote a phrase.")
+    return await searchContext(root, positional[0]!, { limit: number("--limit", 32) })
+  }
+  if (action === "check") {
+    if (positional.length) throw new BootstrapError("usage", "context check accepts keys and changed files as options.")
+    return await checkContext(root, { keys, changed })
+  }
+  if (action === "node") {
+    if (positional.length !== 1) throw new BootstrapError("usage", "context node needs one workflow node.")
+    return await nodeContext(root, positional[0]!, { keys, changed, task: options["--task"] as string | undefined, maxBytes: number("--max-bytes", 65536) })
+  }
+  if (positional.length || typeof options["--plan"] !== "string") throw new BootstrapError("usage", "context update requires --plan.")
+  const prepared = await prepareIndexUpdate(root, options["--plan"])
+  if (prepared.report.status !== "passed") return prepared.report
+  const applied = await applyPlan(root, prepared.plan, { dryRun: options["--dry-run"] === true, receipt: options["--receipt"] as string | undefined })
+  const writes = Array.isArray(applied.files) ? applied.files.filter(item => record(item) && ["created", "updated"].includes(String(item.status))).length : 0
+  return { ...prepared.report, ...applied, command: "context update", scope: "context_index", writes_performed: applied.status === "failed" && applied.partial ? null : writes, index_sha256: applied.status === "passed" && !applied.dry_run ? prepared.report.result_sha256 : prepared.report.index_sha256, update: prepared.report }
+}
 
 export async function main(args = process.argv.slice(2)) {
   if (args.length === 1 && ["--help", "-h"].includes(args[0]!)) { console.log(help); return 0 }
   let command = args[0] ?? "unknown"
   try {
+    if (command === "context") {
+      if (args.length === 2 && ["--help", "-h"].includes(args[1]!)) { console.log(contextHelp); return 0 }
+      command = "context " + (args[1] ?? "unknown")
+      const out = await runContext(args.slice(1))
+      console.log(JSON.stringify(out, null, 2))
+      return out.status === "passed" ? 0 : 1
+    }
     if (!["inspect", "apply", "verify", "recover"].includes(command) || !args[1] || args[1]!.startsWith("--")) throw new BootstrapError("usage", help)
     const root = await realpath(args[1]!)
     if (!(await stat(root)).isDirectory()) throw new BootstrapError("invalid_target", "Target must be an existing directory.")

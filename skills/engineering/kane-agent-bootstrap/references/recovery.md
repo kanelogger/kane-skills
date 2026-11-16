@@ -14,6 +14,8 @@
 
 `apply` 真正修改前持久保存收据，默认在目标项目根 `.agents/state/bootstrap/<uuid>.json`。可用 `--receipt` 指定项目内相对路径。dry-run、零变化和预检冲突不需要新收据；计划文件可放本次临时位置。
 
+`context update` 只为索引生成受限文件计划，沿用同一写入、收据与恢复机制。恢复索引只恢复对应文件版本，不恢复来源文档、不证明派生结论仍有效；恢复后仍要核对当前来源与受影响条目。
+
 ```sh
 bun "/path/to/skill/scripts/main.ts" apply "/path/to/project" --plan "/path/to/plan.json" --receipt ".agents/state/bootstrap/adoption.json"
 ```

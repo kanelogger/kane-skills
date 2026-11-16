@@ -1,7 +1,8 @@
 import { lstat, readdir, realpath } from "node:fs/promises"
-import { basename, dirname, extname, join, relative } from "node:path"
+import { basename, dirname, extname, join, relative, resolve } from "node:path"
 import { parseDocument } from "yaml"
 import { assessContext, finding, insidePath, nonempty, privatePath, readBounded, record, sha256, type Finding, type Status } from "./context.ts"
+import { checkContext, type ContextReport } from "./routes"
 
 export type Report = { schema_version: 1; command: string; scope: string; status: Status; findings: Finding[]; [key: string]: unknown }
 type Source = { path: string; raw: Uint8Array; text: string }
@@ -352,5 +353,26 @@ export async function verifyProject(dir: string, paths?: string[], contextPath?:
     findings.push(...context.findings)
     if (context.blocked_stages.includes("apply")) findings.push(finding("context", "context_blocked", "An unresolved fact blocks file adoption."))
   }
-  return { schema_version: 1, command: "verify", scope: "static_only", status: status(findings), checked_files: checked, checks: { files: checked.length, markdown_links: count }, findings, commands_executed: 0, runtime_verified: false, business_verified: false, ...(context ? { context } : {}) }
+  let context_index: ContextReport | Record<string, unknown> | undefined
+  const indexPath = ".agents/context/index.json"
+  let inspectIndex = paths === undefined || paths.some(path => resolve(root, path) === join(root, indexPath))
+  if (inspectIndex) {
+    try { await lstat(join(root, indexPath)) }
+    catch (err) {
+      if ((err as NodeJS.ErrnoException).code === "ENOENT" && paths === undefined) inspectIndex = false
+    }
+  }
+  if (inspectIndex) {
+    try {
+      const report = await checkContext(root)
+      context_index = report
+      for (const item of report.findings) findings.push(finding(item.file ?? indexPath, item.code, item.message, report.status === "failed" ? "failed" : "unverified"))
+      if (report.status !== "passed" && !report.findings.length) findings.push(finding(indexPath, "context_index_incomplete", "Context index check has uncovered items.", "unverified"))
+    } catch {
+      const item = finding(indexPath, "context_index_invalid", "Context index is invalid, unavailable or unsafe.")
+      findings.push(item)
+      context_index = { status: "failed", findings: [item] }
+    }
+  }
+  return { schema_version: 1, command: "verify", scope: "static_only", status: status(findings), checked_files: checked, checks: { files: checked.length, markdown_links: count }, findings, commands_executed: 0, runtime_verified: false, business_verified: false, ...(context ? { context } : {}), ...(context_index ? { context_index } : {}) }
 }

@@ -125,9 +125,9 @@ export const examples: Record<string, [zhTitle: string, enTitle: string, zhPromp
     "Use $kane-migrate-to-rust to migrate /path/to/legacy-project to safe Rust, check output parity, and record test results and measured performance.",
   ],
   "kane-agent-bootstrap": [
-    "Agent 开发环境接入", "Agent development setup",
-    "$kane-agent-bootstrap 根据当前项目的业务和技术栈，合并适合 Agent 开发的协作规则与环境声明，准备并验证本机开发环境，报告验收结果和恢复收据。",
-    "$kane-agent-bootstrap Adapt this project’s existing business workflows and stack for Agent development. Merge suitable guidance and environment declarations, prepare and verify the local environment, and report validation results and the recovery receipt.",
+    "Agent 开发与上下文", "Agent development and context",
+    "$kane-agent-bootstrap 根据当前项目建立 Agent 开发环境和 .agents/context 索引，将各工作流节点的读取与增量维护协议接入项目入口，并验证真实业务链路。",
+    "$kane-agent-bootstrap Set up Agent development and an .agents/context index for this project. Integrate on-demand reading and incremental maintenance at workflow nodes, then verify a real business path.",
   ],
   "it-system-skill-distiller": [
     "IT 系统能力提炼", "IT system capability extraction",
