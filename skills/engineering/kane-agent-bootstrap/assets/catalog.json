@@ -2,7 +2,7 @@
   "schema_version": 1,
   "source": {
     "name": "prototype-03",
-    "snapshot_sha256": "b02f0d42562f8c6a1b49ded001b321d026803c086c90c3217be7628dbfb7d60c"
+    "snapshot_sha256": "9c314baa7c43da495fe47301e135f943b4f7728d61daf7f5bd50a13c059595cb"
   },
   "files": [
     {
@@ -13,7 +13,7 @@
       "strategy": "adapt",
       "needs_adaptation": true,
       "when": "按实际项目事实合并或改写；可引用已有同类说明",
-      "sha256": "e112809b5da54cd11340f13e5b759568459ad14567817bfee03bd0f1a0643673"
+      "sha256": "4f391d10f732302109c6e234624c783041ae66a50ad4c40c49de6a45eb637651"
     },
     {
       "asset": "templates/AGENTS.md",
@@ -23,7 +23,7 @@
       "strategy": "adapt",
       "needs_adaptation": true,
       "when": "按实际项目事实合并或改写；可引用已有同类说明",
-      "sha256": "e666fb32aa8688cc4c87c0759422f21f9a0711f39bc40f8166a742c88eac24f8"
+      "sha256": "a8f81f5105778938a0ba5501eb8caf749d2beb990b6b1aaf3e5a0d2d8cadd48f"
     },
     {
       "asset": "templates/LESSONS.md",

@@ -220,9 +220,9 @@ function htmlBoundary(line: string, generic: boolean): RegExp | "blank" | undefi
   if (generic && /^ {0,3}(?:<[a-z][a-z0-9-]*(?:[ \t]+[a-z_:][a-z0-9_.:-]*(?:[ \t]*=[ \t]*(?:[^"'=<>`\s]+|'[^']*'|"[^"]*"))?)*[ \t]*\/?>|<\/[a-z][a-z0-9-]*[ \t]*>)[ \t]*$/i.test(line)) return "blank"
 }
 
-function markdownSection(text: string, selected: string) {
+export function markdownSectionRange(text: string, selected: string) {
   const lines = text.split(/(?<=\n)/)
-  const headers: { title: string; slug: string; level: number; start: number }[] = []
+  const headers: { title: string; slug: string; level: number; start: number; bodyStart: number }[] = []
   const seen = new Map<string, number>()
   let fence = ""
   let size = 0
@@ -276,7 +276,7 @@ function markdownSection(text: string, selected: string) {
             const slug = headingSlug(title)
             const count = seen.get(slug) ?? 0
             seen.set(slug, count + 1)
-            headers.push({ title, slug: count ? `${slug}-${count}` : slug, level, start })
+            headers.push({ title, slug: count ? `${slug}-${count}` : slug, level, start, bodyStart: offset + raw.length })
             previous = undefined
           } else previous = { line, start: offset }
         }
@@ -289,7 +289,12 @@ function markdownSection(text: string, selected: string) {
   if (matches.length !== 1) return fail(matches.length ? "ambiguous_section" : "missing_section", matches.length ? "Markdown heading is ambiguous; choose its numbered anchor." : "Markdown section does not exist.")
   const chosen = matches[0]!
   const next = headers.find(header => header.start > chosen.start && header.level <= chosen.level)
-  return text.slice(chosen.start, next?.start ?? text.length)
+  return { start: chosen.start, bodyStart: chosen.bodyStart, end: next?.start ?? text.length }
+}
+
+function markdownSection(text: string, selected: string) {
+  const { start, end } = markdownSectionRange(text, selected)
+  return text.slice(start, end)
 }
 
 function safeTree(value: unknown) {

@@ -3,6 +3,7 @@ import { lstat, mkdir, readFile, realpath, writeFile } from "node:fs/promises"
 import { join, resolve } from "node:path"
 
 const base = ["docs/code-standards.md", "docs/integrating.md", "docs/git.md"]
+const tempIgnore = ".bootstrap-*.tmp"
 const adapt = [
   "AGENTS.md", ".gitignore", "LESSONS.md", "docs/testing.md", "docs/workflow.md",
   "docs/subsystems/README.md", "docs/agent-environment/README.md",
@@ -25,6 +26,14 @@ type Entry = Spec & { file: string; sha256: string }
 type ExportReport = { status: "passed" | "failed" | "stale"; errors?: Record<string, string>[]; asset_count?: number; snapshot_sha256?: string; changed?: string[]; check_only?: boolean }
 
 const sha = (data: Uint8Array | string) => createHash("sha256").update(data).digest("hex")
+
+function withTempIgnore(data: Buffer) {
+  const text = data.toString("utf8")
+  if (text.split(/\r?\n/).includes(tempIgnore)) return data
+  const newline = text.includes("\r\n") ? "\r\n" : "\n"
+  const prefix = text && !text.endsWith("\n") ? newline : ""
+  return Buffer.concat([data, Buffer.from(prefix + tempIgnore + newline)])
+}
 
 function specs(): Spec[] {
   return [
@@ -64,7 +73,8 @@ export async function exportAssets(source: string, assets: string, check = false
       errors.push({ source: spec.source, error: "source_missing_or_not_regular" })
       continue
     }
-    const data = await readFile(path)
+    const original = await readFile(path)
+    const data = spec.source === ".gitignore" ? withTempIgnore(original) : original
     const file = `${spec.asset}.tmpl`
     contents.set(file, data)
     entries.push({ asset: spec.asset, file, source: spec.source, target: spec.target, strategy: spec.strategy, needs_adaptation: spec.needs_adaptation, when: spec.when, sha256: sha(data) })

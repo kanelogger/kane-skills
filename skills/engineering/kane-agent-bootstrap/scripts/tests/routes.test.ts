@@ -406,6 +406,27 @@ describe("incremental context index updates", () => {
     expect(await exists(join(project, ".agents/state"))).toBe(false)
   })
 
+  test("index update refuses credential metadata without echoing the rejected entry", async () => {
+    const value = "ghp_" + "0".repeat(36)
+    const guide = "Guide\n"
+    await write("guide.md", guide)
+    const entry = { file: "guide.md", summary: value }
+    const before = await index({})
+    const reject = async (current: string, expected: string) => {
+      const path = await updatePlan(expected, { guide: entry })
+      const { report, stdout } = await run(["context", "update", project, "--plan", path], [1])
+      expect(report.writes_performed).toBe(0)
+      expect(stdout).toContain("sensitive_content")
+      expect(stdout).not.toContain(value)
+      expect(await readFile(join(project, indexPath), "utf8")).toBe(current)
+      expect(await exists(join(project, ".agents/state"))).toBe(false)
+    }
+    await reject(before, sha(before))
+    await reject(before, sha("stale index"))
+    const unchanged = await index({ guide: { ...entry, sha256: sha(guide) } })
+    await reject(unchanged, sha(unchanged))
+  })
+
   test("can create a missing index with expected null and recover that creation", async () => {
     const content = "First guide\n"
     await write("guide.md", content)

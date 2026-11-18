@@ -58,6 +58,15 @@ test("drift check reports stale content without writing", async () => {
   expect(await readFile(path, "utf8")).toBe("local drift\n")
 })
 
+test("export keeps the bootstrap temp ignore with an older upstream template", async () => {
+  const upstream = join(source, ".gitignore")
+  const original = await readFile(upstream, "utf8")
+  await writeFile(upstream, original.replace(/^\.bootstrap-\*\.tmp\r?\n/m, ""))
+  const result = await exportAssets(source, destination)
+  expect(result.status).toBe("passed")
+  expect(await readFile(join(destination, "templates/.gitignore.tmpl"), "utf8")).toBe(original)
+})
+
 test("a missing source fails before creating output", async () => {
   await rm(join(source, "AGENTS.md"))
   expect((await exportAssets(source, destination)).status).toBe("failed")

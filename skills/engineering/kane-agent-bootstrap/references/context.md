@@ -54,7 +54,7 @@
 
 ## 本轮可选证据记录
 
-只在需要 CLI 检查本轮文件来源或跨会话接续时生成 UTF-8 JSON。默认会话事实表已足够；稳定事实仍在项目所属文档维护。此格式由 `scripts/context.ts` 处理，传给 `apply/verify --context`；不是 `.agents/context/index.json`，也不用它保存长期检索路由、全局活动任务或业务状态。
+只在需要 CLI 检查本轮文件来源或跨会话接续时生成 UTF-8 JSON。默认会话事实表已足够。稳定事实仍在项目所属文档维护。此格式由 `scripts/context.ts` 处理，传给 `apply/verify --context`。按 `references/recovery.md` 的“写入前”规则，将生成并脱敏的 `context.json` 保存到 `.agents/state/bootstrap/` 下本轮私有目录。已有的证据 JSON 可直接作为 CLI 输入。
 
 ```json
 {
@@ -71,10 +71,10 @@
 }
 ```
 
-- `id` 标识该项，`statement` 仅写任务所需的脱敏结论。
+- `id` 标识该项，`statement` 仅写任务所需的脱敏结论。保存前也审查 ID 和来源标识，并去除 URL 中的认证信息。
 - `status` 为 `confirmed`、`assumed`、`conflicting` 或 `unknown`。确认项必须有来源；用户实际回复、推断和未回复不能互换。
 - `sources` 项为 `{ "kind": "file|user|observation|external", "ref": "来源标识", "sha256": "可选文件摘要" }`。实际 `kind` 只取其中一个值。文件引用相对项目根，不读秘密文件或越界链接；摘要过期时重新核实，不能只刷新摘要。
 - 其他来源只登记，不由 CLI 联网或验证真伪；运行证据要能说明输入、环境、操作和结果，不能把期望当观察。
 - `blocks` 仅列受影响阶段：`apply`、`runtime`、`business`。未知或冲突若阻塞 `apply` 则不写入；后两者只限制相应运行结论。
 
-以 `apply --context` 或 `verify --context` 传入记录。结构正确和来源可读不等于语义已证实；记录不是权限或用户确认。CLI 的未知、冲突和过期来源结果用于定位问题，执行者仍需根据当前指示及原始材料处理。
+以 `apply --context` 或 `verify --context` 传入记录。CLI 检查常见凭据，命中时只给出可用于定位的类型和位置。结构正确和来源可读不等于语义已证实；记录不是权限或用户确认。CLI 的未知、冲突和过期来源结果用于定位问题，执行者仍需根据当前指示及原始材料处理。

@@ -3,9 +3,10 @@ import { lstat, open, realpath } from "node:fs/promises"
 import { isAbsolute, relative, resolve, sep } from "node:path"
 import { createHash } from "node:crypto"
 import { parseDocument } from "yaml"
+import { sensitiveText } from "./sensitive"
 
 export type Status = "passed" | "failed" | "unverified"
-export type Finding = { path: string; code: string; status: "failed" | "unverified" | "warning"; message: string; line?: number; fact_id?: string }
+export type Finding = { path: string; code: string; status: "failed" | "unverified" | "warning"; message: string; line?: number; fact_id?: string; kind?: string }
 export type ContextReport = { status: Status; findings: Finding[]; blocked_stages: string[]; summary: Record<string, number> }
 
 export const record = (val: unknown): val is Record<string, unknown> => val !== null && typeof val === "object" && !Array.isArray(val)
@@ -21,6 +22,7 @@ export function privatePath(path: string) {
   return parts.some(p => [".git", ".hg", ".svn", ".aws", ".ssh", ".gnupg", "private", "secrets"].includes(p) || p.startsWith("private-"))
     || /(?:^|\/)\.agents\/(?:state|cache)(?:\/|$)/.test(canonical)
     || /(?:^|\/)\.agents\/[^/]*\.local\.[^/]*$/.test(canonical)
+    || /^\.bootstrap-.*\.tmp$/.test(name)
     || ((name === ".env" || name.startsWith(".env.")) && !example)
     || /\.(?:pem|key|p12|pfx|keystore)$/.test(name)
     || ["credentials", "credentials.json", "id_rsa", "id_ed25519"].includes(name)
@@ -74,6 +76,11 @@ export async function assessContext(root: string, path: string): Promise<Context
     const doc = parseDocument(raw.text, { uniqueKeys: true })
     if (doc.errors.length) throw new Error("invalid_json")
     data = JSON.parse(raw.text)
+    const matches = sensitiveText(raw.text)
+    if (matches.length) {
+      const hits = matches.map(match => finding("context", "sensitive_content", "Potential credential in the evidence input.", "failed", match))
+      return { status: "failed", findings: hits, blocked_stages: [], summary }
+    }
   } catch {
     return { status: "failed", findings: [finding("context", "context_parse", "Context must be readable bounded JSON with unique keys.")], blocked_stages: [], summary }
   }
@@ -90,6 +97,12 @@ export async function assessContext(root: string, path: string): Promise<Context
       || !Array.isArray(fact.sources) || fact.sources.length > 16 || !Array.isArray(fact.blocks)
       || fact.blocks.some(stage => typeof stage !== "string" || !["apply", "runtime", "business"].includes(stage))) {
       findings.push(finding("context", "fact_shape", "Facts need unique IDs, a statement, status, sources and valid blocked stages."))
+      continue
+    }
+    const refs = fact.sources.flatMap(source => record(source) && typeof source.ref === "string" ? [source.ref] : [])
+    const match = [fact.id, fact.statement, ...refs].flatMap(sensitiveText)[0]
+    if (match) {
+      findings.push(finding("context", "sensitive_content", "Potential credential in a decoded evidence field.", "failed", { kind: match.kind }))
       continue
     }
     ids.add(fact.id)

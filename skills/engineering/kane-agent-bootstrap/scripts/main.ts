@@ -4,7 +4,8 @@ import { randomUUID } from "node:crypto"
 import { parseDocument } from "yaml"
 import { Files, BootstrapError, hash, limit, parts } from "./files"
 import { assessContext, privatePath, readBounded, record } from "./context"
-import { inspectProject, verifyProject } from "./checks"
+import { sensitiveText } from "./sensitive"
+import { inspectProject, verifyAdoption, verifyProject } from "./checks"
 import { searchContext, getContext, checkContext, nodeContext, prepareIndexUpdate } from "./routes"
 
 type Output = Record<string, unknown> & { status: string }
@@ -12,7 +13,9 @@ type Operation = { path: string; expected: string | null; content: Buffer; sha25
 type Entry = { path: string; before: string | null; before_sha256: string | null; before_mode: number | null; after_sha256: string; after_mode: number; state: "pending" | "written" | "restored" | "skipped" }
 type Receipt = { schema_version: 1; kind: "kane-agent-bootstrap-receipt"; root: string; state: string; files: Entry[] }
 type Options = { dryRun?: boolean; receipt?: string; context?: string; beforeWrite?: (path: string, index: number) => Promise<void> }
+type SensitiveFinding = ReturnType<typeof sensitiveText>[number] & { path: string; side: "before" | "after" }
 const assets = resolve(import.meta.dir, "../assets")
+const receiptRoot = ".agents/state/bootstrap/"
 const maxPlan = 16 * 1024 * 1024
 const maxReceipt = 32 * 1024 * 1024
 const hex = (val: unknown): val is string => typeof val === "string" && /^[a-f0-9]{64}$/i.test(val)
@@ -33,10 +36,19 @@ function writable(path: unknown) {
   return name
 }
 
-function receiptPath(path: string) {
+function receiptPath(path: string, create = false) {
   const name = parts(path).join("/")
-  if (privatePath(name.toLowerCase()) && !name.toLowerCase().startsWith(".agents/state/bootstrap/")) throw new BootstrapError("invalid_receipt_path", "Receipt path must be owned project-local state.", name)
+  if (create && !name.startsWith(receiptRoot)) throw new BootstrapError("invalid_receipt_path", "New receipts must be inside " + receiptRoot, name)
+  if (privatePath(name) && !name.toLowerCase().startsWith(receiptRoot)) throw new BootstrapError("invalid_receipt_path", "Receipt path must be owned project-local state.", name)
   return name
+}
+
+function scan(path: string, side: SensitiveFinding["side"], text: string): SensitiveFinding[] {
+  return sensitiveText(text).map(match => ({ path, side, ...match }))
+}
+
+function blockedContent(command: "apply" | "recover", dryRun: boolean | undefined, findings: SensitiveFinding[]): Output {
+  return { ...output(command), dry_run: dryRun === true, status: "failed", error: { code: "sensitive_content", message: "Potential credentials found. Review the reported locations before writing project files or a receipt." }, sensitive_findings: findings }
 }
 
 async function asset(id: unknown) {
@@ -118,16 +130,24 @@ export async function applyPlan(root: string, planPath: string | Record<string, 
   try {
     const entries: Entry[] = []
     const results: Record<string, unknown>[] = []
+    const sensitive: SensitiveFinding[] = []
     for (const op of operations) {
       const current = await fs.read(op.path)
-      if (current) decode(current.data)
+      const before = current ? decode(current.data) : null
       const status = classify(op, current?.data)
       results.push({ path: op.path, status, sha256: op.sha256 })
-      if (status !== "unchanged") entries.push({ path: op.path, before: current?.data.toString("base64") ?? null, before_sha256: current ? hash(current.data) : null, before_mode: current?.mode ?? null, after_sha256: op.sha256, after_mode: current?.mode ?? 0o644, state: "pending" })
+      const matches = scan(op.path, "after", decode(op.content))
+      sensitive.push(...matches)
+      if (status === "unchanged" || status === "conflict") continue
+      const oldMatches = before === null ? [] : scan(op.path, "before", before)
+      sensitive.push(...oldMatches)
+      if (matches.length || oldMatches.length) continue
+      entries.push({ path: op.path, before: current?.data.toString("base64") ?? null, before_sha256: current ? hash(current.data) : null, before_mode: current?.mode ?? null, after_sha256: op.sha256, after_mode: current?.mode ?? 0o644, state: "pending" })
     }
     report.files = results
+    if (sensitive.length) return blockedContent("apply", opts.dryRun, sensitive)
     if (results.some(item => item.status === "conflict")) return { ...report, status: "failed", error: { code: "precondition_failed", message: "A target differs from the expected content; no files were written." } }
-    const location = receiptPath(opts.receipt ?? ".agents/state/bootstrap/" + randomUUID() + ".json")
+    const location = receiptPath(opts.receipt ?? receiptRoot + randomUUID() + ".json", true)
     for (const op of operations) if (pathKey(location) === pathKey(op.path) || pathKey(location).startsWith(pathKey(op.path) + "/") || pathKey(op.path).startsWith(pathKey(location) + "/")) throw new BootstrapError("receipt_overlap", "Receipt and planned target paths overlap.", op.path)
     if (entries.length && opts.receipt && await fs.read(location, maxReceipt)) throw new BootstrapError("receipt_exists", "Choose a new receipt path; existing recovery records are never overwritten.", location)
     if (opts.dryRun || !entries.length) return report
@@ -213,7 +233,10 @@ export async function recover(root: string, location: string, opts: { dryRun?: b
     }
     const report = { ...output("recover", results), receipt: path, dry_run: opts.dryRun === true }
     if (results.some(item => item.status === "conflict")) return { ...report, status: "failed", error: { code: "recovery_conflict", message: "A file changed or a pending write is uncertain; no files were restored." } }
-    if (opts.dryRun || receipt.state === "recovered" && results.every(item => item.status === "unchanged")) return report
+    if (receipt.state === "recovered" && results.every(item => item.status === "unchanged")) return report
+    const sensitive = receipt.files.flatMap(entry => entry.before === null ? [] : scan(entry.path, "before", decode(Buffer.from(entry.before, "base64"))))
+    if (sensitive.length) return blockedContent("recover", opts.dryRun, sensitive)
+    if (opts.dryRun) return report
     receipt.state = "recovering"
     saved = await store(fs, path, receipt, saved)
     const completed: string[] = []
@@ -242,7 +265,7 @@ export async function recover(root: string, location: string, opts: { dryRun?: b
 }
 
 const contextHelp = "context get TARGET ID... [--max-bytes N] | context search TARGET QUERY [--limit N] | context check TARGET [--keys ID...] [--changed FILE...] | context node TARGET start|plan|implement|verify|handoff [--keys ID...] [--changed FILE...] [--task FILE] [--max-bytes N] | context update TARGET --plan PLAN [--dry-run] [--receipt RELPATH]"
-const help = "Usage: bun main.ts inspect TARGET | apply TARGET --plan PLAN [--context CONTEXT] [--receipt RELPATH] [--dry-run] | verify TARGET [--paths FILE ...] [--context CONTEXT] | recover TARGET --receipt RELPATH [--dry-run] | " + contextHelp
+const help = "Usage: bun main.ts inspect TARGET | apply TARGET --plan PLAN [--context CONTEXT] [--receipt RELPATH] [--dry-run] | verify TARGET [--adoption | --paths FILE ...] [--context CONTEXT] | recover TARGET --receipt RELPATH [--dry-run] | " + contextHelp
 
 async function runContext(args: string[]): Promise<Record<string, unknown>> {
   const action = args[0]
@@ -296,6 +319,7 @@ async function runContext(args: string[]): Promise<Record<string, unknown>> {
   const prepared = await prepareIndexUpdate(root, options["--plan"])
   if (prepared.report.status !== "passed") return prepared.report
   const applied = await applyPlan(root, prepared.plan, { dryRun: options["--dry-run"] === true, receipt: options["--receipt"] as string | undefined })
+  if (applied.sensitive_findings) return { ...applied, command: "context update", scope: "context_index", writes_performed: 0 }
   const writes = Array.isArray(applied.files) ? applied.files.filter(item => record(item) && ["created", "updated"].includes(String(item.status))).length : 0
   return { ...prepared.report, ...applied, command: "context update", scope: "context_index", writes_performed: applied.status === "failed" && applied.partial ? null : writes, index_sha256: applied.status === "passed" && !applied.dry_run ? prepared.report.result_sha256 : prepared.report.index_sha256, update: prepared.report }
 }
@@ -315,11 +339,11 @@ export async function main(args = process.argv.slice(2)) {
     const root = await realpath(args[1]!)
     if (!(await stat(root)).isDirectory()) throw new BootstrapError("invalid_target", "Target must be an existing directory.")
     const flags: Record<string, string | boolean | string[]> = {}
-    const allowed = command === "apply" ? ["--plan", "--context", "--receipt", "--dry-run"] : command === "verify" ? ["--paths", "--context"] : command === "recover" ? ["--receipt", "--dry-run"] : []
+    const allowed = command === "apply" ? ["--plan", "--context", "--receipt", "--dry-run"] : command === "verify" ? ["--adoption", "--paths", "--context"] : command === "recover" ? ["--receipt", "--dry-run"] : []
     for (let i = 2; i < args.length; i++) {
       const key = args[i]!
       if (!allowed.includes(key) || key in flags) throw new BootstrapError("usage", "Unknown or repeated option.")
-      if (key === "--dry-run") flags[key] = true
+      if (key === "--dry-run" || key === "--adoption") flags[key] = true
       else if (key === "--paths") {
         const values: string[] = []
         while (args[i + 1] && !args[i + 1]!.startsWith("--")) values.push(args[++i]!)
@@ -333,7 +357,11 @@ export async function main(args = process.argv.slice(2)) {
     }
     let out: Record<string, unknown>
     if (command === "inspect") out = await inspectProject(root)
-    else if (command === "verify") out = await verifyProject(root, flags["--paths"] as string[] | undefined, flags["--context"] as string | undefined)
+    else if (command === "verify") {
+      if (flags["--adoption"] && flags["--paths"]) throw new BootstrapError("usage", "--adoption cannot be combined with --paths.")
+      const context = flags["--context"] as string | undefined
+      out = flags["--adoption"] ? await verifyAdoption(root, context) : await verifyProject(root, flags["--paths"] as string[] | undefined, context)
+    }
     else if (command === "apply") {
       if (typeof flags["--plan"] !== "string") throw new BootstrapError("usage", "apply requires --plan.")
       out = await applyPlan(root, flags["--plan"], { dryRun: flags["--dry-run"] === true, receipt: flags["--receipt"] as string | undefined, context: flags["--context"] as string | undefined })

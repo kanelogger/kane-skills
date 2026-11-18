@@ -31,8 +31,10 @@ disable-model-invocation: true
 | `scripts/main.ts` | `inspect`、`apply`、`verify`、`recover` 与 `context` CLI |
 | `scripts/files.ts` | 受约束的文件遍历与写入、恢复原语 |
 | `scripts/checks.ts` | 只读来源索引与静态校验 |
+| `scripts/adoption-commands.ts` | 定位并核对索引中的项目检查命令入口 |
 | `scripts/context.ts` | 本轮可选证据 JSON 的结构、来源及阻塞检查 |
 | `scripts/routes.ts` | `.agents/context/index.json` 的检索、节点读取、来源检查与增量计划 |
+| `scripts/sensitive.ts` | 拟写入正文和恢复快照中的疑似凭据检查 |
 | `scripts/sync-assets.ts` | 作者维护资产快照；不在目标初始化时运行 |
 
 首次运行前，在技能工具目录准备锁定依赖，安装与项目操作分开执行：
@@ -45,7 +47,8 @@ ${BUN_X} install --frozen-lockfile --ignore-scripts --cwd "{baseDir}/scripts"
 
 ## 选择使用方式与参考材料
 
-- **初始化或修正接入**：执行下文 1–5 步，交付可用索引及从项目入口可达的实际工作流。
+- **初始化或修正接入**：执行下文 1–5 步，交付可用索引、经验库及从项目入口可达的实际工作流。
+- **只核对既有接入**：用户要求时运行 `verify TARGET --adoption`，按实际结果报告缺项。需要修正接入时使用初始化或修正流程。
 - **后续任务检索与维护**：读取目标 `AGENTS.md` 和现有索引，按 [按需上下文与工作流](references/retrieval.md) 执行节点读取、核实来源与增量更新；不重跑 `inspect`、初始化访谈、资产投放或环境准备。只有任务本身要求修正接入时才切回第一种方式。
 - 需要背景来源、分阶段问题或本轮证据 JSON 时，直接读取 [背景与澄清](references/context.md)。
 - 需要选择资产、生成文件操作计划或核对现有 CLI 边界时，直接读取 [适配与 CLI 契约](references/adaptation.md)。
@@ -83,33 +86,35 @@ ${BUN_X} install --frozen-lockfile --ignore-scripts --cwd "{baseDir}/scripts"
 
 阅读 [适配与 CLI 契约](references/adaptation.md)、[按需上下文与工作流](references/retrieval.md) 和 [资产清单](assets/catalog.json)。优先合并或引用已有规范、开发手册和任务入口，不强制全部目录、五种角色、分支、任务文件或 ADR。每次初始化或修正接入都要建立或修复可用的 `.agents/context/index.json`，并将读取与维护协议合并进生成的 AGENTS 和项目实际工作流；小项目可在 AGENTS 内短内联工作流，不能仅把协议留在技能说明里。
 
-通用正文可复制；`needs_adaptation: true` 的材料先根据事实改写，再以最终 `content` 写入。替换模板自身“没有应用、命令或 CI”等现状陈述，并核对所有导航。根 `project.yml` 从实际配置与包内填写模板生成，`null` 是未知，`[]/{}` 是已确认没有；不把未发现写成不需要。保留目标已有经验，不把通用模式写成该项目事故。
+每次初始化或修正接入都必须落实项目经验库。识别并复用已有的经验库，保留历史记录；确认没有时，把根 `LESSONS.md` 的适配正文纳入本次写入计划。按 [接入结构](references/adaptation.md#接入结构) 设置从根 `AGENTS.md` 出发的工作流与经验库导航。将交接回写和独立评审规则合并到 [实际工作流节点](references/retrieval.md#合并到实际工作流的节点)，写明何时评审、怎样安排全新上下文，以及如何处置发现和复核修复。
+
+通用正文可复制；`needs_adaptation: true` 的材料先根据事实改写，再以最终 `content` 写入。替换模板自身“没有应用、命令或 CI”等现状陈述，并核对所有导航。根 `project.yml` 从实际配置与包内填写模板生成，`null` 是未知，`[]/{}` 是已确认没有；不把未发现写成不需要。
 
 清单的 `asset` 是逻辑 ID，正文实际位置由 `file` 指定，读取时定位技能 `assets/` 下的该文件。`.tmpl` 只表示待采用的材料，不按包内现有文档导航处理；投放后的路径与引用仍须核对。
 
-先索引现有工作流、真实命令和本次涉及的业务入口，用有意义的 key、别名与适用节点帮助检索。索引指向现有段落或 YAML/JSON 字段；只有跨来源综合结论确需独立保存且无既有归属时，才新增 `.agents/context/derived/` 条目并登记源依赖。合并忽略规则时保留索引和派生知识入库，只忽略 `.agents/state/` 等本机状态。不要向项目 AGENTS 写本机绝对技能路径。
+先索引现有工作流、至少一条真实检查命令和本次涉及的业务入口。用有意义的 key、别名与适用节点定位现有段落或 YAML/JSON 字段。检查命令的索引写法见 [接入结构](references/adaptation.md#接入结构)。只有跨来源综合结论确需独立保存且无既有归属时，才新增 `.agents/context/derived/` 条目并登记源依赖。合并 `.agents/state/` 和 `.bootstrap-*.tmp` 忽略规则，保留索引和派生知识入库。不要向项目 AGENTS 写本机绝对技能路径。
 
-形成简短采用说明与 JSON 操作计划，说明来源、目标文件和验收。计划只含本次非秘密规则与配置；凭据通过项目已有安全入口处理。收据会保留修改前文本，应用前合并本机忽略规则并核对候选内容，不以忽略规则代替敏感内容审查。
+形成简短采用说明与 JSON 操作计划，说明来源、目标文件和验收。保存计划前审查拟写入的正文和将被替换的现有正文，因为收据会保留旧文本。凭据通过项目已有安全入口处理，计划与可选证据只写脱敏内容。按 [写入前](references/recovery.md#写入前) 把本次生成的 JSON 放在目标项目 `.agents/state/bootstrap/` 下的私有运行目录。
 
 ## 4. 应用并保留恢复依据
 
 操作计划和收据格式、冲突与中断处理见 [失败恢复](references/recovery.md)。
 
 ```sh
-${BUN_X} "{baseDir}/scripts/main.ts" apply "/path/to/project" --plan "/path/to/plan.json" --dry-run
-${BUN_X} "{baseDir}/scripts/main.ts" apply "/path/to/project" --plan "/path/to/plan.json"
-${BUN_X} "{baseDir}/scripts/main.ts" verify "/path/to/project"
+${BUN_X} "{baseDir}/scripts/main.ts" apply "/path/to/project" --plan "/path/to/project/.agents/state/bootstrap/<run>/plan.json" --dry-run
+${BUN_X} "{baseDir}/scripts/main.ts" apply "/path/to/project" --plan "/path/to/project/.agents/state/bootstrap/<run>/plan.json"
+${BUN_X} "{baseDir}/scripts/main.ts" verify "/path/to/project" --adoption
 ```
 
 可用 `--context` 核对本轮证据 JSON。来源摘要过期或明确阻塞 `apply` 的冲突/未知事项未解决时，修正事实或计划；不只刷新摘要绕过冲突。`runtime`、`business` 缺口只阻塞对应验证，不能写成已验证。
 
 目标已有索引时，普通 `apply` 写后检查本轮变化文件关联的条目，通过 `context_updates` 提示待复核项；它不自动更新摘要或知识正文，也不改变文件写入已成功的结果。`verify` 默认发现索引时检查它，限定 `--paths` 时需显式选中索引才纳入；按实际报告处理未覆盖与过期项。
 
-dry-run 是预检，不新增审批；在已有授权范围继续。相同内容重跑跳过，冲突时保留现场并重新合并。实际修改前持久保存本轮收据；dry-run 和零变化不创建收据。收据是本机恢复资料，不是操作授权。
+先用 dry-run 预检路径、冲突和疑似凭据，再在已有授权范围内应用。命中时按文件、正文版本、类型和行号定位，避免回显值。确认应保存的内容已脱敏后重新预检。相同内容重跑跳过，冲突时保留现场并重新合并。实际修改前在 `.agents/state/bootstrap/` 持久保存本机恢复收据。dry-run 和零变化不创建收据。
 
 ## 5. 冗余验证与实际运行
 
-- **静态结构**：修复本次引入的链接、字段和占位值问题。可用 `verify --paths` 检查选定文件，显式说明旧缺陷与未覆盖范围，不能隐藏本次失败。
+- **静态结构**：初始化或修正接入应用后必须运行 `verify TARGET --adoption`。可与 `--context` 同用。检查指定文件时单独使用 `verify --paths`。处理失败项并回读 `AGENTS.md`、实际工作流和经验库，确认交接指向同一经验库且写明回写条件。核对实际工作流中的独立评审规则是否适合项目。
 - **上下文接续**：从目标 AGENTS 走到实际工作流与索引，演示按 key 读取一条真实命令和本次业务来源；确认节点协议已投放到项目，索引可解析、引用可达，增量检查能暴露来源变化。安装工具不可用时，按索引直接读段落或字段并维护相同协议；不复制整套技能或让日常任务停滞。
 - **语义核对**：回到原始需求、来源与关键路径核验采用结果，处理事实冲突，不用生成文档证明自身正确。
 - **本机运行**：从真实命令定义核对调用、工作目录、前置条件、副作用、超时和恢复。`project.yml` 的 `run/check` 可为手工说明，CLI 不执行这些字符串；由 Agent 核实后用参数数组调用具体程序，绝不把未净化输入拼入 shell。
@@ -120,7 +125,9 @@ dry-run 是预检，不新增审批；在已有授权范围继续。相同内容
 
 ## 交付与完成
 
-分别报告协作材料、索引与工作流、本机环境、业务链路的输入、实际结果、证据与未覆盖项；给出收据位置、资源处置、具体阻塞和下一步。稳定事实回写所属项目文档，任务结论、决策简短理由、来源、反证条件与下一步沿用项目唯一任务或 Issue 记录。交接前由 Agent 更新受影响索引并检查过期项；JSON、流程字段和来源摘要只证明结构或版本，不证明业务真伪与完成。
+分别报告协作材料、索引与工作流、本机环境、业务链路的输入、实际结果、证据与未覆盖项。注明 `verify --adoption` 结果、经验库实际路径和本次回写结果，给出收据位置、资源处置、具体阻塞和下一步。接入完成要求结构检查通过，并确认实际工作流已落实独立评审和经验回写的责任。
+
+交接时把有证据、可复用的经验写回项目经验库，再更新受影响索引并检查过期项。稳定事实回写所属项目文档，任务结论、决策简短理由、来源、反证条件与下一步沿用项目唯一任务或 Issue 记录。JSON、流程字段和来源摘要只证明结构或版本，不证明业务真伪与完成。
 
 节点读取由加载项目规则后的 Agent 主动执行；本技能未安装客户端 hooks，也不宣称 CLI 会强制调度 Agent。评估检索效果时记录实际读取字节、工具轮次、来源是否正确和过期项处理情况，不把字节冒充 token，也不承诺恒定耗时或最快检索。
 

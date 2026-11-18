@@ -15,6 +15,8 @@ type Report = {
   status: string
   scope?: string
   receipt?: string
+  error?: { code: string }
+  sensitive_findings?: { path: string; side: string; kind: string; line: number }[]
   files?: { path: string; status: string }[]
   commands?: { name: string; source: string; working_directory: string }[]
   findings?: Finding[]
@@ -170,6 +172,31 @@ describe("file application", () => {
     expect(await readFile(join(project, "receipt.json"), "utf8")).toBe("preserve recovery record\n")
   })
 
+  test("new and previous credentials stop the whole plan without disclosing values or writing files", async () => {
+    const oldValue = "fictional-secret-for-before-snapshot-65af223"
+    const newValue = "fictional-secret-for-proposed-file-2428ac1"
+    const previous = `# Existing settings\nAPI_TOKEN=${oldValue}\n`
+    await write("existing.md", previous)
+    const path = await plan([
+      { path: "safe.md", expected_sha256: null, content: "safe\n" },
+      { path: "existing.md", expected_sha256: sha(previous), content: "API_TOKEN=${API_TOKEN}\n" },
+      { path: "new.md", expected_sha256: null, content: `# Proposed settings\nAPI_TOKEN=${newValue}\n` },
+    ])
+    for (const options of [["--dry-run"], []]) {
+      const { stdout, stderr, report } = await run(["apply", project, "--plan", path, ...options], [1])
+      expect(report.error?.code).toBe("sensitive_content")
+      expect(report.sensitive_findings).toEqual([
+        { path: "existing.md", side: "before", kind: "credential_assignment", line: 2 },
+        { path: "new.md", side: "after", kind: "credential_assignment", line: 2 },
+      ])
+      expect(stdout + stderr).not.toContain(oldValue)
+      expect(stdout + stderr).not.toContain(newValue)
+      expect(report.receipt).toBeUndefined()
+      expect(await readdir(project)).toEqual(["existing.md"])
+      expect(await readFile(join(project, "existing.md"), "utf8")).toBe(previous)
+    }
+  })
+
   test("a failed second write preserves completed work and a usable recovery receipt", async () => {
     const path = await plan([
       { path: "first.md", expected_sha256: null, content: "first\n" },
@@ -314,20 +341,24 @@ describe("read-only evidence", () => {
     }
   })
 
-  test("case-variant Agent state and local configuration remain private", async () => {
+  test("case-variant Agent state, local configuration and write temporaries remain private", async () => {
     const local = JSON.stringify({ token: "fixture-case-local-secret-4829" })
     const state = "fixture-case-state-secret-5610\n"
+    const temporary = "fixture-orphaned-temporary-4233\n"
     await write(".AGENTS/config.local.json", local)
     await write(".AGENTS/state/events.md", state)
+    await write("docs/.bootstrap-orphan.tmp", temporary)
     const { report, stdout } = await run(["inspect", project])
     const paths = report.files?.map(file => file.path.toLowerCase()) ?? []
     expect(paths).not.toContain(".agents/config.local.json")
     expect(paths).not.toContain(".agents/state/events.md")
+    expect(paths).not.toContain("docs/.bootstrap-orphan.tmp")
     expect(stdout).not.toContain("fixture-case-local-secret-4829")
     expect(stdout).not.toContain(sha(local))
     expect(stdout).not.toContain(sha(state))
+    expect(stdout).not.toContain(sha(temporary))
     await seed()
-    for (const [ref, content] of [[".AGENTS/config.local.json", local], [".AGENTS/state/events.md", state]]) {
+    for (const [ref, content] of [[".AGENTS/config.local.json", local], [".AGENTS/state/events.md", state], ["docs/.bootstrap-orphan.tmp", temporary]]) {
       const ctx = await context([{ id: "private", statement: "Private state", status: "confirmed", sources: [{ kind: "file", ref, sha256: sha(content) }], blocks: [] }])
       await run(["verify", project, "--context", ctx], [1, 2])
     }
@@ -417,6 +448,24 @@ describe("static verification", () => {
 })
 
 describe("context evidence", () => {
+  test("evidence reports refuse credentials in decoded identifiers without echoing them", async () => {
+    await seed()
+    const value = "ghp_" + "8".repeat(36)
+    const ctx = await context([{ id: value, statement: "Unsettled evidence", status: "unknown", sources: [], blocks: ["apply"] }])
+    const evidence = await readFile(ctx, "utf8")
+    const path = await plan([{ path: "new.md", expected_sha256: null, content: "new\n" }])
+    for (const raw of [evidence, evidence.replace(value, "\\u0067" + value.slice(1))]) {
+      await writeFile(ctx, raw)
+      for (const args of [["apply", project, "--plan", path], ["verify", project]]) {
+        const { stdout, stderr } = await run([...args, "--context", ctx], [1])
+        expect(stdout).toContain("sensitive_content")
+        expect(stdout + stderr).not.toContain(value)
+      }
+    }
+    expect(await exists(join(project, "new.md"))).toBe(false)
+    expect(await exists(join(project, ".agents"))).toBe(false)
+  })
+
   test("confirmed facts require a source", async () => {
     await seed()
     const path = await context([{ id: "goal", statement: "Known goal", status: "confirmed", sources: [], blocks: [] }])
@@ -517,12 +566,44 @@ describe("receipts and recovery", () => {
     expect(await readFile(outside, "utf8")).toBe("{}\n")
   })
 
-  test("custom receipts do not overwrite preexisting user files", async () => {
-    await write("receipt.json", "user-owned\n")
+  test("new custom receipts stay in bootstrap state and do not overwrite preexisting files", async () => {
+    const stored = ".agents/state/bootstrap/run/receipt.json"
+    await write(stored, "user-owned\n")
     const path = await plan([{ path: "AGENTS.md", expected_sha256: null, content: "# Project\n" }])
-    await run(["apply", project, "--plan", path, "--receipt", "receipt.json"], [1, 2])
-    expect(await readFile(join(project, "receipt.json"), "utf8")).toBe("user-owned\n")
+    const { report: outside } = await run(["apply", project, "--plan", path, "--receipt", "receipt.json"], [2])
+    expect(outside.error?.code).toBe("invalid_receipt_path")
+    const { report: occupied } = await run(["apply", project, "--plan", path, "--receipt", stored], [2])
+    expect(occupied.error?.code).toBe("receipt_exists")
+    expect(await readFile(join(project, stored), "utf8")).toBe("user-owned\n")
+    expect(await exists(join(project, "receipt.json"))).toBe(false)
     expect(await exists(join(project, "AGENTS.md"))).toBe(false)
+  })
+
+  test("legacy custom receipts recover clean text but refuse credential snapshots before rewriting", async () => {
+    const target = await write("AGENTS.md", "# Before\n")
+    const path = await plan([{ path: "AGENTS.md", expected_sha256: sha("# Before\n"), content: "# After\n" }])
+    const { report } = await run(["apply", project, "--plan", path])
+    const local = join(project, report.receipt!)
+    const legacy = join(project, "legacy-receipt.json")
+    await rename(local, legacy)
+    const original = await readFile(legacy, "utf8")
+    const receipt = JSON.parse(original)
+    const value = "fictional-legacy-credential-in-snapshot-4e2cb"
+    const previous = `API_TOKEN=${value}\n`
+    receipt.files[0].before = Buffer.from(previous).toString("base64")
+    receipt.files[0].before_sha256 = sha(previous)
+    const unsafe = JSON.stringify(receipt)
+    await writeFile(legacy, unsafe)
+    for (const options of [["--dry-run"], []]) {
+      const result = await run(["recover", project, "--receipt", "legacy-receipt.json", ...options], [1])
+      expect(result.report.sensitive_findings).toEqual([{ path: "AGENTS.md", side: "before", kind: "credential_assignment", line: 1 }])
+      expect(result.stdout + result.stderr).not.toContain(value)
+      expect(await readFile(target, "utf8")).toBe("# After\n")
+      expect(await readFile(legacy, "utf8")).toBe(unsafe)
+    }
+    await writeFile(legacy, original)
+    await run(["recover", project, "--receipt", "legacy-receipt.json"])
+    expect(await readFile(target, "utf8")).toBe("# Before\n")
   })
 })
 

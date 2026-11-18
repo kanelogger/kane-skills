@@ -2,11 +2,12 @@ import { lstat, readdir, realpath } from "node:fs/promises"
 import { basename, dirname, extname, join, relative, resolve } from "node:path"
 import { parseDocument } from "yaml"
 import { assessContext, finding, insidePath, nonempty, privatePath, readBounded, record, sha256, type Finding, type Status } from "./context.ts"
-import { checkContext, type ContextReport } from "./routes"
+import { checkContext, loadIndex, markdownSectionRange, type ContextIndex, type ContextReport } from "./routes"
+import { findAdoptionCommand } from "./adoption-commands"
 
 export type Report = { schema_version: 1; command: string; scope: string; status: Status; findings: Finding[]; [key: string]: unknown }
 type Source = { path: string; raw: Uint8Array; text: string }
-type Link = { value?: string; missing_reference?: boolean; line: number }
+type Link = { value?: string; missing_reference?: boolean; line: number; label?: string; image?: boolean; offset: number; incomplete?: boolean }
 const limits = { files: 3000, file_bytes: 512 * 1024, total_bytes: 8 * 1024 * 1024, entries: 20000 }
 const skip = new Set([".git", ".hg", ".svn", "node_modules", ".venv", "venv", "__pycache__", ".cache", ".next", ".nuxt", ".pnpm-store", ".pytest_cache", ".mypy_cache", ".ruff_cache", ".tox", "dist", "build", "target", "coverage", "vendor", ".aws", ".ssh", ".gnupg", "private", "secrets"])
 const manifests = new Set(["package.json", "pyproject.toml", "requirements.txt", "go.mod", "Cargo.toml", "Gemfile", "pom.xml", "build.gradle", "build.gradle.kts", "composer.json", "deno.json", "deno.jsonc", "mix.exs", "Package.swift", "CMakeLists.txt", "Makefile", "makefile", "Justfile", "justfile", "Taskfile.yml", "Taskfile.yaml"])
@@ -167,7 +168,7 @@ function links(text: string): Link[] {
   for (const match of body.matchAll(def)) if (!defs.has(label(match[1]!))) defs.set(label(match[1]!), match[2] || match[3]!)
   body = body.replace(def, val => " ".repeat(val.length))
   const spans: [number, number][] = []
-  for (const match of body.matchAll(/!?\[[^\]\n]*\]\(/g)) {
+  for (const match of body.matchAll(/(!?)\[([^\]\n]*)\]\(/g)) {
     const start = match.index! + match[0].length
     let end = start
     let value = ""
@@ -186,26 +187,32 @@ function links(text: string): Link[] {
       value = body.slice(start, end)
     }
     const line = body.slice(0, match.index).split("\n").length
-    if (value) out.push({ value, line })
     const close = body[end] === ")" ? end : body.indexOf(")", end)
+    if (value) out.push({ value, line, label: match[2], image: match[1] === "!", offset: match.index, incomplete: close < 0 })
     spans.push([match.index!, close < 0 ? body.length : close + 1])
   }
   for (const match of body.matchAll(/!?\[([^\]\n]+)\](?:\[([^\]\n]*)\])?/g)) {
     if (spans.some(([start, end]) => start <= match.index! && match.index! < end)) continue
     const value = defs.get(label(match[2] || match[1]!))
     const line = body.slice(0, match.index).split("\n").length
-    if (value) out.push({ value, line })
-    else if (match[2] !== undefined) out.push({ missing_reference: true, line })
+    if (value) out.push({ value, line, label: match[1], image: match[0].startsWith("!"), offset: match.index })
+    else if (match[2] !== undefined) out.push({ missing_reference: true, line, offset: match.index })
   }
   return out
+}
+
+function referenceParts(ref: string) {
+  const index = ref.indexOf("#")
+  return {
+    file: decodeURIComponent((index < 0 ? ref : ref.slice(0, index)).split("?")[0]!),
+    anchor: index < 0 ? "" : decodeURIComponent(ref.slice(index + 1)),
+  }
 }
 
 async function checkReference(root: string, base: string, ref: string, path: string, items: Finding[], code: string, line?: number) {
   if (/^[a-z][a-z0-9+.-]*:/i.test(ref) || ref.startsWith("//")) return
   try {
-    const index = ref.indexOf("#")
-    const file = decodeURIComponent((index < 0 ? ref : ref.slice(0, index)).split("?")[0]!)
-    const anchor = index < 0 ? "" : decodeURIComponent(ref.slice(index + 1))
+    const { file, anchor } = referenceParts(ref)
     const target = file ? await insidePath(root, base, file) : base
     const meta = await lstat(target)
     if (meta.isSymbolicLink() || privatePath(relative(root, target))) throw new Error("unsafe_reference")
@@ -375,4 +382,142 @@ export async function verifyProject(dir: string, paths?: string[], contextPath?:
     }
   }
   return { schema_version: 1, command: "verify", scope: "static_only", status: status(findings), checked_files: checked, checks: { files: checked.length, markdown_links: count }, findings, commands_executed: 0, runtime_verified: false, business_verified: false, ...(context ? { context } : {}), ...(context_index ? { context_index } : {}) }
+}
+
+type AdoptionRole = "workflow" | "lessons"
+type AdoptionDoc = { path: string; text: string; anchor?: string; section?: ReturnType<typeof markdownSectionRange> }
+const roleNames: Record<AdoptionRole, RegExp> = {
+  workflow: /工作流|开发流程|任务流程|\bwork[ -]?flow\b/i,
+  lessons: /经验(?:库|记录|教训|总结)|工程复盘|复盘(?:库|记录)|\blessons\b|\b(?:engineering|project)[ -]+retrospectives?\b/i,
+}
+const rolePaths: Record<AdoptionRole, RegExp> = {
+  workflow: /(?:^|\/)workflow(?:\.md|\/README\.md)$/i,
+  lessons: /(?:^|\/)LESSONS\.md$/i,
+}
+
+function visibleMarkdown(text: string) {
+  return blankCode(text, false).replace(/<!--[\s\S]*?(?:-->|$)/g, comment => comment.replace(/[^\n]/g, " "))
+}
+
+async function adoptionDocument(root: string, target: string, anchor?: string): Promise<AdoptionDoc> {
+  const path = relative(root, target)
+  if (privatePath(path) || extname(path).toLowerCase() !== ".md") throw new Error("expected_public_markdown")
+  const text = visibleMarkdown((await readBounded(target)).text)
+  if (!anchor) return { path, text }
+  if (!headings(text).has(anchor)) throw new Error("missing_anchor")
+  try { return { path, text, anchor, section: markdownSectionRange(text, `#${anchor}`) } }
+  catch { return { path, text, anchor } }
+}
+
+function workflowContent(doc: AdoptionDoc) {
+  const text = doc.section ? doc.text.slice(doc.section.bodyStart, doc.section.end) : doc.text
+  const body = text.replace(/^ {0,3}\S[^\n]*\n {0,3}[-=]+[ \t]*(?:\n|$)/gm, "")
+  return body.split("\n").some(line => !/^\s*(?:#{1,6}(?:\s|$)|[-=]+\s*$|(?:TODO|TBD|待补充)[.!。]?\s*$|$)/i.test(line))
+}
+
+function inlineWorkflow(doc: AdoptionDoc): AdoptionDoc | undefined {
+  for (const anchor of headings(doc.text)) {
+    if (!roleNames.workflow.test(anchor)) continue
+    try {
+      const workflow = { ...doc, anchor, section: markdownSectionRange(doc.text, `#${anchor}`) }
+      if (workflowContent(workflow)) return workflow
+    } catch {}
+  }
+}
+
+function visibleLink(doc: AdoptionDoc, link: Link) {
+  if (link.image || (doc.section && (link.offset < doc.section.start || link.offset >= doc.section.end))) return false
+  const lineStart = doc.text.lastIndexOf("\n", link.offset - 1) + 1
+  if (/^(?: {4}|\t)/.test(doc.text.slice(lineStart, lineStart + 4))) return false
+  let escape = link.offset
+  while (escape > lineStart && doc.text[escape - 1] === "\\") escape--
+  return (link.offset - escape) % 2 === 0
+}
+
+async function adoptionLink(root: string, sources: AdoptionDoc[], role: AdoptionRole, findings: Finding[], fallback?: AdoptionDoc) {
+  const before = findings.length
+  for (const source of sources) {
+    for (const link of links(source.text)) {
+      if (!visibleLink(source, link)) continue
+      const ref = link.value
+      if (!ref || (!roleNames[role].test(link.label ?? "") && !rolePaths[role].test(ref.split(/[?#]/, 1)[0]!))) continue
+      let targetPath: string | undefined
+      try {
+        const { file, anchor } = referenceParts(ref)
+        if (link.incomplete || /^[a-z][a-z0-9+.-]*:/i.test(file) || file.startsWith("//") || (!file && !anchor)) throw new Error("expected_local_link")
+        const base = join(root, source.path)
+        const target = file ? await insidePath(root, dirname(base), file) : base
+        const rel = relative(root, target)
+        if (!privatePath(rel)) targetPath = rel
+        if (!anchor && rel === source.path) throw new Error("self_link_requires_anchor")
+        const doc = await adoptionDocument(root, target, anchor)
+        if (role === "lessons") return doc
+        if (!anchor && basename(doc.path).toLowerCase() === "readme.md" && !rolePaths.workflow.test(doc.path)) {
+          const section = inlineWorkflow(doc)
+          if (section) return section
+          throw new Error("missing_workflow_content")
+        }
+        if ((anchor && !doc.section) || !workflowContent(doc)) throw new Error("missing_workflow_content")
+        return doc
+      } catch (err) {
+        const target = targetPath ? ` (${targetPath})` : ""
+        const detail = err instanceof Error && err.message === "missing_workflow_content"
+          ? `The workflow target has no workflow content${target}.`
+          : `The ${role} link must resolve to a readable project Markdown file and any specified heading${target}.`
+        findings.push(finding(source.path, `adoption_${role}_reference`, detail, "failed", { line: link.line }))
+      }
+    }
+  }
+  if (!fallback && findings.length === before) findings.push(finding("AGENTS.md", `adoption_${role}_missing`, role === "workflow"
+    ? "Link the project workflow from AGENTS.md or add a nonempty workflow section there."
+    : "Link the project lessons from AGENTS.md or its workflow."))
+  return fallback
+}
+
+export async function verifyAdoption(dir: string, contextPath?: string): Promise<Report> {
+  const root = await realpath(dir)
+  const findings: Finding[] = []
+  const paths = new Set<string>()
+  let agents: AdoptionDoc | undefined
+  try {
+    agents = await adoptionDocument(root, await insidePath(root, root, "AGENTS.md"))
+    paths.add(agents.path)
+  } catch {
+    findings.push(finding("AGENTS.md", "missing_entry", "Required adoption entry is missing or not a readable Markdown file."))
+  }
+  const manifest = "project.yml"
+  try {
+    const path = await insidePath(root, root, manifest)
+    if (!(await lstat(path)).isFile()) throw new Error("not_file")
+    paths.add(manifest)
+  } catch {
+    findings.push(finding(manifest, "missing_entry", "Required adoption entry is missing or not an ordinary file."))
+  }
+  const workflow = agents && await adoptionLink(root, [agents], "workflow", findings, inlineWorkflow(agents))
+  const lessons = agents && await adoptionLink(root, workflow && workflow.path !== agents.path ? [agents, workflow] : [agents], "lessons", findings)
+  if (workflow) paths.add(workflow.path)
+  if (lessons) paths.add(lessons.path)
+
+  const indexPath = ".agents/context/index.json"
+  let index: ContextIndex | undefined
+  let indexSha: string | undefined
+  try {
+    const loaded = await loadIndex(root)
+    if (loaded.sha256 === null) findings.push(finding(indexPath, "adoption_index_missing", "The project context index is required for adoption."))
+    else {
+      index = loaded.index
+      indexSha = loaded.sha256
+      paths.add(indexPath)
+    }
+  } catch {
+    findings.push(finding(indexPath, "context_index_invalid", "Context index is invalid, unavailable or unsafe."))
+  }
+  const command = index && await findAdoptionCommand(root, index, findings)
+  const verified = await verifyProject(root, [...paths], contextPath)
+  findings.push(...verified.findings)
+  if (indexSha && record(verified.context_index) && nonempty(verified.context_index.index_sha256) && verified.context_index.index_sha256 !== indexSha) {
+    findings.push(finding(indexPath, "adoption_index_changed", "The context index changed during verification. Re-run the adoption check."))
+  }
+  const reportPath = (doc: AdoptionDoc | undefined) => doc ? { path: doc.path, ...(doc.anchor ? { anchor: doc.anchor } : {}) } : null
+  return { ...verified, scope: "adoption", status: status(findings) === "passed" ? "passed" : "failed", findings, adoption: { workflow: reportPath(workflow), lessons: reportPath(lessons), check_command: command ?? null } }
 }
