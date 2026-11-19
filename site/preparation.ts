@@ -103,6 +103,10 @@ export const preparation: Record<string, [zh: string, en: string]> = {
     "提供目标项目目录、当前任务和已有业务资料。技能使用 Bun 与包内锁定依赖，目前在 macOS 验证；后续任务按 key、别名或节点读取上下文，目标项目保留自己的技术栈。",
     "Provide the project directory, current task, and existing business material. The skill uses Bun with package-local locked dependencies and is verified on macOS. Later tasks read context by key, alias or workflow node; the project keeps its own stack.",
   ],
+  "kane-agent-harness": [
+    "提供目标目录和要采用或调整的规则。维护共享模板时指定可写的技能源码目录。项目脚本通过 Bun 在 macOS 或 Linux 上运行。",
+    "Provide the project directory and the controls to adopt or adjust. For shared template changes, identify the writable skill source. Project operations use Bun on macOS or Linux.",
+  ],
   "it-system-skill-distiller": [
     "提供系统目录、现有资料和输出位置。动态验证还需要明确测试环境和操作权限。",
     "Provide the system directory, existing material, and an output location. Dynamic verification also needs a test environment and defined permissions.",

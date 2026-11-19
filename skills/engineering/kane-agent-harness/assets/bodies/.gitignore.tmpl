@@ -1,0 +1,22 @@
+# 与目标项目已有的 .gitignore 逐条合并，检查后续规则对例外的影响。
+# 依赖、构建和测试产物按实际技术栈补充。
+# 忽略规则不会移除已跟踪文件，提交前仍须检查敏感内容。
+
+# 本地环境与凭据；以下可提交的示例必须已经脱敏。
+.env
+.env.*
+!.env.example
+!.env.*.example
+!.env.sample
+!.env.*.sample
+!.env.template
+!.env.*.template
+
+# 操作系统元数据。
+.DS_Store
+Thumbs.db
+
+# 项目根目录下的 Agent 本地状态与缓存；不忽略项目交付的技能和规范。
+/.agents/state/
+/.agents/cache/
+/.agents/*.local.*

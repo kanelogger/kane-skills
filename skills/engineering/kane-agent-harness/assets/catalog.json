@@ -1,0 +1,344 @@
+[
+  {
+    "id": "personal",
+    "title": "个人协作约定",
+    "default": true,
+    "parts": [
+      {
+        "id": "personal",
+        "path": "AGENTS.md",
+        "source": "bodies/AGENTS.md.tmpl"
+      }
+    ]
+  },
+  {
+    "id": "requirements",
+    "title": "需求与规格",
+    "default": true,
+    "parts": [
+      {
+        "id": "requirements",
+        "path": "specs/requirements.md",
+        "source": "bodies/specs/requirements.md.tmpl",
+        "preferReference": true
+      }
+    ]
+  },
+  {
+    "id": "workflow",
+    "title": "任务工作流程",
+    "default": true,
+    "parts": [
+      {
+        "id": "workflow",
+        "path": "docs/workflow.md",
+        "source": "bodies/docs/workflow.md.tmpl"
+      }
+    ]
+  },
+  {
+    "id": "independent-review",
+    "title": "独立审阅",
+    "default": true,
+    "parts": [
+      {
+        "id": "independent-review",
+        "path": "docs/independent-review.md",
+        "source": "bodies/docs/independent-review.md.tmpl"
+      }
+    ]
+  },
+  {
+    "id": "engineering",
+    "title": "工程标准",
+    "default": true,
+    "parts": [
+      {
+        "id": "engineering",
+        "path": "docs/code-standards.md",
+        "source": "bodies/docs/code-standards.md.tmpl"
+      }
+    ]
+  },
+  {
+    "id": "testing",
+    "title": "测试与验证",
+    "default": true,
+    "parts": [
+      {
+        "id": "testing",
+        "path": "docs/testing.md",
+        "source": "bodies/docs/testing.md.tmpl"
+      }
+    ]
+  },
+  {
+    "id": "integration",
+    "title": "外部服务与数据集成",
+    "default": true,
+    "parts": [
+      {
+        "id": "integration",
+        "path": "docs/integrating.md",
+        "source": "bodies/docs/integrating.md.tmpl"
+      }
+    ]
+  },
+  {
+    "id": "lessons",
+    "title": "通用经验与项目复盘",
+    "default": true,
+    "parts": [
+      {
+        "id": "lessons",
+        "path": "LESSONS.md",
+        "source": "bodies/LESSONS.md.tmpl"
+      }
+    ]
+  },
+  {
+    "id": "environment",
+    "title": "项目环境清单",
+    "default": true,
+    "parts": [
+      {
+        "id": "environment",
+        "path": "project.yml",
+        "source": "bodies/project.yml.tmpl"
+      }
+    ]
+  },
+  {
+    "id": "ignore",
+    "title": "本地文件忽略规则",
+    "default": true,
+    "parts": [
+      {
+        "id": "ignore",
+        "path": ".gitignore",
+        "source": "bodies/.gitignore.tmpl"
+      }
+    ]
+  },
+  {
+    "id": "readme",
+    "title": "项目 README",
+    "default": true,
+    "parts": [
+      {
+        "id": "readme",
+        "path": "README.md",
+        "source": "bodies/README.md.tmpl"
+      }
+    ]
+  },
+  {
+    "id": "roles",
+    "title": "可选角色配置与调用",
+    "default": false,
+    "parts": [
+      {
+        "id": "roles",
+        "path": "agents.yml",
+        "source": "bodies/agents.yml.tmpl"
+      },
+      {
+        "id": "role-guide",
+        "path": "docs/agent-roles.md",
+        "source": "bodies/docs/agent-roles.md.tmpl"
+      }
+    ]
+  },
+  {
+    "id": "git",
+    "title": "Git 操作护栏",
+    "default": false,
+    "parts": [
+      {
+        "id": "git",
+        "path": "docs/git.md",
+        "source": "bodies/docs/git.md.tmpl"
+      }
+    ]
+  },
+  {
+    "id": "directory-guide",
+    "title": "目录级协作入口填写模板",
+    "default": false,
+    "parts": [
+      {
+        "id": "directory-guide",
+        "path": "docs/AGENTS.directory.template.md",
+        "source": "bodies/docs/AGENTS.directory.template.md.tmpl"
+      }
+    ]
+  },
+  {
+    "id": "tasks",
+    "title": "任务记录与交接",
+    "default": false,
+    "parts": [
+      {
+        "id": "tasks",
+        "path": "tasks/README.md",
+        "source": "bodies/tasks/README.md.tmpl"
+      },
+      {
+        "id": "task-form",
+        "path": "tasks/TEMPLATE.md",
+        "source": "bodies/tasks/TEMPLATE.md.tmpl"
+      }
+    ]
+  },
+  {
+    "id": "adr",
+    "title": "技术决策记录",
+    "default": false,
+    "parts": [
+      {
+        "id": "adr",
+        "path": "docs/adr/README.md",
+        "source": "bodies/docs/adr/README.md.tmpl"
+      },
+      {
+        "id": "adr-form",
+        "path": "docs/adr/TEMPLATE.md",
+        "source": "bodies/docs/adr/TEMPLATE.md.tmpl"
+      }
+    ]
+  },
+  {
+    "id": "subsystems",
+    "title": "子系统说明",
+    "default": false,
+    "parts": [
+      {
+        "id": "subsystems",
+        "path": "docs/subsystems/README.md",
+        "source": "bodies/docs/subsystems/README.md.tmpl"
+      },
+      {
+        "id": "subsystem-form",
+        "path": "docs/subsystems/TEMPLATE.md",
+        "source": "bodies/docs/subsystems/TEMPLATE.md.tmpl"
+      }
+    ]
+  },
+  {
+    "id": "architecture",
+    "title": "架构说明填写模板",
+    "default": false,
+    "parts": [
+      {
+        "id": "architecture",
+        "path": "specs/architecture.md",
+        "source": "bodies/specs/architecture.md.tmpl"
+      }
+    ]
+  },
+  {
+    "id": "environment-guides",
+    "title": "环境登记与能力核对",
+    "default": false,
+    "parts": [
+      {
+        "id": "environment-guides",
+        "path": "docs/agent-environment/README.md",
+        "source": "bodies/docs/agent-environment/README.md.tmpl"
+      },
+      {
+        "id": "command-guide",
+        "path": "docs/agent-environment/commands.md",
+        "source": "bodies/docs/agent-environment/commands.md.tmpl"
+      },
+      {
+        "id": "capability-guide",
+        "path": "docs/agent-environment/capabilities.md",
+        "source": "bodies/docs/agent-environment/capabilities.md.tmpl"
+      },
+      {
+        "id": "filesystem-guide",
+        "path": "docs/agent-environment/network-filesystem.md",
+        "source": "bodies/docs/agent-environment/network-filesystem.md.tmpl"
+      },
+      {
+        "id": "skill-guide",
+        "path": "docs/agent-environment/skills.md",
+        "source": "bodies/docs/agent-environment/skills.md.tmpl"
+      }
+    ]
+  },
+  {
+    "id": "rehearsal",
+    "title": "开发与交接演练",
+    "default": false,
+    "parts": [
+      {
+        "id": "rehearsal",
+        "path": "docs/agent-environment/development-rehearsal.md",
+        "source": "bodies/docs/agent-environment/development-rehearsal.md.tmpl"
+      }
+    ]
+  },
+  {
+    "id": "environment-example",
+    "title": "环境清单填写示例",
+    "default": false,
+    "parts": [
+      {
+        "id": "environment-example",
+        "path": "docs/project.example.md",
+        "source": "bodies/docs/project.example.md.tmpl"
+      }
+    ]
+  },
+  {
+    "id": "adoption",
+    "title": "采用取舍填写模板",
+    "default": false,
+    "parts": [
+      {
+        "id": "adoption",
+        "path": "docs/adoption.md",
+        "source": "bodies/docs/adoption.md.tmpl"
+      }
+    ]
+  },
+  {
+    "id": "rules",
+    "title": "专题规则与检查清单",
+    "default": false,
+    "parts": [
+      {
+        "id": "rules",
+        "path": "rules/README.md",
+        "source": "bodies/rules/README.md.tmpl"
+      },
+      {
+        "id": "workflow-checklist",
+        "path": "rules/workflow.md",
+        "source": "bodies/rules/workflow.md.tmpl"
+      },
+      {
+        "id": "testing-checklist",
+        "path": "rules/testing.md",
+        "source": "bodies/rules/testing.md.tmpl"
+      },
+      {
+        "id": "security-checklist",
+        "path": "rules/security.md",
+        "source": "bodies/rules/security.md.tmpl"
+      },
+      {
+        "id": "git-checklist",
+        "path": "rules/git.md",
+        "source": "bodies/rules/git.md.tmpl"
+      },
+      {
+        "id": "style-checklist",
+        "path": "rules/code-style.md",
+        "source": "bodies/rules/code-style.md.tmpl"
+      }
+    ]
+  }
+]

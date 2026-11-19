@@ -129,6 +129,12 @@ export const examples: Record<string, [zhTitle: string, enTitle: string, zhPromp
     "$kane-agent-bootstrap 根据当前项目建立 Agent 开发环境和 .agents/context 索引，将各工作流节点的读取与增量维护协议接入项目入口，并验证真实业务链路。",
     "$kane-agent-bootstrap Set up Agent development and an .agents/context index for this project. Integrate on-demand reading and incremental maintenance at workflow nodes, then verify a real business path.",
   ],
+  "kane-agent-harness": [
+    "Agent 工程协作模板",
+    "Agent development harness",
+    "$kane-agent-harness 把独立审阅接入当前项目，沿用团队的贡献指南和已有例外。",
+    "$kane-agent-harness Adopt independent review in this project using the existing contributor guide and team exceptions.",
+  ],
   "it-system-skill-distiller": [
     "IT 系统能力提炼", "IT system capability extraction",
     "用 it-system-skill-distiller 从这个业务系统的代码和文档里提炼一份 Agent 能力包。",

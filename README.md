@@ -1,7 +1,7 @@
 # ![Kane Skills](assets/brand/kane-skills-armory-logo.svg)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-31-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-32-green.svg)](skills/)
 
 > Languages: [English README](README.md) | [中文 README](README-CN.md)
 
@@ -22,7 +22,7 @@ This repository is a public, self-contained skill library. Each package is inspe
 
 ## Skills
 
-The 31 skills are organized into 7 categories under `skills/<category>/<skill-name>/`. Each skill belongs to exactly one category based on the user's immediate primary task, not the input source. To use a skill separately, copy or install its package directory containing `SKILL.md`.
+The 32 skills are organized into 7 categories under `skills/<category>/<skill-name>/`. Each skill belongs to exactly one category based on the user's immediate primary task, not the input source. To use a skill separately, copy or install its package directory containing `SKILL.md`.
 
 Skills can be invoked by name. In Codex, type `$skill-name`, for example `$kane-translate`. Automatic selection depends on each skill's invocation policy and the runtime.
 
@@ -80,11 +80,12 @@ Skills can be invoked by name. In Codex, type `$skill-name`, for example `$kane-
 | [`github-reuse-scout`](skills/planning/github-reuse-scout/SKILL.md) | Search GitHub for reusable open-source projects before building and decide whether to fork, reference, or build without reuse. | `.reuse/reuse-plan.md` reuse decision and migration ledger. | [README](skills/planning/github-reuse-scout/README.md) |
 | [`kane-task-planner`](skills/planning/kane-task-planner/SKILL.md) | Invoke only when the user explicitly names the skill to plan a task before execution, prioritizing available skills and recommending scripts, subagents, or new skills where useful. | A brief, high-level execution plan with methods, reasons, expected outputs, and necessary dependencies; recommendations only. | [README](skills/planning/kane-task-planner/README.md) |
 
-### engineering — Development, maintenance, and delivery (7)
+### engineering — Development, maintenance, and delivery (8)
 
 | Skill | Use When | Output | Docs |
 | ----- | -------- | ------ | ---- |
 | [`kane-agent-bootstrap`](skills/engineering/kane-agent-bootstrap/SKILL.md) | Only when explicitly invoked: initialize an existing project for Agent development, or retrieve and incrementally maintain context during later tasks. | Project guidance, environment declarations, an on-demand context index, validation evidence and guarded recovery receipts. | [README](skills/engineering/kane-agent-bootstrap/README.md) |
+| [`kane-agent-harness`](skills/engineering/kane-agent-harness/SKILL.md) | Adopt or evolve reusable Agent development controls in a new or existing project, or maintain the shared templates. | Project-owned guidance, review procedures, an adoption record and a checked change set. | [README](skills/engineering/kane-agent-harness/README.md) |
 | [`it-system-skill-distiller`](skills/engineering/it-system-skill-distiller/SKILL.md) | Distill an IT business system into an AI-readable capability package. | Validated `distilled/` package structure. | [README](skills/engineering/it-system-skill-distiller/README.md) |
 | [`simplify-codebase`](skills/engineering/simplify-codebase/SKILL.md) | Audit or simplify codebases by removing accidental complexity with reachability and contract evidence. | Ranked proof records, or a validated simplification with an operation receipt. | [README](skills/engineering/simplify-codebase/README.md) |
 | [`kane-migrate-to-rust`](skills/engineering/kane-migrate-to-rust/SKILL.md) | Invoke explicitly to migrate a GitHub repository or local legacy codebase to Safe Rust, with output parity checks and optional LLVM PGO. | Rust workspace, architectural blueprint, measured migration telemetry, and an interactive HTML report. | [README](skills/engineering/kane-migrate-to-rust/README.md) |

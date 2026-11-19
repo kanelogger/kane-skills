@@ -1,0 +1,61 @@
+# 项目环境清单填写示例
+
+本页仅供对照填写，不代表项目已有配置或已验证命令。把核实后的值写入项目实际使用的环境清单。下列片段演示字段结构。采用时从项目实际配置确认值，未核实的项保留 `null`，已确认没有条目的列表或映射可以留空。本页路径以目标项目根目录为基准。
+
+## 工具链与命令
+
+```yaml
+environment:
+  supported_platforms:
+    - "<实际支持的系统和架构>"
+  toolchains:
+    - name: "<语言、运行时或构建工具>"
+      version_source: "<依赖清单、锁文件或工具配置路径>"
+      check: "<版本核对命令或手工步骤>"
+  commands:
+    test:
+      run: "<测试命令或手工步骤>"
+      working_directory: "."
+      definition_source: "<命令定义路径或权威说明>"
+      prerequisites: null
+      side_effects: null
+      verification_scope: "<可验证行为与边界>"
+      failure_handling: "<失败判定、超时、取消或恢复方式>"
+```
+
+## 服务、工具与执行需求
+
+```yaml
+environment:
+  services:
+    - name: "<服务名>"
+      connection_source: "<配置路径或变量名>"
+      start: "<commands 键或维护方>"
+      readiness: "<就绪条件>"
+      stop: "<commands 键或维护方>"
+  tools:
+    - name: "<技能、插件或外部工具>"
+      provided_by: "<提供方>"
+      source: "<来源或所属管理器>"
+      version_source: null
+      required_for: "<触发条件或用途>"
+  variables:
+    - name: "<变量名>"
+      purpose: "<用途>"
+      source: "<配置入口或密钥管理器名称>"
+  local_paths:
+    evidence:
+      path: "<项目内实际证据目录>"
+      retention: "<保留期限与清理责任>"
+requirements:
+  filesystem:
+    - path: "<项目内实际路径>"
+      access: ["read"]
+      purpose: "<适用任务>"
+  network:
+    - purpose: "<联网用途>"
+      destinations: ["<目标范围>"]
+      configuration_source: "<配置入口>"
+```
+
+在已有数据平台约定的项目中，可按项目自己的契约扩展存储名、查询引擎、管道入口和本地数据目录。数据目录的版本控制规则和清理责任从真实配置核对。声明用于描述执行所需能力，实际访问服从当前授权与环境权限。
