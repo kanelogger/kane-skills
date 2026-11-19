@@ -1,7 +1,7 @@
 # ![Kane Skills](assets/brand/kane-skills-armory-logo.svg)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/Skills-32-green.svg)](skills/)
+[![Skills](https://img.shields.io/badge/Skills-31-green.svg)](skills/)
 
 > 语言版本: [English README](README.md) | [中文 README](README-CN.md)
 
@@ -23,9 +23,11 @@ Kane 创建的可复用智能体技能库。
 
 ## 技能列表
 
-32 个技能分为 7 个分类，放在 `skills/<分类>/<技能名>/` 下，每个技能按用户眼前的主要任务唯一归类，而非按输入来源分类。单独使用某个技能时，复制或安装包含 `SKILL.md` 的技能目录即可。
+31 个技能分为 7 个分类，放在 `skills/<分类>/<技能名>/` 下，每个技能按用户眼前的主要任务唯一归类，而非按输入来源分类。单独使用某个技能时，复制或安装包含 `SKILL.md` 的技能目录即可。
 
 可按名称调用技能。在 Codex 中输入 `$技能名`，例如 `$kane-translate`。是否支持自动选择取决于技能的调用策略和运行时。
+
+`kane-agent-bootstrap` 已退役。新项目请使用 `kane-agent-harness`；已有项目如需使用旧上下文索引或恢复收据，可查阅[旧版源码和说明](https://github.com/kanelogger/kane-skills/tree/efe8e0fb1ea61b802d8825c50ccdbb0a44f9d6b9/skills/engineering/kane-agent-bootstrap)。
 
 ### reading · 阅读与解读（2）
 
@@ -81,11 +83,10 @@ Kane 创建的可复用智能体技能库。
 | [`github-reuse-scout`](skills/planning/github-reuse-scout/SKILL.md) | 开发前搜索可复用的开源项目，并基于证据判断复用、参考或放弃复用。 | `.reuse/reuse-plan.md` 复用决策与迁移台账。 | [README](skills/planning/github-reuse-scout/README.md) |
 | [`kane-task-planner`](skills/planning/kane-task-planner/SKILL.md) | 仅由用户点名调用，在执行前规划任务，优先复用当前可用技能，按需建议脚本、子代理或新技能。 | 简短粗粒度执行计划，列出执行方式、推荐理由、预期产出及必要先后关系；只提建议。 | [README](skills/planning/kane-task-planner/README.md) |
 
-### engineering · 开发维护与交付（8）
+### engineering · 开发维护与交付（7）
 
 | 技能 | 使用场景 | 输出 | 文档 |
 | ---- | -------- | ---- | ---- |
-| [`kane-agent-bootstrap`](skills/engineering/kane-agent-bootstrap/SKILL.md) | 仅在用户明确调用时，按已有业务与技术栈接入 Agent 开发环境，或在后续任务中读取和增量维护上下文。 | 项目协作入口、环境声明、上下文索引、验证证据与恢复收据。 | [README](skills/engineering/kane-agent-bootstrap/README.md) |
 | [`kane-agent-harness`](skills/engineering/kane-agent-harness/SKILL.md) | 为新项目或已有项目接入、升级和增删 Agent 开发控制部件，或维护共享模板。 | 项目协作正文、独立审阅流程、采用记录和经核对的差异。 | [README](skills/engineering/kane-agent-harness/README.md) |
 | [`it-system-skill-distiller`](skills/engineering/it-system-skill-distiller/SKILL.md) | 将 IT 业务系统提炼为智能体可读的能力包。 | 经过校验的 `distilled/` 包结构。 | [README](skills/engineering/it-system-skill-distiller/README.md) |
 | [`simplify-codebase`](skills/engineering/simplify-codebase/SKILL.md) | 以可达性、契约和验证证据审计或简化代码库，移除意外复杂度。 | 排序后的证明记录，或带操作回执的已验证简化结果。 | [README](skills/engineering/simplify-codebase/README.md) |

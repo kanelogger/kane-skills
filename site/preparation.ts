@@ -99,10 +99,6 @@ export const preparation: Record<string, [zh: string, en: string]> = {
     "点名 $kane-migrate-to-rust，提供 GitHub HTTPS 地址或本地目录及代表性工作负载。需要 Python 3.10+、Git、Rust/Cargo、Clippy 和原项目构建工具；LLVM PGO 还需匹配工具链的 llvm-profdata。",
     "Invoke $kane-migrate-to-rust with a GitHub HTTPS URL or local directory and a representative workload. Requires Python 3.10+, Git, Rust/Cargo, Clippy, and the legacy build tools; LLVM PGO also needs a toolchain-compatible llvm-profdata.",
   ],
-  "kane-agent-bootstrap": [
-    "提供目标项目目录、当前任务和已有业务资料。技能使用 Bun 与包内锁定依赖，目前在 macOS 验证；后续任务按 key、别名或节点读取上下文，目标项目保留自己的技术栈。",
-    "Provide the project directory, current task, and existing business material. The skill uses Bun with package-local locked dependencies and is verified on macOS. Later tasks read context by key, alias or workflow node; the project keeps its own stack.",
-  ],
   "kane-agent-harness": [
     "提供目标目录和要采用或调整的规则。维护共享模板时指定可写的技能源码目录。项目脚本通过 Bun 在 macOS 或 Linux 上运行。",
     "Provide the project directory and the controls to adopt or adjust. For shared template changes, identify the writable skill source. Project operations use Bun on macOS or Linux.",
